@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b17ace7b-2db9-4ce2-b194-0211ee0c89bd" name="Changes" comment="Added a sample JavaFX project that should work with a JDK that has JavaFX.">
+    <list default="true" id="b17ace7b-2db9-4ce2-b194-0211ee0c89bd" name="Changes" comment="Ignore the workspace.xml file since it causes unnecessary merge conflicts">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
     </list>
@@ -21,6 +21,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
@@ -90,7 +95,21 @@
       <option name="project" value="LOCAL" />
       <updated>1666752056984</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added a sample JavaFX project that should work with any Java 8 JDK that includes JavaFX">
+      <created>1666752359074</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1666752359074</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Ignore the workspace.xml file since it causes unnecessary merge conflicts">
+      <created>1666752590001</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1666752590001</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -110,6 +129,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit - Created basic directory with sample java program" />
     <MESSAGE value="Added a sample JavaFX project that should work with a JDK that has JavaFX." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a sample JavaFX project that should work with a JDK that has JavaFX." />
+    <MESSAGE value="Added a sample JavaFX project that should work with any Java 8 JDK that includes JavaFX" />
+    <MESSAGE value="Ignore the workspace.xml file since it causes unnecessary merge conflicts" />
+    <option name="LAST_COMMIT_MESSAGE" value="Ignore the workspace.xml file since it causes unnecessary merge conflicts" />
   </component>
 </project>
