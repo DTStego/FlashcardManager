@@ -7,6 +7,7 @@ public class User implements Serializable
     // The password and securityAnswer variables should generally be passed into an encryptor
     // before being set to the instance variables. The encryptor will be provided in a later release.
 
+    // Usernames should be unique!
     private String username;
     private String password;
     private String securityQuestion;
