@@ -15,6 +15,9 @@ public class Main extends Application
     // Default scale for size of stage; Is multiplied with screenWidth and screenHeight
     public static double screenScale = 0.75;
 
+    // Initialized in main() using a UserPersistence implementation
+    public static UserDatabase userDatabase;
+
     @Override
     public void start(Stage primaryStage)
     {
@@ -32,6 +35,10 @@ public class Main extends Application
         Rectangle2D bounds = Screen.getPrimary().getBounds();
         screenWidth = bounds.getWidth();
         screenHeight = bounds.getHeight();
+
+        // UserDatabase should end up being empty or retrieved from a file or sql database
+        UserPersistence lookup = new UserSerialize();
+        userDatabase = new UserDatabase(lookup.retrieve());
 
         launch(args);
     }
