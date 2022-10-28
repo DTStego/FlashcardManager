@@ -1,5 +1,7 @@
 package application;
 
+import application.persistence.UserPersistence;
+import application.persistence.UserSerialize;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
@@ -14,6 +16,11 @@ public class Main extends Application
     public static double screenHeight;
     // Default scale for size of stage; Is multiplied with screenWidth and screenHeight
     public static double screenScale = 0.75;
+
+    // Initialized in main() using a UserPersistence implementation
+    public static UserDatabase userDatabase;
+    // Static variable contained in main to change implementation (Serial, SQL, etc.)
+    public static UserPersistence userPersistence;
 
     @Override
     public void start(Stage primaryStage)
@@ -32,6 +39,10 @@ public class Main extends Application
         Rectangle2D bounds = Screen.getPrimary().getBounds();
         screenWidth = bounds.getWidth();
         screenHeight = bounds.getHeight();
+
+        // Creates a UserPersistence object with a chosen implementation and retrieves and stores a userList
+        userPersistence = new UserSerialize();
+        userDatabase = new UserDatabase(userPersistence.retrieve());
 
         launch(args);
     }
