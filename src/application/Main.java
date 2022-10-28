@@ -1,5 +1,7 @@
 package application;
 
+import application.persistence.UserPersistence;
+import application.persistence.UserSerialize;
 import javafx.application.Application;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;

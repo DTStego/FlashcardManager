@@ -1,4 +1,6 @@
-package application;
+package application.persistence;
+
+import application.User;
 
 import java.io.IOException;
 import java.util.HashSet;

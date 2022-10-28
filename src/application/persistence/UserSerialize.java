@@ -1,4 +1,6 @@
-package application;
+package application.persistence;
+
+import application.User;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;

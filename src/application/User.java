@@ -28,7 +28,7 @@ public class User implements Serializable
         this.username = username;
         this.password = password;
         this.securityQuestion = securityQuestion;
-        this.securityAnswer = securityQuestion;
+        this.securityAnswer = securityAnswer;
     }
 
     /* TODO
