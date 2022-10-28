@@ -21,6 +21,7 @@ public class UserSerialize implements UserPersistence
     @Override
     public void save(HashSet<User> userList)
     {
+        // Point to the userList.txt file in the save folder and if it doesn't exist create it
         File saveFile = new File(saveFolder.concat(File.separatorChar + "userList.txt"));
         if (!saveFile.exists())
         {
@@ -29,6 +30,7 @@ public class UserSerialize implements UserPersistence
 
         try
         {
+            // Write the HashSet<User> into the userList.txt file
             ObjectOutputStream outputStream = new ObjectOutputStream(Files.newOutputStream(saveFile.toPath()));
             outputStream.writeObject(userList);
         } catch (Exception ex)
@@ -45,6 +47,8 @@ public class UserSerialize implements UserPersistence
     @Override
     public HashSet<User> retrieve()
     {
+        // If the creation of a save file in the save folder was successful,
+        // that indicates there is no saved data. Therefore, return an empty userList.
         if (createSaveFile())
         {
             return new HashSet<>();
@@ -53,10 +57,12 @@ public class UserSerialize implements UserPersistence
         // Point to a userList text file that should exist (createSaveFile() returned false)
         File saveFile = new File(saveFolder.concat(File.separatorChar + "userList.txt"));
 
+        // Double-check the existence of the save file and confirm it actually has data
         if (saveFile.exists() && saveFile.length() != 0)
         {
             try
             {
+                // Read the data from the file and return the HashSet<User> userList data
                 ObjectInputStream inputStream = new ObjectInputStream(Files.newInputStream(saveFile.toPath()));
                 return (HashSet<User>) inputStream.readObject();
             } catch (Exception ex)
@@ -75,10 +81,9 @@ public class UserSerialize implements UserPersistence
     @Override
     public boolean createSaveFile()
     {
-        File file = new File(saveFolder);
-
         // Attempt to create the directory "FlashcardManager/saves"
         // Cannot combine with .createNewFile statement because method creates files instead
+        File file = new File(saveFolder);
         file.mkdirs();
 
         // Adjust file pointer to the actual .txt file (Which stores the userList database)
