@@ -17,6 +17,8 @@ public class Main extends Application
 
     // Initialized in main() using a UserPersistence implementation
     public static UserDatabase userDatabase;
+    // Static variable contained in main to change implementation (Serial, SQL, etc.)
+    public static UserPersistence userPersistence;
 
     @Override
     public void start(Stage primaryStage)
@@ -36,9 +38,9 @@ public class Main extends Application
         screenWidth = bounds.getWidth();
         screenHeight = bounds.getHeight();
 
-        // UserDatabase should end up being empty or retrieved from a file or sql database
-        UserPersistence lookup = new UserSerialize();
-        userDatabase = new UserDatabase(lookup.retrieve());
+        // Creates a UserPersistence object with a chosen implementation and retrieves and stores a userList
+        userPersistence = new UserSerialize();
+        userDatabase = new UserDatabase(userPersistence.retrieve());
 
         launch(args);
     }
