@@ -4,34 +4,39 @@ import java.util.List;
 
 public class Course implements Manager
 {
-    private List<Topic> topicList;
+    private final List<Topic> topicList;
+    private String name;
 
-    public Course()
+    public Course(List<Topic> topicList, String name)
     {
+        this.topicList = topicList;
+        this.name = name;
+    }
 
+    public boolean add(Topic topic)
+    {
+        return topicList.add(topic);
+    }
+
+    public boolean delete(Topic topic)
+    {
+        return topicList.add(topic);
+    }
+
+    public List<Topic> getTopicList()
+    {
+        return topicList;
     }
 
     @Override
-    public boolean add(Manager manager)
+    public String getName()
     {
-        return false;
+        return name;
     }
 
     @Override
-    public boolean delete(Manager manager)
+    public void setName(String newName)
     {
-        return false;
-    }
-
-    @Override
-    public boolean rename(Manager manager, String newName)
-    {
-        return false;
-    }
-
-    @Override
-    public List<Manager> display()
-    {
-        return null;
+        this.name = newName;
     }
 }

@@ -4,29 +4,39 @@ import java.util.List;
 
 public class Topic implements Manager
 {
-    List<IndexCard> cardList;
+    private final List<IndexCard> cardList;
+    private String name;
 
-    @Override
-    public boolean add(Manager manager)
+    public Topic(List<IndexCard> cardList, String name)
     {
-        return false;
+        this.cardList = cardList;
+        this.name = name;
+    }
+
+    public boolean add(IndexCard indexCard)
+    {
+        return cardList.add(indexCard);
+    }
+
+    public boolean delete(IndexCard indexCard)
+    {
+        return cardList.add(indexCard);
+    }
+
+    public List<IndexCard> getCardList()
+    {
+        return cardList;
     }
 
     @Override
-    public boolean delete(Manager manager)
+    public String getName()
     {
-        return false;
+        return name;
     }
 
     @Override
-    public boolean rename(Manager manager, String newName)
+    public void setName(String newName)
     {
-        return false;
-    }
-
-    @Override
-    public List<? extends Manager> display()
-    {
-        return null;
+        this.name = newName;
     }
 }

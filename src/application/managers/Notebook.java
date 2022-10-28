@@ -5,33 +5,38 @@ import java.util.List;
 public class Notebook implements Manager
 {
     private final List<Course> courseList;
+    private String name;
 
-    public Notebook(List<Course> courseList)
+    public Notebook(List<Course> courseList, String name)
     {
         this.courseList = courseList;
+        this.name = name;
     }
 
-    @Override
-    public boolean add(Manager manager)
+    public boolean add(Course course)
     {
-        return false;
+        return courseList.add(course);
     }
 
-    @Override
-    public boolean delete(Manager manager)
+    public boolean delete(Course course)
     {
-        return false;
+        return courseList.remove(course);
     }
 
-    @Override
-    public boolean rename(Manager manager, String newName)
-    {
-        return false;
-    }
-
-    @Override
-    public List<Course> display()
+    public List<Course> getCourseList()
     {
         return courseList;
+    }
+
+    @Override
+    public String getName()
+    {
+        return name;
+    }
+
+    @Override
+    public void setName(String newName)
+    {
+        this.name = newName;
     }
 }
