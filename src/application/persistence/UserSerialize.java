@@ -7,7 +7,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.HashSet;
 
-public class UserSerialize implements UserPersistence
+public class UserSerialize implements UserPersistence, ObjectSerialize
 {
     // Path of save folder in documents, e.g., (For Windows) "../My Documents/FlashcardManager/saves/"
     private final String saveFolder = FileSystemView.getFileSystemView().getDefaultDirectory().getPath()
