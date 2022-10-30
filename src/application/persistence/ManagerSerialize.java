@@ -37,10 +37,10 @@ public class ManagerSerialize implements ManagerPersistence, ObjectSerialize
         File file = new File(saveFolder);
         file.mkdirs();
 
-        // Adjust file pointer to the actual .txt file (Which stores the userList database)
+        // Adjust file pointer to the actual .txt file (Which stores notebook database)
         file = new File(saveFolder.concat(File.separatorChar + "notebook.txt"));
 
-        // Return true if userList.txt was created through the createNewFile() method
+        // Return true if notebook.txt was created through the createNewFile() method
         boolean success = false;
 
         try
