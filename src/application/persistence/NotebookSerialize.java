@@ -6,9 +6,8 @@ import javax.swing.filechooser.FileSystemView;
 import java.io.File;
 import java.io.IOException;
 
-public class ManagerSerialize implements ManagerPersistence, ObjectSerialize
+public class NotebookSerialize implements ManagerPersistence, ObjectSerialize
 {
-    // Path of save folder in documents, e.g., (For Windows) "../My Documents/FlashcardManager/saves/"
     private final String saveFolder = FileSystemView.getFileSystemView().getDefaultDirectory().getPath()
             .concat(File.separatorChar + "FlashcardManager" + File.separatorChar + "saves");
 
@@ -37,7 +36,7 @@ public class ManagerSerialize implements ManagerPersistence, ObjectSerialize
         File file = new File(saveFolder);
         file.mkdirs();
 
-        // Adjust file pointer to the actual .txt file (Which stores notebook database)
+        // Adjust file pointer to the actual .txt file (Which stores the userList database)
         file = new File(saveFolder.concat(File.separatorChar + "notebook.txt"));
 
         // Return true if notebook.txt was created through the createNewFile() method
