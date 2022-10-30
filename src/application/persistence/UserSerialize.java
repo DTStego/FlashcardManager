@@ -15,7 +15,7 @@ public class UserSerialize implements UserPersistence, ObjectSerialize
 
     /**
      * Stores the userList in a "saves" folder in a user's document folder through serialization.
-     * Creates a "saves" folder and "UserList.txt" file if none are found.
+     * Creates a "saves" folder and "userList.txt" file if none are found.
      * @param userList HashSet<User> userList to be stored by serializing
      */
     @Override
@@ -40,7 +40,7 @@ public class UserSerialize implements UserPersistence, ObjectSerialize
     }
 
     /**
-     * Checks if a new save file can be created. If successful, indicates there is no saved userList.
+     * Checks if a new save file can be created. If createSaveFile() returns true, indicates there is no saved userList.
      * The method will then return an empty list. Otherwise, read from the byte stream if it exists in the file.
      * @return a HashSet<User> that contains a list of User objects
      */
@@ -70,6 +70,7 @@ public class UserSerialize implements UserPersistence, ObjectSerialize
                 ex.printStackTrace();
             }
         }
+        // Return a new userList if there is a notebook.txt file, but it is blank.
         return new HashSet<>();
     }
 

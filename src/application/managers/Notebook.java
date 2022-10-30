@@ -1,11 +1,18 @@
 package application.managers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Notebook implements Manager
 {
     private final List<Course> courseList;
     private String name;
+
+    public Notebook()
+    {
+        courseList = new ArrayList<>();
+        name = "New Notebook";
+    }
 
     public Notebook(List<Course> courseList, String name)
     {

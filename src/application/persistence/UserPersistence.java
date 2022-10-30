@@ -9,5 +9,4 @@ public interface UserPersistence
 {
     void save(HashSet<User> user);
     HashSet<User> retrieve();
-    boolean createSaveFile();
 }
