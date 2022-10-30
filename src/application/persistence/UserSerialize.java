@@ -75,7 +75,7 @@ public class UserSerialize implements UserPersistence, ObjectSerialize
 
     /**
      * Creates a Folder/File structure in the Application package if none is found
-     * Saves to ../My Documents/FlashcardManager/saves/userList.txt
+     * Saves to ../My Documents/FlashcardManager/saves/userList.txt. Does not overwrite.
      * @return true if file was created; false if file already exists
      */
     @Override

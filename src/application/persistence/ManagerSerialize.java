@@ -4,6 +4,7 @@ import application.managers.Manager;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.File;
+import java.io.IOException;
 
 public class ManagerSerialize implements ManagerPersistence, ObjectSerialize
 {
@@ -23,9 +24,33 @@ public class ManagerSerialize implements ManagerPersistence, ObjectSerialize
         return null;
     }
 
+    /**
+     * Creates a Folder/File structure in the Application package if none is found
+     * Saves to ../My Documents/FlashcardManager/saves/notebook.txt. Does not overwrite.
+     * @return true if file was created; false if file already exists
+     */
     @Override
     public boolean createSaveFile()
     {
-        return false;
+        // Attempt to create the directory "FlashcardManager/saves"
+        // Cannot combine with .createNewFile statement because method creates files instead
+        File file = new File(saveFolder);
+        file.mkdirs();
+
+        // Adjust file pointer to the actual .txt file (Which stores the userList database)
+        file = new File(saveFolder.concat(File.separatorChar + "notebook.txt"));
+
+        // Return true if userList.txt was created through the createNewFile() method
+        boolean success = false;
+
+        try
+        {
+            success = file.createNewFile();
+        } catch (IOException ex)
+        {
+            ex.printStackTrace();
+        }
+
+        return success;
     }
 }
