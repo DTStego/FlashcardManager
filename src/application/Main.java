@@ -1,13 +1,18 @@
 package application;
 
+import application.managers.Notebook;
 import application.persistence.UserPersistence;
 import application.persistence.UserSerialize;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import javax.swing.filechooser.FileSystemView;
+import java.io.IOException;
 
 public class Main extends Application
 {
@@ -24,9 +29,9 @@ public class Main extends Application
     public static User currentUser;
 
     @Override
-    public void start(Stage primaryStage)
+    public void start(Stage primaryStage) throws IOException
     {
-        Group root = new Group();
+        Parent root = FXMLLoader.load(getClass().getResource("login/LoginScreen.fxml"));
         Scene scene = new Scene(root, screenWidth * screenScale, screenHeight * screenScale);
 
         primaryStage.setTitle("Flashcard Manager");
@@ -45,6 +50,10 @@ public class Main extends Application
         userPersistence = new UserSerialize();
         userDatabase = new UserDatabase(userPersistence.retrieve());
 
+        User testUser = new User("Username1", "Pass1","s1","a1", new Notebook());
+
+        System.out.println(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
+        userDatabase.addUser(testUser);
         launch(args);
     }
 }
