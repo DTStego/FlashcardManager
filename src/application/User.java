@@ -1,5 +1,7 @@
 package application;
 
+import application.managers.Notebook;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,6 +15,7 @@ public class User implements Serializable
     private String password;
     private String securityQuestion;
     private String securityAnswer;
+    private final Notebook notebook;
 
     /*
         Issue: If a User class in userList changes its username or other variable that hashCode()
@@ -24,17 +27,14 @@ public class User implements Serializable
         If we change a user's username, password, etc., remove them from the userList first and add them after!
      */
 
-    public User(String username, String password, String securityQuestion, String securityAnswer)
+    public User(String username, String password, String securityQuestion, String securityAnswer, Notebook notebook)
     {
         this.username = username;
         this.password = password;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
+        this.notebook = notebook;
     }
-
-    /* TODO
-    Implement Hashcode/Equals method so Users are stored in a hashmap database
-    */
 
     public String getUsername()
     {
@@ -74,6 +74,11 @@ public class User implements Serializable
     public void setSecurityAnswer(String securityAnswer)
     {
         this.securityAnswer = securityAnswer;
+    }
+
+    public Notebook getNotebook()
+    {
+        return notebook;
     }
 
     @Override

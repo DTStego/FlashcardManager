@@ -2,11 +2,11 @@ package application.persistence;
 
 import application.User;
 
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public interface UserPersistence
 {
-    void save(HashSet<User> user);
-    HashSet<User> retrieve();
+    void save(HashMap<String, User> user);
+    HashMap<String, User> retrieve();
 }

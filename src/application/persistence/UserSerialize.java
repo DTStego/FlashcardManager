@@ -5,6 +5,7 @@ import application.User;
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class UserSerialize implements UserPersistence, ObjectSerialize
@@ -16,10 +17,10 @@ public class UserSerialize implements UserPersistence, ObjectSerialize
     /**
      * Stores the userList in a "saves" folder in a user's document folder through serialization.
      * Creates a "saves" folder and "userList.txt" file if none are found.
-     * @param userList HashSet<User> userList to be stored by serializing
+     * @param userList HashMap<String, User> userList to be stored by serializing
      */
     @Override
-    public void save(HashSet<User> userList)
+    public void save(HashMap<String, User> userList)
     {
         // Point to the userList.txt file in the save folder and if it doesn't exist create it
         File saveFile = new File(saveFolder.concat(File.separatorChar + "userList.txt"));
@@ -30,7 +31,7 @@ public class UserSerialize implements UserPersistence, ObjectSerialize
 
         try
         {
-            // Write the HashSet<User> into the userList.txt file
+            // Write the HashMap<String, User> into the userList.txt file
             ObjectOutputStream outputStream = new ObjectOutputStream(Files.newOutputStream(saveFile.toPath()));
             outputStream.writeObject(userList);
         } catch (Exception ex)
@@ -42,16 +43,16 @@ public class UserSerialize implements UserPersistence, ObjectSerialize
     /**
      * Checks if a new save file can be created. If createSaveFile() returns true, indicates there is no saved userList.
      * The method will then return an empty list. Otherwise, read from the byte stream if it exists in the file.
-     * @return a HashSet<User> that contains a list of User objects
+     * @return a HashMap<String, User> that contains a list of User objects
      */
     @Override
-    public HashSet<User> retrieve()
+    public HashMap<String, User> retrieve()
     {
         // If the creation of a save file in the save folder was successful,
         // that indicates there is no saved data. Therefore, return an empty userList.
         if (createSaveFile())
         {
-            return new HashSet<>();
+            return new HashMap<>();
         }
 
         // Point to a userList text file that should exist (createSaveFile() returned false)
@@ -62,16 +63,16 @@ public class UserSerialize implements UserPersistence, ObjectSerialize
         {
             try
             {
-                // Read the data from the file and return the HashSet<User> userList data
+                // Read the data from the file and return the HashMap<String, User> userList data
                 ObjectInputStream inputStream = new ObjectInputStream(Files.newInputStream(saveFile.toPath()));
-                return (HashSet<User>) inputStream.readObject();
+                return (HashMap<String, User>) inputStream.readObject();
             } catch (Exception ex)
             {
                 ex.printStackTrace();
             }
         }
         // Return a new userList if there is a notebook.txt file, but it is blank.
-        return new HashSet<>();
+        return new HashMap<>();
     }
 
     /**

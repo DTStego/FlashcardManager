@@ -21,6 +21,7 @@ public class Main extends Application
     public static UserDatabase userDatabase;
     // Static variable contained in main to change implementation (Serial, SQL, etc.)
     public static UserPersistence userPersistence;
+    public static User currentUser;
 
     @Override
     public void start(Stage primaryStage)

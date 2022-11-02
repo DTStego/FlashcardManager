@@ -8,11 +8,13 @@ public class Notebook implements Manager
     private final List<Course> courseList;
     private String name;
 
+    // Creates a new notebook once a User has been logged in and the stage is set to the home screen
     public Notebook()
     {
         courseList = new ArrayList<>();
         name = "New Notebook";
     }
+
 
     public Notebook(List<Course> courseList, String name)
     {
