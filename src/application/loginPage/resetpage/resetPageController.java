@@ -16,7 +16,7 @@ import application.UserDatabase;
 public class resetPageController {
     private String securityQuestion, username;
     private User currentUser;
-    private UserDatabase database; 
+    private UserDatabase database = Main.userDatabase; 
     private HashMap<String, User> userList = database.getUserList();
 
     @FXML
@@ -41,11 +41,8 @@ public class resetPageController {
     @FXML
     void submitUsername(ActionEvent event) {
         username = userInput.getText();
-
-        //securityQ.setText("username: " + username); (Test input)
         
-        //if username exists, recieve securityQuestion
-        //else send error
+        
         if (userList.get(username) != null) {
             currentUser = userList.get(username);
             securityQuestion = currentUser.getSecurityQuestion();
@@ -59,7 +56,7 @@ public class resetPageController {
 
     @FXML
     void returnToLogin(ActionEvent event) {
-
+        //return to loginpage
     }
 
     //take answer input, verify, then show password area
@@ -78,6 +75,8 @@ public class resetPageController {
         if (newPassString.equals(newPassConfirmString)) { //can add requirements for password
             currentUser.setPassword(newPassString);
             returnToLogin(event);
+        } else {
+            //display error, passwords don't match
         }
     }
 

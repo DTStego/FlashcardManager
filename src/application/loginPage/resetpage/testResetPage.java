@@ -17,7 +17,7 @@ public class testResetPage extends Application
 
             Scene scene = new Scene(root, 600, 400);
             primaryStage.setScene(scene);
-            primaryStage.show();
+            //primaryStage.show();
 
         } catch (Exception e) {
             // TODO: handle exception
