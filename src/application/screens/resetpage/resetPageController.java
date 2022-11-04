@@ -26,10 +26,6 @@ public class resetPageController {
 
     @FXML
     private Label errormsg;
-
-    @FXML
-    private Button back;
-
     @FXML
     private Text securityQ;
 
@@ -60,14 +56,14 @@ public class resetPageController {
             securityQ.setText(securityQuestion);
             removeError();
         } else {
-            displayError("Username is not valid.");
+            displayError("* Username does not exist, please try again.");
         }
     }
 
     @FXML
     void returnToLogin(ActionEvent event) {
         //return to loginpage
-        loadScreen(event, "../login/LoginScreen.fxml");
+        loadScreen(event, "../login/LoginScreen.fxml", "Login");
     }
 
     //take answer input, verify, then show password area
@@ -78,7 +74,7 @@ public class resetPageController {
             //Display password creation
             passCreation.setOpacity(1);
         } else {
-            displayError("Answer is incorrect.");
+            displayError("* The answer is incorrect, please try again.");
         }
     }
 
@@ -88,13 +84,13 @@ public class resetPageController {
         String newPassString = newPass.getText();
         String newPassConfirmString = newPassConfirm.getText();
 
-        if (newPassString.equals(newPassConfirmString)) { //can add requirements for password
+        if (newPassString.equals(newPassConfirmString) && newPassString.length()!=0) { //can add requirements for password
             currentUser.setPassword(newPassString);
             removeError();
             returnToLogin(event);
         } else {
             //display error, passwords don't match
-            displayError("Passwords don't match.");
+            displayError("* Passwords do not match or a new password was not inputted, please try again.");
         }
     }
 
@@ -107,17 +103,17 @@ public class resetPageController {
         errormsg.setOpacity(0);
     }
 
-    private void loadScreen(Event event, String fxmlLocation) {
+    private void loadScreen(Event event, String fxmlLocation, String stageTitle) {
         try {
             Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource(fxmlLocation));
             Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
 
-            primaryStage.setTitle("Register");
+            primaryStage.setTitle(stageTitle);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
-            System.out.println("FXML file not found");
+            System.out.println("resetPageController: Target FXML file not found");
         }
     }
 
