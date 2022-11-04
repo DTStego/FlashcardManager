@@ -33,14 +33,14 @@ public class LoginScreenController {
     }
     @FXML
     void onLoginClick(MouseEvent event) {
-        if (verifyUser()) {
+        if (verifyUser(event)) {
             //go to next page
         }
     }
     @FXML
     void onUsernameKeyPress(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            if (verifyUser()) {
+            if (verifyUser(event)) {
                 //go to next page
             }
         }
@@ -48,7 +48,7 @@ public class LoginScreenController {
     @FXML
     void onPassKeyPress(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            if (verifyUser()) {
+            if (verifyUser(event)) {
                 //go to next page
             }
         }
@@ -57,7 +57,7 @@ public class LoginScreenController {
     void onRegisterClick(MouseEvent event) {
         loadScreen(event, "../register/register.fxml", "Register");
     }
-    private boolean verifyUser() {
+    private boolean verifyUser(Event event) {
         ErrorMsg.setOpacity(1);
         if (usernameTextBox.getText().equals("")) {
             ErrorMsg.setText("* Please enter a username");
@@ -73,6 +73,7 @@ public class LoginScreenController {
         if (user != null) {
             if (user.getPassword().equals(passTextBox.getText())) {
                 System.out.println("* Login successful");
+                loadScreen(event, "../home/homeScreen.fxml", "Home");
                 ErrorMsg.setOpacity(0);
                 return true;
             } else {

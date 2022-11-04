@@ -5,10 +5,9 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.home.HomeScreenController">
    <children>
-      <TabPane prefHeight="400.0" prefWidth="158.0" side="LEFT" tabClosingPolicy="UNAVAILABLE">
+      <TabPane fx:id="courseList" prefHeight="400.0" prefWidth="479.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Untitled Tab 1">
             <content>
@@ -17,6 +16,7 @@
           </Tab>
         </tabs>
       </TabPane>
-      <Button layoutX="508.0" layoutY="14.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="78.0" text="New" />
+      <Button fx:id="newCourseBtn" layoutX="487.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#onNewTabClick" prefHeight="33.0" prefWidth="99.0" text="New Course" />
+      <Button fx:id="deleteCourseBtn" layoutX="487.0" layoutY="56.0" mnemonicParsing="false" onMouseClicked="#onDeleteTabClick" prefHeight="33.0" prefWidth="99.0" text="Delete Course" />
    </children>
 </AnchorPane>
