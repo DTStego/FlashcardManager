@@ -62,7 +62,7 @@ public class resetPageController {
 
     @FXML
     void returnToLogin(ActionEvent event) {
-        //return to loginpage
+        // Return to the login screen
         loadScreen(event, "../login/LoginScreen.fxml", "Login");
     }
 
@@ -78,7 +78,7 @@ public class resetPageController {
         }
     }
 
-    //verify new password equals each other, set password on user, return to login page
+    // Verify new password equals each other, set password on user, return to login page
     @FXML
     void submitNewPass(ActionEvent event) {
         String newPassString = newPass.getText();
@@ -86,6 +86,7 @@ public class resetPageController {
 
         if (newPassString.equals(newPassConfirmString) && newPassString.length()!=0) { //can add requirements for password
             currentUser.setPassword(newPassString);
+            Main.userDatabase.updateUser(currentUser);
             removeError();
             returnToLogin(event);
         } else {
