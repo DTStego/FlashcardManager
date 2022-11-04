@@ -2,6 +2,7 @@ package application.screens.login;
 
 import application.Main;
 import application.User;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -11,7 +12,6 @@ import javafx.scene.input.MouseEvent;
 
 public class LoginScreenController
 {
-
     @FXML
     private Label ErrorMsg;
     @FXML
@@ -26,7 +26,7 @@ public class LoginScreenController
     @FXML
     void onLoginClick(MouseEvent event)
     {
-        if (verifyUser())
+        if (verifyUser(event))
         {
             //go to next page
         }
@@ -36,7 +36,7 @@ public class LoginScreenController
     {
         if (event.getCode() == KeyCode.ENTER)
         {
-            if (verifyUser())
+            if (verifyUser(event))
             {
                 //go to next page
             }
@@ -47,7 +47,7 @@ public class LoginScreenController
     {
         if (event.getCode() == KeyCode.ENTER)
         {
-            if (verifyUser())
+            if (verifyUser(event))
             {
                 //go to next page
             }
@@ -58,7 +58,7 @@ public class LoginScreenController
     {
         Main.loadScreen(event, "screens/register/register.fxml", "Register");
     }
-    private boolean verifyUser()
+    private boolean verifyUser(Event event)
     {
         ErrorMsg.setOpacity(1);
         if (usernameTextBox.getText().equals(""))
@@ -79,6 +79,7 @@ public class LoginScreenController
             if (user.getPassword().equals(passTextBox.getText()))
             {
                 System.out.println("* Login successful");
+                Main.loadScreen(event, "screens/home/homeScreen.fxml", "Home");
                 ErrorMsg.setOpacity(0);
                 return true;
             } else
