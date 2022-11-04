@@ -37,6 +37,15 @@ public class UserDatabase implements Serializable
         Main.userPersistence.save(userList);
     }
 
+    public User getUser(String username)
+    {
+        return userList.get(username.toLowerCase(Locale.ROOT));
+    }
+    public boolean contains(String username)
+    {
+        return userList.containsKey(username.toLowerCase(Locale.ROOT));
+    }
+
     /** Returns the userList in UserDatabase */
     // Be careful not to use the HashSet's add and remove methods (Use the ones provided by UserDatabase)
     public HashMap<String, User> getUserList()

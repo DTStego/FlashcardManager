@@ -18,7 +18,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 public class LoginScreenController {
 
@@ -86,8 +85,7 @@ public class LoginScreenController {
             return false;
         }
 
-        HashMap<String, User> userList = Main.userDatabase.getUserList();
-        User user = userList.get(usernameTextBox.getText());
+        User user = Main.userDatabase.getUser(usernameTextBox.getText());
 
         if (user != null) {
             if (user.getPassword().equals(passTextBox.getText())) {

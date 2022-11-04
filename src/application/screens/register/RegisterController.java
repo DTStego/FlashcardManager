@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class RegisterController {
     @FXML
@@ -66,22 +67,22 @@ public class RegisterController {
         String errorMsg = "";
         // Invalid variable is incremented if any fields are empty or if the username is not unique
         int invalid = 0;
-        //Check if username is not blank and is unique
-        if (usernameInput.getLength()==0 || Main.userDatabase.getUserList().containsKey(usernameInput.getText())) {
+        // Check if username is not blank and is unique
+        if (usernameInput.getLength() == 0 || Main.userDatabase.contains(usernameInput.getText())) {
             errorMsg += "* Invalid username, select a different username\n";
             invalid++;
         }
-        //Check if password is not blank
+        // Check if password is not blank
         if (passwordInput.getLength()==0) {
             errorMsg += "* Password must be of length greater than 0\n";
             invalid++;
         }
-        //Check if security question is not blank
+        // Check if security question is not blank
         if (security.getLength()==0) {
             errorMsg += "* Please set a security question\n";
             invalid++;
         }
-        //Check if security answer is not blank
+        // Check if security answer is not blank
         if (secAnswer.getLength()==0) {
             errorMsg += "* Please input the answer to the security question\n";
             invalid++;

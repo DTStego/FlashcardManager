@@ -52,18 +52,14 @@ public class resetPageController {
     @FXML
     void submitUsername(ActionEvent event) {
         username = userInput.getText();
-        HashMap<String, User> userList = Main.userDatabase.getUserList(); //Currently main database is empty
         
-        if (userList.get(username) != null) {
-            currentUser = userList.get(username);
+        if ((currentUser = Main.userDatabase.getUser(username)) != null) {
             securityQuestion = currentUser.getSecurityQuestion();
             securityQ.setText(securityQuestion);
             removeError();
         } else {
             displayError("Username is not valid.");
         }
-
-        
     }
 
     @FXML

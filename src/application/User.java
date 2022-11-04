@@ -39,14 +39,7 @@ public class User implements Serializable
 
     public String getUsername()
     {
-        if (username.length() == 1)
-        {
-            return username.toUpperCase(Locale.ROOT);
-        }
-        else
-        {
-            return username.substring(0, 1).toUpperCase(Locale.ROOT) + username.substring(1);
-        }
+        return username;
     }
 
     public void setUsername(String username)
