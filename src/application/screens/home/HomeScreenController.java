@@ -1,5 +1,6 @@
 package application.screens.home;
 
+import application.Main;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
@@ -47,7 +48,6 @@ public class HomeScreenController {
 
     @FXML
     void onRenameTabClick(MouseEvent event) {
-        System.out.println("Click");
         if (courseList.getTabs().size() > 0) {
 
             rename.setVisible(true);
@@ -64,9 +64,13 @@ public class HomeScreenController {
             currentTab.setText(newName);
             rename.setVisible(false);
         } else {
-            //print error of course name is empty
+            //show error of course name is empty
         }
     }
 
+    @FXML
+    void signOut(MouseEvent event) {
+        Main.loadScreen(event, "screens/login/LoginScreen.fxml", "LoginScreen");
+    }
 
 }
