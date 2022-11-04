@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.register.login.LoginScreenController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.login.LoginScreenController">
    <children>
       <Pane layoutY="-1.0" prefHeight="56.0" prefWidth="601.0">
          <children>
@@ -31,7 +31,7 @@
             <Label layoutX="113.0" layoutY="109.0" text="Password" />
             <Button fx:id="loginBtn" layoutX="112.0" layoutY="173.0" mnemonicParsing="false" onMouseClicked="#onLoginClick" text="Login" />
             <Hyperlink fx:id="forgotPassBtn" layoutX="177.0" layoutY="174.0" onMouseClicked="#onForgotPassClick" text="Forgot password?" />
-            <Hyperlink fx:id="registerBtn" layoutX="178.0" layoutY="200.0" onMouseClicked="#onRegisterClick" prefHeight="23.0" prefWidth="202.0" text="Don't have an account? Create one!" />
+            <Hyperlink fx:id="registerBtn" layoutX="301.0" layoutY="174.0" onMouseClicked="#onRegisterClick" prefHeight="23.0" prefWidth="202.0" text="Don't have an account? Create one!" />
             <Label fx:id="ErrorMsg" layoutX="181.0" layoutY="194.0" opacity="0.0" prefHeight="17.0" prefWidth="161.0" text="SampleErrorText" textFill="RED" />
          </children>
       </Pane>

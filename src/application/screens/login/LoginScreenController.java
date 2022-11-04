@@ -1,8 +1,13 @@
-package application.screens.register.login;
+package application.screens.login;
 
 import application.Main;
 import application.User;
+import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -10,16 +15,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 public class LoginScreenController {
 
     @FXML
     private Label ErrorMsg;
-
-    @FXML
-    private Button backBtn;
 
     @FXML
     private Hyperlink forgotPassBtn;
@@ -37,13 +41,8 @@ public class LoginScreenController {
     private TextField usernameTextBox;
 
     @FXML
-    void onBackBtnClick(MouseEvent event) {
-
-    }
-
-    @FXML
     void onForgotPassClick(MouseEvent event) {
-
+        loadScreen(event, "screens/resetpage/resetpageUI.fxml");
     }
 
     @FXML
@@ -73,7 +72,7 @@ public class LoginScreenController {
 
     @FXML
     void onRegisterClick(MouseEvent event) {
-        System.out.println("go to register page");
+        loadScreen(event, "screens/register/register.fxml");
     }
 
     private boolean verifyUser() {
@@ -105,4 +104,17 @@ public class LoginScreenController {
         }
     }
 
+    private void loadScreen(Event event, String fxmlLocation) {
+        try {
+            Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            Parent root = FXMLLoader.load(Main.class.getResource(fxmlLocation));
+            Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
+
+            primaryStage.setTitle("Register");
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            System.out.println("FXML file not found");
+        }
+    }
 }
