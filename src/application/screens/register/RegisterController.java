@@ -1,10 +1,18 @@
 package application.screens.register;
 
 import application.Main;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class RegisterController {
     @FXML
@@ -19,12 +27,15 @@ public class RegisterController {
     private Label errorLBL;
     @FXML
     private Button backBtn;
-
     /** Return to login page*/
     @FXML
-    void returnToLogin() {
+    void returnToLogin(ActionEvent event) throws IOException {
         //return to login page
-        System.out.println("return to login");
+        Parent root = FXMLLoader.load(getClass().getResource("../login/LoginScreen.fxml"));
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
     /** Returns true if username is unique and not in the database */
     boolean isValid() {
