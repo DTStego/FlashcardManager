@@ -1,7 +1,10 @@
 package application.screens.register;
 
 import application.Main;
+import application.User;
+import application.managers.Notebook;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -27,15 +30,35 @@ public class RegisterController {
     private Label errorLBL;
     @FXML
     private Button backBtn;
+
     /** Return to login page*/
     @FXML
     void returnToLogin(ActionEvent event) throws IOException {
         //return to login page
-        Parent root = FXMLLoader.load(getClass().getResource("../login/LoginScreen.fxml"));
-        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        loadScreen(event, "../login/LoginScreen.fxml");
+    }
+
+    /** If all fields are not empty and the username is unique, add new user to userList */
+    @FXML
+    void registerUser(ActionEvent event) {
+        if(isValid()) {
+            Main.userDatabase.addUser(new User(usernameInput.getText(), passwordInput.getText(), security.getText(), secAnswer.getText(), new Notebook()));
+            loadScreen(event, "../login/LoginScreen.fxml");
+        }
+    }
+
+    private void loadScreen(Event event, String fxmlLocation) {
+        try {
+            Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlLocation));
+            Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
+
+            primaryStage.setTitle("Register");
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            System.out.println("FXML file not found");
+        }
     }
     /** Returns true if username is unique and not in the database */
     boolean isValid() {
@@ -78,14 +101,5 @@ public class RegisterController {
 //            //Return true if username is not in userDatabase
 //            return !Main.userDatabase.getUserList().containsKey(usernameInput.getText());
 //        }
-    }
-
-    /** If all fields are not empty and the username is unique, add new user to userList */
-    @FXML
-    void registerUser() {
-        if(isValid()) {
-            System.out.println("this is valid");
-//            Main.userDatabase.addUser(new User(usernameInput.getText(), passwordInput.getText(), security.getText(), secAnswer.getText(), new Notebook()));
-        }
     }
 }
