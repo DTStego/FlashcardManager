@@ -85,6 +85,11 @@ public class resetPageController {
         }
     }
 
+    @FXML
+    void displayError(String error) {
+
+    }
+
     private void loadScreen(Event event, String fxmlLocation) {
         try {
             Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
