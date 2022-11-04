@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.scene.text.Text;
@@ -22,6 +23,9 @@ import application.User;
 public class resetPageController {
     private String securityQuestion, username;
     private User currentUser;
+
+    @FXML
+    private Label ErrorMsg;
 
     @FXML
     private Button back;
@@ -41,6 +45,9 @@ public class resetPageController {
     @FXML
     private TextField newPassConfirm;
 
+    @FXML
+    private VBox passCreation;
+
     //get username from input and if exists, set equal to var in controller
     @FXML
     void submitUsername(ActionEvent event) {
@@ -51,8 +58,9 @@ public class resetPageController {
             currentUser = userList.get(username);
             securityQuestion = currentUser.getSecurityQuestion();
             securityQ.setText(securityQuestion);
+            removeError();
         } else {
-            //display error of username doesn't exist
+            displayError("Username is not valid.");
         }
 
         
@@ -68,7 +76,12 @@ public class resetPageController {
     @FXML
     void submitAnswer(ActionEvent event) {
         String answer = userAnswer.getText();
-        if (answer.equals(currentUser.getSecurityAnswer())); //---> display new password creation
+        if (answer.equals(currentUser.getSecurityAnswer())) {
+            //Display password creation
+            passCreation.setOpacity(1);
+        } else {
+            displayError("Answer is incorrect.");
+        }
     }
 
     //verify new password equals each other, set password on user, return to login page
@@ -79,15 +92,21 @@ public class resetPageController {
 
         if (newPassString.equals(newPassConfirmString)) { //can add requirements for password
             currentUser.setPassword(newPassString);
+            removeError();
             returnToLogin(event);
         } else {
             //display error, passwords don't match
+            displayError("Passwords don't match.");
         }
     }
 
-    @FXML
     void displayError(String error) {
-
+        ErrorMsg.setOpacity(1);
+        ErrorMsg.setText(error);
+    }
+    
+    void removeError() {
+        ErrorMsg.setOpacity(0);
     }
 
     private void loadScreen(Event event, String fxmlLocation) {
