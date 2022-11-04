@@ -11,13 +11,10 @@ import java.util.HashMap;
 
 import application.Main;
 import application.User;
-import application.UserDatabase;
 
 public class resetPageController {
     private String securityQuestion, username;
     private User currentUser;
-    private UserDatabase database = Main.userDatabase; 
-    private HashMap<String, User> userList = database.getUserList();
 
     @FXML
     private Button back;
@@ -41,7 +38,7 @@ public class resetPageController {
     @FXML
     void submitUsername(ActionEvent event) {
         username = userInput.getText();
-        
+        HashMap<String, User> userList = Main.userDatabase.getUserList(); //Currently main database is empty
         
         if (userList.get(username) != null) {
             currentUser = userList.get(username);
