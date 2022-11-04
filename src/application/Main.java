@@ -24,7 +24,6 @@ public class Main extends Application
     public static UserDatabase userDatabase;
     // Static variable contained in main to change implementation (Serial, SQL, etc.)
     public static UserPersistence userPersistence;
-
     public static User currentUser;
 
     @Override
@@ -48,6 +47,7 @@ public class Main extends Application
         // Creates a UserPersistence object with a chosen implementation and retrieves and stores a userList
         userPersistence = new UserSerialize();
         userDatabase = new UserDatabase(userPersistence.retrieve());
+
         launch(args);
     }
 }
