@@ -9,7 +9,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.register.RegisterController">
+<AnchorPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.register.RegisterController">
    <children>
       <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#returnToLogin" prefHeight="42.0" prefWidth="81.0" text="Back">
          <font>

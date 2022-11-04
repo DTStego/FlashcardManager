@@ -1,4 +1,4 @@
-package application.register;
+package application.screens.register;
 
 import application.Main;
 import javafx.fxml.FXML;
