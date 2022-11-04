@@ -25,7 +25,7 @@ public class resetPageController {
     private User currentUser;
 
     @FXML
-    private Label ErrorMsg;
+    private Label errormsg;
 
     @FXML
     private Button back;
@@ -53,9 +53,10 @@ public class resetPageController {
     void submitUsername(ActionEvent event) {
         username = userInput.getText();
         HashMap<String, User> userList = Main.userDatabase.getUserList(); //Currently main database is empty
-        
-        if (userList.get(username) != null) {
-            currentUser = userList.get(username);
+        User user = userList.get(username);
+
+        if (user != null) {
+            currentUser = user;
             securityQuestion = currentUser.getSecurityQuestion();
             securityQ.setText(securityQuestion);
             removeError();
@@ -101,12 +102,12 @@ public class resetPageController {
     }
 
     void displayError(String error) {
-        ErrorMsg.setOpacity(1);
-        ErrorMsg.setText(error);
+        errormsg.setOpacity(1);
+        errormsg.setText(error);
     }
     
     void removeError() {
-        ErrorMsg.setOpacity(0);
+        errormsg.setOpacity(0);
     }
 
     private void loadScreen(Event event, String fxmlLocation) {
