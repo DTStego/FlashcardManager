@@ -27,5 +27,6 @@
             <Button mnemonicParsing="false" onMouseClicked="#submitNewCourseName" text="Confirm" />
          </children>
       </VBox>
+      <Button layoutX="506.0" layoutY="360.0" mnemonicParsing="false" onMouseClicked="#signOut" text="Sign Out" />
    </children>
 </AnchorPane>
