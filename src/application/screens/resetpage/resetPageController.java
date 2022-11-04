@@ -1,12 +1,19 @@
-package application.loginPage.resetpage;
+package application.screens.resetpage;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.scene.Node;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import application.Main;
@@ -54,6 +61,7 @@ public class resetPageController {
     @FXML
     void returnToLogin(ActionEvent event) {
         //return to loginpage
+        loadScreen(event, "../login/LoginScreen.fxml");
     }
 
     //take answer input, verify, then show password area
@@ -74,6 +82,20 @@ public class resetPageController {
             returnToLogin(event);
         } else {
             //display error, passwords don't match
+        }
+    }
+
+    private void loadScreen(Event event, String fxmlLocation) {
+        try {
+            Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlLocation));
+            Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
+
+            primaryStage.setTitle("Register");
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            System.out.println("FXML file not found");
         }
     }
 
