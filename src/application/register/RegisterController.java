@@ -2,28 +2,35 @@ package application.register;
 
 import application.Main;
 import application.User;
-import application.managers.Notebook;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import java.util.HashMap;
+
 public class RegisterController {
-
-    public TextField usernameInput;
-    public TextField passwordInput;
-    public TextField security;
-    public TextField secAnswer;
-    public Label errorLBL;
-    public Button backBtn;
-
+    @FXML
+    private TextField usernameInput;
+    @FXML
+    private TextField passwordInput;
+    @FXML
+    private TextField security;
+    @FXML
+    private TextField secAnswer;
+    @FXML
+    private Label errorLBL;
+    @FXML
+    private Button backBtn;
 
     /** Return to login page*/
-    public void returnToLogin() {
-        //return to loginpage
+    @FXML
+    void returnToLogin() {
+        //return to login page
         System.out.println("return to login");
     }
     /** Returns true if username is unique and not in the database */
-    public boolean isValid() {
+    boolean isValid() {
         //Reset errorMsg
         String errorMsg = "";
         // Invalid variable is incremented if any fields are empty or if the username is not unique
@@ -66,7 +73,8 @@ public class RegisterController {
     }
 
     /** If all fields are not empty and the username is unique, add new user to userList */
-    public void registerUser() {
+    @FXML
+    void registerUser() {
         if(isValid()) {
             System.out.println("this is valid");
 //            Main.userDatabase.addUser(new User(usernameInput.getText(), passwordInput.getText(), security.getText(), secAnswer.getText(), new Notebook()));
