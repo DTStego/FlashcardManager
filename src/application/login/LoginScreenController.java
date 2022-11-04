@@ -25,6 +25,9 @@ public class LoginScreenController {
     private Hyperlink forgotPassBtn;
 
     @FXML
+    private Hyperlink registerBtn;
+
+    @FXML
     private Button loginBtn;
 
     @FXML
@@ -67,6 +70,12 @@ public class LoginScreenController {
             }
         }
     }
+
+    @FXML
+    void onRegisterClick(MouseEvent event) {
+        System.out.println("go to register page");
+    }
+
     private boolean verifyUser() {
         ErrorMsg.setOpacity(1);
         if (usernameTextBox.getText().equals("")) {

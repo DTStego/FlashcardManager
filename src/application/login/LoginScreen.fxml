@@ -20,11 +20,6 @@
                   <Font size="30.0" />
                </font>
             </Text>
-            <Button fx:id="backBtn" layoutX="7.0" layoutY="8.0" mnemonicParsing="false" onMouseClicked="#onBackBtnClick" prefHeight="40.0" prefWidth="87.0" text="Back">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Button>
          </children>
       </Pane>
       <Line endX="470.0" layoutX="115.0" layoutY="55.0" startX="-1.0" />
@@ -36,7 +31,8 @@
             <Label layoutX="113.0" layoutY="109.0" text="Password" />
             <Button fx:id="loginBtn" layoutX="112.0" layoutY="173.0" mnemonicParsing="false" onMouseClicked="#onLoginClick" text="Login" />
             <Hyperlink fx:id="forgotPassBtn" layoutX="177.0" layoutY="174.0" onMouseClicked="#onForgotPassClick" text="Forgot password?" />
-            <Label fx:id="ErrorMsg" layoutX="112.0" layoutY="205.0" opacity="0.0" prefHeight="17.0" prefWidth="161.0" text="SampleErrorText" textFill="RED" />
+            <Hyperlink fx:id="registerBtn" layoutX="178.0" layoutY="200.0" onMouseClicked="#onRegisterClick" prefHeight="23.0" prefWidth="202.0" text="Don't have an account? Create one!" />
+            <Label fx:id="ErrorMsg" layoutX="181.0" layoutY="194.0" opacity="0.0" prefHeight="17.0" prefWidth="161.0" text="SampleErrorText" textFill="RED" />
          </children>
       </Pane>
    </children>
