@@ -25,7 +25,7 @@ public class resetPageController {
     private User currentUser;
 
     @FXML
-    private Label ErrorMsg;
+    private Label errormsg;
 
     @FXML
     private Button back;
@@ -48,12 +48,14 @@ public class resetPageController {
     @FXML
     private VBox passCreation;
 
-    //get username from input and if exists, set equal to var in controller
+    // get username from input and if exists, set equal to var in controller
     @FXML
-    void submitUsername(ActionEvent event) {
-        username = userInput.getText();
-        
-        if ((currentUser = Main.userDatabase.getUser(username)) != null) {
+    void submitUsername(ActionEvent event)
+    {
+        User user = Main.userDatabase.getUser(userInput.getText());
+
+        if (user != null) {
+            currentUser = user;
             securityQuestion = currentUser.getSecurityQuestion();
             securityQ.setText(securityQuestion);
             removeError();
@@ -97,12 +99,12 @@ public class resetPageController {
     }
 
     void displayError(String error) {
-        ErrorMsg.setOpacity(1);
-        ErrorMsg.setText(error);
+        errormsg.setOpacity(1);
+        errormsg.setText(error);
     }
     
     void removeError() {
-        ErrorMsg.setOpacity(0);
+        errormsg.setOpacity(0);
     }
 
     private void loadScreen(Event event, String fxmlLocation) {
