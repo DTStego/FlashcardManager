@@ -3,8 +3,10 @@ package application;
 import application.persistence.UserPersistence;
 import application.persistence.UserSerialize;
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
@@ -49,5 +51,22 @@ public class Main extends Application
         userDatabase = new UserDatabase(userPersistence.retrieve());
 
         launch(args);
+    }
+
+    public static void loadScreen(Event event, String fxmlLocation, String stageTitle)
+    {
+        try
+        {
+            Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            Parent root = FXMLLoader.load(Main.class.getResource(fxmlLocation));
+            Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
+
+            primaryStage.setTitle(stageTitle);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e)
+        {
+            System.out.println(fxmlLocation + ": Target FXML file not found");
+        }
     }
 }
