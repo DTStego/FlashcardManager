@@ -37,6 +37,16 @@ public class UserDatabase implements Serializable
         Main.userPersistence.save(userList);
     }
 
+    /** Deletes and Re-adds a User when a user's instance variable changes
+     *
+     * @param user The user that has needs to be updated in the database
+     */
+    public void updateUser(User user)
+    {
+        deleteUser(user);
+        addUser(user);
+    }
+
     public User getUser(String username)
     {
         return userList.get(username.toLowerCase(Locale.ROOT));
