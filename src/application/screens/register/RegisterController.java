@@ -29,14 +29,12 @@ public class RegisterController {
     private TextField secAnswer;
     @FXML
     private Label errorLBL;
-    @FXML
-    private Button backBtn;
 
     /** Return to login page*/
     @FXML
     void returnToLogin(ActionEvent event) throws IOException {
         //return to login page
-        loadScreen(event, "../login/LoginScreen.fxml");
+        loadScreen(event, "../login/LoginScreen.fxml", "Login");
     }
 
     /** If all fields are not empty and the username is unique, add new user to userList */
@@ -44,21 +42,21 @@ public class RegisterController {
     void registerUser(ActionEvent event) {
         if(isValid()) {
             Main.userDatabase.addUser(new User(usernameInput.getText(), passwordInput.getText(), security.getText(), secAnswer.getText(), new Notebook()));
-            loadScreen(event, "../login/LoginScreen.fxml");
+            loadScreen(event, "../login/LoginScreen.fxml", "Login");
         }
     }
 
-    private void loadScreen(Event event, String fxmlLocation) {
+    private void loadScreen(Event event, String fxmlLocation, String stageTitle) {
         try {
             Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource(fxmlLocation));
             Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
 
-            primaryStage.setTitle("Register");
+            primaryStage.setTitle(stageTitle);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
-            System.out.println("FXML file not found");
+            System.out.println("RegisterController: Target FXML file not found");
         }
     }
     /** Returns true if username is unique and not in the database */

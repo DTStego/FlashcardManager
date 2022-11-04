@@ -23,34 +23,20 @@ public class LoginScreenController {
 
     @FXML
     private Label ErrorMsg;
-
-    @FXML
-    private Hyperlink forgotPassBtn;
-
-    @FXML
-    private Hyperlink registerBtn;
-
-    @FXML
-    private Button loginBtn;
-
     @FXML
     private TextField passTextBox;
-
     @FXML
     private TextField usernameTextBox;
-
     @FXML
     void onForgotPassClick(MouseEvent event) {
-        loadScreen(event, "../resetpage/resetpageUI.fxml");
+        loadScreen(event, "../resetpage/resetpageUI.fxml", "Reset Page");
     }
-
     @FXML
     void onLoginClick(MouseEvent event) {
         if (verifyUser()) {
             //go to next page
         }
     }
-
     @FXML
     void onUsernameKeyPress(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -59,7 +45,6 @@ public class LoginScreenController {
             }
         }
     }
-
     @FXML
     void onPassKeyPress(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
@@ -68,20 +53,18 @@ public class LoginScreenController {
             }
         }
     }
-
     @FXML
     void onRegisterClick(MouseEvent event) {
-        loadScreen(event, "../register/register.fxml");
+        loadScreen(event, "../register/register.fxml", "Register");
     }
-
     private boolean verifyUser() {
         ErrorMsg.setOpacity(1);
         if (usernameTextBox.getText().equals("")) {
-            ErrorMsg.setText("Please enter a username");
+            ErrorMsg.setText("* Please enter a username");
             return false;
         }
         if (passTextBox.getText().equals("")) {
-            ErrorMsg.setText("Please enter a password");
+            ErrorMsg.setText("* Please enter a password");
             return false;
         }
 
@@ -89,30 +72,30 @@ public class LoginScreenController {
 
         if (user != null) {
             if (user.getPassword().equals(passTextBox.getText())) {
-                System.out.println("Login successful");
+                System.out.println("* Login successful");
                 ErrorMsg.setOpacity(0);
                 return true;
             } else {
-                ErrorMsg.setText("Password is incorrect");
+                ErrorMsg.setText("* Password is incorrect, please try again");
                 return false;
             }
         } else {
-            ErrorMsg.setText("Username does not exist");
+            ErrorMsg.setText("* Username does not exist, please try again");
             return false;
         }
     }
 
-    private void loadScreen(Event event, String fxmlLocation) {
+    private void loadScreen(Event event, String fxmlLocation, String stageTitle) {
         try {
             Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
             Parent root = FXMLLoader.load(getClass().getResource(fxmlLocation));
             Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
 
-            primaryStage.setTitle("Register");
+            primaryStage.setTitle(stageTitle);
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e) {
-            System.out.println("FXML file not found");
+            System.out.println("LoginScreenController: Target FXML file not found");
         }
     }
 }
