@@ -1,6 +1,5 @@
 package application;
 
-import application.managers.Notebook;
 import application.persistence.UserPersistence;
 import application.persistence.UserSerialize;
 import javafx.application.Application;
@@ -11,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import javax.swing.filechooser.FileSystemView;
 import java.io.IOException;
 
 public class Main extends Application
@@ -31,7 +29,7 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage) throws IOException
     {
-        Parent root = FXMLLoader.load(getClass().getResource("login/LoginScreen.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("screens/login/LoginScreen.fxml"));
         Scene scene = new Scene(root, screenWidth * screenScale, screenHeight * screenScale);
 
         primaryStage.setTitle("Flashcard Manager");
