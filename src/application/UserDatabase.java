@@ -3,6 +3,7 @@ package application;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 
 // UserDatabase is initialized at the start of the program from an external file/system
 public class UserDatabase implements Serializable
@@ -32,7 +33,7 @@ public class UserDatabase implements Serializable
     /** Method Overloading using a username instead of an actual User object */
     public void deleteUser(String username)
     {
-        userList.remove(username);
+        userList.remove(username.toLowerCase(Locale.ROOT));
         Main.userPersistence.save(userList);
     }
 

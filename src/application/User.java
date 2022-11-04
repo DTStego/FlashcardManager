@@ -3,6 +3,7 @@ package application;
 import application.managers.Notebook;
 
 import java.io.Serializable;
+import java.util.Locale;
 import java.util.Objects;
 
 public class User implements Serializable
@@ -29,7 +30,7 @@ public class User implements Serializable
 
     public User(String username, String password, String securityQuestion, String securityAnswer, Notebook notebook)
     {
-        this.username = username;
+        this.username = username.toLowerCase(Locale.ROOT);
         this.password = password;
         this.securityQuestion = securityQuestion;
         this.securityAnswer = securityAnswer;
@@ -38,12 +39,19 @@ public class User implements Serializable
 
     public String getUsername()
     {
-        return username;
+        if (username.length() == 1)
+        {
+            return username.toUpperCase(Locale.ROOT);
+        }
+        else
+        {
+            return username.substring(0, 1).toUpperCase(Locale.ROOT) + username.substring(1);
+        }
     }
 
     public void setUsername(String username)
     {
-        this.username = username;
+        this.username = username.toLowerCase();
     }
 
     public String getPassword()
