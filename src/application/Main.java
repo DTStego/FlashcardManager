@@ -49,11 +49,6 @@ public class Main extends Application
         // Creates a UserPersistence object with a chosen implementation and retrieves and stores a userList
         userPersistence = new UserSerialize();
         userDatabase = new UserDatabase(userPersistence.retrieve());
-
-        User testUser = new User("Username1", "Pass1","s1","a1", new Notebook());
-
-        System.out.println(FileSystemView.getFileSystemView().getDefaultDirectory().getPath());
-        userDatabase.addUser(testUser);
         launch(args);
     }
 }
