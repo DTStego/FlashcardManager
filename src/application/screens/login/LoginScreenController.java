@@ -42,7 +42,7 @@ public class LoginScreenController {
 
     @FXML
     void onForgotPassClick(MouseEvent event) {
-        loadScreen(event, "screens/resetpage/resetpageUI.fxml");
+        loadScreen(event, "../resetpage/resetpageUI.fxml");
     }
 
     @FXML
@@ -72,7 +72,7 @@ public class LoginScreenController {
 
     @FXML
     void onRegisterClick(MouseEvent event) {
-        loadScreen(event, "screens/register/register.fxml");
+        loadScreen(event, "../register/register.fxml");
     }
 
     private boolean verifyUser() {
@@ -107,7 +107,7 @@ public class LoginScreenController {
     private void loadScreen(Event event, String fxmlLocation) {
         try {
             Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            Parent root = FXMLLoader.load(Main.class.getResource(fxmlLocation));
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlLocation));
             Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
 
             primaryStage.setTitle("Register");
