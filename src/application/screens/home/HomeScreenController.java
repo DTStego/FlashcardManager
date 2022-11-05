@@ -3,13 +3,9 @@ package application.screens.home;
 import java.util.List;
 
 import application.Main;
-import application.User;
 import application.managers.Course;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
@@ -17,31 +13,19 @@ public class HomeScreenController {
 
     @FXML
     private TabPane courseList;
-
-    @FXML
-    private Button deleteCourseBtn;
-
-    @FXML
-    private Button newCourseBtn;
-
-    @FXML
-    private Button renameCourseBtn;
-
     @FXML
     private VBox rename;
-
     @FXML
     private TextField newCourseNameInput;
-
    @FXML
    public void initialize() {
         List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
-        
+
         //Goes through courses and displays tabs for them
         for (Course course : currentCourseList) {
             Tab tempTab = new Tab();
             String tempTabName = course.getName();
-            tempTab.setText(tempTabName);
+            tempTab.setGraphic(new Label(tempTabName));
             courseList.getTabs().add(tempTab);        
         } 
    }
@@ -53,7 +37,9 @@ public class HomeScreenController {
 
             //Finds current Tab
             Tab currentTab = courseList.getTabs().get(selectedIndex);
-            String currentName = currentTab.getText();
+
+            Label currentTabText = (Label)currentTab.getGraphic();
+            String currentName = currentTabText.getText();
 
             //Iterates through notebook courselist to find course to delete
             List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
@@ -80,7 +66,7 @@ public class HomeScreenController {
     void onNewTabClick(MouseEvent event) {
         Tab blankTab = new Tab();
         String blankTabName = "test tab " + courseList.getTabs().size();
-        blankTab.setText(blankTabName);
+        blankTab.setGraphic(new Label(blankTabName));
         courseList.getTabs().add(blankTab);
         courseList.getSelectionModel().select(blankTab);
 
@@ -110,7 +96,8 @@ public class HomeScreenController {
             int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
             Tab currentTab = courseList.getTabs().get(selectedIndex);
 
-            String currentName = currentTab.getText();
+            Label currentTabText = (Label)currentTab.getGraphic();
+            String currentName = currentTabText.getText();
             String newName = newCourseNameInput.getText();
             
             //Find in notebook and rename file 
@@ -124,17 +111,20 @@ public class HomeScreenController {
 
             if (currentCourse == null) {
                 //Show error
+
             } else {
 
                 currentCourse.rename(newName);
                 
                 //Rename in UI
-                currentTab.setText(newName);
+                currentTabText.setText(newName);
+//                currentTab.setText(newName);
                 newCourseNameInput.clear();
                 rename.setVisible(false);
                 updateUser();
                 }
         } else {
+
             //show error of course name is empty
         }
     }
