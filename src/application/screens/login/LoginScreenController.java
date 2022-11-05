@@ -80,6 +80,7 @@ public class LoginScreenController
             {
                 System.out.println("* Login successful");
                 Main.loadScreen(event, "screens/home/homeScreen.fxml", "Home");
+                Main.currentUser = user;
                 ErrorMsg.setOpacity(0);
                 return true;
             } else
