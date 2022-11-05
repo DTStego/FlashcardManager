@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 
 public class HomeScreenController {
 
@@ -17,6 +18,9 @@ public class HomeScreenController {
     private VBox rename;
     @FXML
     private TextField newCourseNameInput;
+    @FXML
+    private Text errorTxt;
+
    @FXML
    public void initialize() {
         List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
@@ -53,8 +57,11 @@ public class HomeScreenController {
 
             if (currentCourse == null) {
                 //Show error
+                displayError("There are no courses to delete");
             } else {
                 //Remove in notebook, then remove in UI
+                rename.setVisible(false);
+                removeError();
                 Main.currentUser.getNotebook().getCourseList().remove(currentCourse);          
                 courseList.getTabs().remove(selectedIndex);
                 updateUser();
@@ -81,7 +88,9 @@ public class HomeScreenController {
     void onRenameTabClick(MouseEvent event) {
         if (!courseList.getTabs().isEmpty()) {
             nameTab();
-        } 
+        } else {
+            displayError("There are no courses to rename");
+        }
     }
 
     void nameTab() {
@@ -90,7 +99,7 @@ public class HomeScreenController {
 
     @FXML
     void submitNewCourseName(MouseEvent event) {
-        if (newCourseNameInput.getText() != null) {
+        if (!"".equals(newCourseNameInput.getText())) {
             Course currentCourse = null;
 
             int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
@@ -110,22 +119,20 @@ public class HomeScreenController {
             } 
 
             if (currentCourse == null) {
-                //Show error
-
+                displayError("There are no courses to rename");
             } else {
+                removeError();
 
                 currentCourse.rename(newName);
                 
                 //Rename in UI
                 currentTabText.setText(newName);
-//                currentTab.setText(newName);
                 newCourseNameInput.clear();
                 rename.setVisible(false);
                 updateUser();
                 }
         } else {
-
-            //show error of course name is empty
+            displayError("Please enter a name for this course.");
         }
     }
 
@@ -137,5 +144,14 @@ public class HomeScreenController {
 
     public void updateUser() {
         Main.userDatabase.updateUser(Main.currentUser);
+    }
+
+    public void displayError(String text) {
+        errorTxt.setVisible(true);
+        errorTxt.setText(text);
+    }
+
+    public void removeError() {
+        errorTxt.setVisible(false);
     }
 }
