@@ -79,8 +79,8 @@ public class LoginScreenController
             if (user.getPassword().equals(passTextBox.getText()))
             {
                 System.out.println("* Login successful");
-                Main.loadScreen(event, "screens/home/homeScreen.fxml", "Home");
                 Main.currentUser = user;
+                Main.loadScreen(event, "screens/home/homeScreen.fxml", "Home");
                 ErrorMsg.setOpacity(0);
                 return true;
             } else

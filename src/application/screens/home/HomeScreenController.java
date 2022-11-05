@@ -33,7 +33,18 @@ public class HomeScreenController {
     @FXML
     private TextField newCourseNameInput;
 
-
+   @FXML
+   public void initialize() {
+        List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
+        
+        //Goes through courses and displays tabs for them
+        for (Course course : currentCourseList) {
+            Tab tempTab = new Tab();
+            String tempTabName = course.getName();
+            tempTab.setText(tempTabName);
+            courseList.getTabs().add(tempTab);        
+        } 
+   }
 
     @FXML
     void onDeleteTabClick(MouseEvent event) {
@@ -116,6 +127,7 @@ public class HomeScreenController {
             } else {
 
                 currentCourse.rename(newName);
+                
                 //Rename in UI
                 currentTab.setText(newName);
                 newCourseNameInput.clear();
