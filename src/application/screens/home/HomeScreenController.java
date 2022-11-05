@@ -72,7 +72,7 @@ public class HomeScreenController {
     @FXML
     void onNewTabClick(MouseEvent event) {
         Tab blankTab = new Tab();
-        String blankTabName = "test tab " + courseList.getTabs().size();
+        String blankTabName = "Blank Course " + courseList.getTabs().size();
         blankTab.setGraphic(new Label(blankTabName));
         courseList.getTabs().add(blankTab);
         courseList.getSelectionModel().select(blankTab);
