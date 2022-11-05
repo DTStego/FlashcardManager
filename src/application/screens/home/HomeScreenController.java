@@ -38,7 +38,28 @@ public class HomeScreenController {
     void onDeleteTabClick(MouseEvent event) {
         if (courseList.getTabs().size() > 0) {
             int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
-            courseList.getTabs().remove(selectedIndex);
+
+            //Finds current Tab
+            Tab currentTab = courseList.getTabs().get(selectedIndex);
+            String currentName = currentTab.getText();
+
+            //Iterates through notebook courselist to find course to delete
+            List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
+            Course currentCourse = null;
+
+            for (Course course : currentCourseList) {
+                if (course.getName().equals(currentName)) {
+                    currentCourse = course; 
+                } 
+            } 
+
+            if (currentCourse == null) {
+                //Show error
+            } else {
+                //Remove in notebook, then remove in UI
+                Main.currentUser.getNotebook().getCourseList().remove(currentCourse);          
+                courseList.getTabs().remove(selectedIndex);
+            }
         }
     }
 
@@ -52,18 +73,13 @@ public class HomeScreenController {
 
         Course newCourse = new Course(null, blankTabName);
         Main.currentUser.getNotebook().getCourseList().add(newCourse);
-        System.out.println(Main.currentUser.getNotebook().getCourseList());
-        List<Course> CourseList = Main.currentUser.getNotebook().getCourseList();
-        for (Course course : CourseList) {
-            System.out.println(course.getName());
-        }
 
         nameTab();
     }
 
     @FXML
     void onRenameTabClick(MouseEvent event) {
-        if (courseList.getTabs().size() > 0) {
+        if (!courseList.getTabs().isEmpty()) {
             nameTab();
         } 
     }
@@ -84,9 +100,9 @@ public class HomeScreenController {
             String newName = newCourseNameInput.getText();
             
             //Find in notebook and rename file 
-            List<Course> courseList = Main.currentUser.getNotebook().getCourseList();
+            List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
 
-            for (Course course : courseList) {
+            for (Course course : currentCourseList) {
                 if (course.getName().equals(currentName)) {
                     currentCourse = course; 
                 } 
