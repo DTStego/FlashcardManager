@@ -1,6 +1,9 @@
 package application.screens.home;
 
+import java.util.List;
+
 import application.Main;
+import application.managers.Course;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
@@ -35,34 +38,86 @@ public class HomeScreenController {
     void onDeleteTabClick(MouseEvent event) {
         if (courseList.getTabs().size() > 0) {
             int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
-            courseList.getTabs().remove(selectedIndex);
+
+            //Finds current Tab
+            Tab currentTab = courseList.getTabs().get(selectedIndex);
+            String currentName = currentTab.getText();
+
+            //Iterates through notebook courselist to find course to delete
+            List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
+            Course currentCourse = null;
+
+            for (Course course : currentCourseList) {
+                if (course.getName().equals(currentName)) {
+                    currentCourse = course; 
+                } 
+            } 
+
+            if (currentCourse == null) {
+                //Show error
+            } else {
+                //Remove in notebook, then remove in UI
+                Main.currentUser.getNotebook().getCourseList().remove(currentCourse);          
+                courseList.getTabs().remove(selectedIndex);
+            }
         }
     }
 
     @FXML
     void onNewTabClick(MouseEvent event) {
-        Tab testTab = new Tab();
-        testTab.setText("test tab " + courseList.getTabs().size());
-        courseList.getTabs().add(testTab);
+        Tab blankTab = new Tab();
+        String blankTabName = "test tab " + courseList.getTabs().size();
+        blankTab.setText(blankTabName);
+        courseList.getTabs().add(blankTab);
+        courseList.getSelectionModel().select(blankTab);
+
+        Course newCourse = new Course(null, blankTabName);
+        Main.currentUser.getNotebook().getCourseList().add(newCourse);
+
+        nameTab();
     }
 
     @FXML
     void onRenameTabClick(MouseEvent event) {
-        if (courseList.getTabs().size() > 0) {
-
-            rename.setVisible(true);
+        if (!courseList.getTabs().isEmpty()) {
+            nameTab();
         } 
+    }
+
+    void nameTab() {
+        rename.setVisible(true);
     }
 
     @FXML
     void submitNewCourseName(MouseEvent event) {
         if (newCourseNameInput.getText() != null) {
+            Course currentCourse = null;
+
             int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
             Tab currentTab = courseList.getTabs().get(selectedIndex);
 
+            String currentName = currentTab.getText();
             String newName = newCourseNameInput.getText();
-            currentTab.setText(newName);
-            rename.setVisible(false);
+            
+            //Find in notebook and rename file 
+            List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
+
+            for (Course course : currentCourseList) {
+                if (course.getName().equals(currentName)) {
+                    currentCourse = course; 
+                } 
+            } 
+
+            if (currentCourse == null) {
+                //Show error
+            } else {
+
+                currentCourse.rename(newName);
+                //Rename in UI
+                currentTab.setText(newName);
+                newCourseNameInput.clear();
+                rename.setVisible(false);
+                }
         } else {
             //show error of course name is empty
         }
