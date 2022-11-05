@@ -3,6 +3,7 @@ package application.screens.home;
 import java.util.List;
 
 import application.Main;
+import application.User;
 import application.managers.Course;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -59,6 +60,7 @@ public class HomeScreenController {
                 //Remove in notebook, then remove in UI
                 Main.currentUser.getNotebook().getCourseList().remove(currentCourse);          
                 courseList.getTabs().remove(selectedIndex);
+                updateUser();
             }
         }
     }
@@ -74,6 +76,7 @@ public class HomeScreenController {
         Course newCourse = new Course(null, blankTabName);
         Main.currentUser.getNotebook().getCourseList().add(newCourse);
 
+        updateUser();
         nameTab();
     }
 
@@ -117,6 +120,7 @@ public class HomeScreenController {
                 currentTab.setText(newName);
                 newCourseNameInput.clear();
                 rename.setVisible(false);
+                updateUser();
                 }
         } else {
             //show error of course name is empty
@@ -128,4 +132,8 @@ public class HomeScreenController {
         Main.loadScreen(event, "screens/login/LoginScreen.fxml", "LoginScreen");
     }
 
+
+    public void updateUser() {
+        Main.userDatabase.updateUser(Main.currentUser);
+    }
 }
