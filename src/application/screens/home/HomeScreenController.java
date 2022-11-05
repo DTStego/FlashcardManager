@@ -1,6 +1,9 @@
 package application.screens.home;
 
+import java.util.List;
+
 import application.Main;
+import application.managers.Course;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
@@ -42,9 +45,19 @@ public class HomeScreenController {
     @FXML
     void onNewTabClick(MouseEvent event) {
         Tab blankTab = new Tab();
-        blankTab.setText("test tab " + courseList.getTabs().size());
+        String blankTabName = "test tab " + courseList.getTabs().size();
+        blankTab.setText(blankTabName);
         courseList.getTabs().add(blankTab);
         courseList.getSelectionModel().select(blankTab);
+
+        Course newCourse = new Course(null, blankTabName);
+        Main.currentUser.getNotebook().getCourseList().add(newCourse);
+        System.out.println(Main.currentUser.getNotebook().getCourseList());
+        List<Course> CourseList = Main.currentUser.getNotebook().getCourseList();
+        for (Course course : CourseList) {
+            System.out.println(course.getName());
+        }
+
         nameTab();
     }
 
@@ -62,12 +75,33 @@ public class HomeScreenController {
     @FXML
     void submitNewCourseName(MouseEvent event) {
         if (newCourseNameInput.getText() != null) {
+            Course currentCourse = null;
+
             int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
             Tab currentTab = courseList.getTabs().get(selectedIndex);
 
+            String currentName = currentTab.getText();
             String newName = newCourseNameInput.getText();
-            currentTab.setText(newName);
-            rename.setVisible(false);
+            
+            //Find in notebook and rename file 
+            List<Course> courseList = Main.currentUser.getNotebook().getCourseList();
+
+            for (Course course : courseList) {
+                if (course.getName().equals(currentName)) {
+                    currentCourse = course; 
+                } 
+            } 
+
+            if (currentCourse == null) {
+                //Show error
+            } else {
+
+                currentCourse.rename(newName);
+                //Rename in UI
+                currentTab.setText(newName);
+                newCourseNameInput.clear();
+                rename.setVisible(false);
+                }
         } else {
             //show error of course name is empty
         }

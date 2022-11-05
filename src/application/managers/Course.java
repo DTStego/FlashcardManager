@@ -28,6 +28,10 @@ public class Course implements Manager
         return topicList;
     }
 
+    public void rename(String newName) {
+        name = newName;
+    }
+
     @Override
     public String getName()
     {

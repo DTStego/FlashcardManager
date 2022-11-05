@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -9,15 +8,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.home.HomeScreenController">
    <children>
-      <TabPane fx:id="courseList" prefHeight="400.0" prefWidth="479.0" tabClosingPolicy="UNAVAILABLE">
-        <tabs>
-          <Tab text="Untitled Tab 1">
-            <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-            </content>
-          </Tab>
-        </tabs>
-      </TabPane>
+      <TabPane fx:id="courseList" prefHeight="400.0" prefWidth="479.0" tabClosingPolicy="UNAVAILABLE" />
       <Button fx:id="newCourseBtn" layoutX="487.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#onNewTabClick" prefHeight="33.0" prefWidth="99.0" text="New Course" />
       <Button fx:id="deleteCourseBtn" layoutX="487.0" layoutY="56.0" mnemonicParsing="false" onMouseClicked="#onDeleteTabClick" prefHeight="33.0" prefWidth="99.0" text="Delete Course" />
       <Button fx:id="renameCourseBtn" layoutX="487.0" layoutY="100.0" mnemonicParsing="false" onMouseClicked="#onRenameTabClick" prefHeight="33.0" prefWidth="99.0" text="Rename Course" />
