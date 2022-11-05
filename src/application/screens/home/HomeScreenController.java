@@ -41,17 +41,22 @@ public class HomeScreenController {
 
     @FXML
     void onNewTabClick(MouseEvent event) {
-        Tab testTab = new Tab();
-        testTab.setText("test tab " + courseList.getTabs().size());
-        courseList.getTabs().add(testTab);
+        Tab blankTab = new Tab();
+        blankTab.setText("test tab " + courseList.getTabs().size());
+        courseList.getTabs().add(blankTab);
+        courseList.getSelectionModel().select(blankTab);
+        nameTab();
     }
 
     @FXML
     void onRenameTabClick(MouseEvent event) {
         if (courseList.getTabs().size() > 0) {
-
-            rename.setVisible(true);
+            nameTab();
         } 
+    }
+
+    void nameTab() {
+        rename.setVisible(true);
     }
 
     @FXML
