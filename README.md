@@ -16,3 +16,10 @@ The program incorporates pure JavaFX with FXML and controllers.
 - Keigo Tajima
 - Johnhuy Nguyen
 - Brandon Ching
+
+## Notes
+
+The program saves information to the default documents folder for your respective OS.
+
+Windows: C:/Users/*username*/Documents/FlashcardManager<br>
+&nbsp;&nbsp;&nbsp;&nbsp;If OneDrive hijacked your documents folder, C:/Users/*username*/OneDrive/Documents/FlashcardManager
