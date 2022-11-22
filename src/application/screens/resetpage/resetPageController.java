@@ -64,12 +64,17 @@ public class resetPageController
     void submitAnswer(ActionEvent event)
     {
         String answer = userAnswer.getText();
-        if (answer.equals(currentUser.getSecurityAnswer()))
-        {
-            //Display password creation
-            passCreation.setOpacity(1);
-        } else {
-            displayError("* The answer is incorrect, please try again.");
+        if (currentUser!=null) {
+            if (answer.equals(currentUser.getSecurityAnswer()))
+            {
+                //Display password creation
+                passCreation.setOpacity(1);
+            } else {
+                displayError("* The answer is incorrect, please try again.");
+            }
+        }
+        else {
+            displayError("* User not found, please enter a valid username and click \"Find User\"");
         }
     }
 
@@ -98,7 +103,7 @@ public class resetPageController
         errormsg.setOpacity(1);
         errormsg.setText(error);
     }
-    
+
     void removeError()
     {
         errormsg.setOpacity(0);
