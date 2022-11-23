@@ -10,9 +10,9 @@ import java.util.HashSet;
 
 public class UserSerialize implements UserPersistence, ObjectSerialize
 {
-    // Path of save folder in documents, e.g., (For Windows) "../My Documents/FlashcardManager/saves/"
+    // Path of save folder in documents, e.g., (For Windows) "../My Documents/FlashcardManager/saves_v{version_number}/"
     private final String saveFolder = FileSystemView.getFileSystemView().getDefaultDirectory().getPath()
-            .concat(File.separatorChar + "FlashcardManager" + File.separatorChar + "saves");
+            .concat(File.separatorChar + "FlashcardManager" + File.separatorChar + "saves_v0.9");
 
     /**
      * Stores the userList in a "saves" folder in a user's document folder through serialization.
@@ -83,7 +83,7 @@ public class UserSerialize implements UserPersistence, ObjectSerialize
     @Override
     public boolean createSaveFile()
     {
-        // Attempt to create the directory "FlashcardManager/saves"
+        // Attempt to create the directory "FlashcardManager/saves_v.{version_number}"
         // Cannot combine with .createNewFile statement because method creates files instead
         File file = new File(saveFolder);
         file.mkdirs();
