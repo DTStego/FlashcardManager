@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.home.HomeScreenController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.home.HomeScreenController">
    <children>
       <TabPane fx:id="courseList" prefHeight="400.0" prefWidth="479.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMinHeight="300.0" />
       <Button fx:id="newCourseBtn" layoutX="487.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#onNewTabClick" prefHeight="33.0" prefWidth="99.0" text="New Course" />
@@ -19,7 +19,8 @@
             <Button mnemonicParsing="false" onMouseClicked="#submitNewCourseName" text="Confirm" />
          </children>
       </VBox>
-      <Button layoutX="506.0" layoutY="360.0" mnemonicParsing="false" onMouseClicked="#signOut" text="Sign Out" />
+      <Button layoutX="488.0" layoutY="360.0" mnemonicParsing="false" onMouseClicked="#signOut" prefHeight="25.0" prefWidth="99.0" text="Sign Out" />
       <Text fx:id="errorTxt" fill="RED" layoutX="480.0" layoutY="332.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error" textAlignment="CENTER" visible="false" wrappingWidth="112.0172119140625" />
+      <Button fx:id="accountSettingsBtn" layoutX="488.0" layoutY="327.0" mnemonicParsing="false" onMouseClicked="#onAccountSettingsBtnClick" prefHeight="25.0" prefWidth="99.0" text="Acc. Settings" />
    </children>
 </AnchorPane>

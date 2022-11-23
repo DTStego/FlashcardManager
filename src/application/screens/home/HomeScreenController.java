@@ -13,6 +13,9 @@ import javafx.scene.text.Text;
 public class HomeScreenController {
 
     @FXML
+    private Button accountSettingsBtn;
+
+    @FXML
     private TabPane courseList;
     @FXML
     private VBox rename;
@@ -20,6 +23,7 @@ public class HomeScreenController {
     private TextField newCourseNameInput;
     @FXML
     private Text errorTxt;
+
 
    @FXML
    public void initialize() {
@@ -136,6 +140,10 @@ public class HomeScreenController {
         }
     }
 
+    @FXML
+    void onAccountSettingsBtnClick(MouseEvent event) {
+        Main.loadScreen(event,"screens/accountSettings/accountSettingsScreen.fxml", "AccountSettings");
+    }
     @FXML
     void signOut(MouseEvent event) {
         Main.loadScreen(event, "screens/login/LoginScreen.fxml", "LoginScreen");
