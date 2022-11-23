@@ -1,6 +1,7 @@
 package application;
 
 import application.managers.Notebook;
+import edu.sjsu.yazdankhah.crypto.util.PassUtil;
 
 import java.io.Serializable;
 import java.util.Locale;
@@ -30,10 +31,12 @@ public class User implements Serializable
 
     public User(String username, String password, String securityQuestion, String securityAnswer, Notebook notebook)
     {
+        PassUtil security = new PassUtil();
+
         this.username = username.toLowerCase(Locale.ROOT);
-        this.password = password;
+        this.password = security.encrypt(password);
         this.securityQuestion = securityQuestion;
-        this.securityAnswer = securityAnswer;
+        this.securityAnswer = security.encrypt(securityAnswer);
         this.notebook = notebook;
     }
 
@@ -47,14 +50,19 @@ public class User implements Serializable
         this.username = username.toLowerCase();
     }
 
+    /**
+     * @return String that is decrypted using a PassUtil object
+     */
     public String getPassword()
     {
-        return password;
+        PassUtil security = new PassUtil();
+        return security.decrypt(password);
     }
 
     public void setPassword(String password)
     {
-        this.password = password;
+        PassUtil security = new PassUtil();
+        this.password = security.encrypt(password);
     }
 
     public String getSecurityQuestion()
@@ -67,14 +75,19 @@ public class User implements Serializable
         this.securityQuestion = securityQuestion;
     }
 
+    /**
+     * @return String that is decrypted using a PassUtil object
+     */
     public String getSecurityAnswer()
     {
-        return securityAnswer;
+        PassUtil security = new PassUtil();
+        return security.decrypt(securityAnswer);
     }
 
     public void setSecurityAnswer(String securityAnswer)
     {
-        this.securityAnswer = securityAnswer;
+        PassUtil security = new PassUtil();
+        this.securityAnswer = security.encrypt(securityAnswer);
     }
 
     public Notebook getNotebook()
@@ -88,8 +101,8 @@ public class User implements Serializable
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return username.equals(user.username) && password.equals(user.password)
-                && securityQuestion.equals(user.securityQuestion) && securityAnswer.equals(user.securityAnswer);
+        return getUsername().equals(user.username) && getPassword().equals(user.password)
+                && getSecurityQuestion().equals(user.securityQuestion) && getSecurityAnswer().equals(user.securityAnswer);
     }
 
     @Override
