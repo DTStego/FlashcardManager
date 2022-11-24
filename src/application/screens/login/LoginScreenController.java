@@ -23,11 +23,27 @@ public class LoginScreenController
     private TextField passTextBox;
     @FXML
     private TextField usernameTextBox;
+
+    /**
+     * Activates when a user clicks on the "Forgot password?" prompt on the login screen.
+     * Switches the scene to the reset page.
+     */
     @FXML
     void onForgotPassClick(MouseEvent event)
     {
         Main.loadScreen(event, "screens/resetpage/resetpageUI.fxml", "Reset Page");
     }
+
+    /**
+     * Activates when a user clicks on the register prompt on the login screen.
+     * Switches the scene to the register page.
+     */
+    @FXML
+    void onRegisterClick(MouseEvent event)
+    {
+        Main.loadScreen(event, "screens/register/register.fxml", "Register");
+    }
+
     @FXML
     void onLoginClick(MouseEvent event)
     {
@@ -36,33 +52,38 @@ public class LoginScreenController
             //go to next page
         }
     }
+
+    /**
+     * Activates when a user presses a button while focused on the username text-box.
+     * Attempts to verify user through the verifyUser() method.
+     */
     @FXML
     void onUsernameKeyPress(KeyEvent event)
     {
         if (event.getCode() == KeyCode.ENTER)
         {
-            if (verifyUser(event))
-            {
-                //go to next page
-            }
+            verifyUser(event);
         }
     }
+
+    /**
+     * Activates when a user presses a button while focused on the password text-box.
+     * Attempts to verify user through the verifyUser() method.
+     */
     @FXML
     void onPassKeyPress(KeyEvent event)
     {
         if (event.getCode() == KeyCode.ENTER)
         {
-            if (verifyUser(event))
-            {
-                //go to next page
-            }
+            verifyUser(event);
         }
     }
-    @FXML
-    void onRegisterClick(MouseEvent event)
-    {
-        Main.loadScreen(event, "screens/register/register.fxml", "Register");
-    }
+
+    /**
+     * Attempts to verify the credentials from the username and password text-boxes
+     * @param event Event object used to locate the primary stage for Main.java's loadScreen() method.
+     * @return boolean dependent on if the user was verified in the database or not.
+     */
     private boolean verifyUser(Event event)
     {
         ErrorMsg.setOpacity(1);
@@ -74,16 +95,19 @@ public class LoginScreenController
         if (passTextBox.getText().equals(""))
         {
             ErrorMsg.setText("* Please enter a password");
+            // Focuses on the password text-box if none is detected and a username was entered.
+            passTextBox.requestFocus();
             return false;
         }
 
+        // Attempts to locate the user in the database
         User user = Main.userDatabase.getUser(usernameTextBox.getText());
 
         if (user != null)
         {
+            // If the user is verified, advance to the home screen, otherwise, display error messages.
             if (user.getPassword().equals(passTextBox.getText()))
             {
-                System.out.println("* Login successful");
                 Main.currentUser = user;
                 Main.loadScreen(event, "screens/home/homeScreen.fxml", "Home");
                 ErrorMsg.setOpacity(0);
@@ -100,6 +124,7 @@ public class LoginScreenController
         }
     }
 
+    /** Opens the save folder location */
     @FXML
     void openSaveLocation(MouseEvent event)
     {

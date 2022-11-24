@@ -34,7 +34,14 @@ public class resetPageController
     @FXML
     private VBox passCreation;
 
-    // Get username from input and if exists, set equal to var in controller
+    @FXML
+    void returnToLogin(ActionEvent event)
+    {
+        // Return to the login screen
+        Main.loadScreen(event, "screens/login/LoginScreen.fxml", "Login");
+    }
+
+    /** Attempts to retrieve the user from a database to then display the security question */
     @FXML
     void submitUsername(ActionEvent event)
     {
@@ -52,22 +59,18 @@ public class resetPageController
         }
     }
 
-    @FXML
-    void returnToLogin(ActionEvent event)
-    {
-        // Return to the login screen
-        Main.loadScreen(event, "screens/login/LoginScreen.fxml", "Login");
-    }
-
-    //take answer input, verify, then show password area
+    /**
+     * Verifies the inputted security answer and shows the text-boxes to reset the password.
+     * Otherwise, display error messages that explain the issues.
+     */
     @FXML
     void submitAnswer(ActionEvent event)
     {
         String answer = userAnswer.getText();
-        if (currentUser!=null) {
+        if (currentUser != null) {
             if (answer.equals(currentUser.getSecurityAnswer()))
             {
-                //Display password creation
+                // Display password creation
                 passCreation.setOpacity(1);
             } else {
                 displayError("* The answer is incorrect, please try again.");
@@ -78,7 +81,11 @@ public class resetPageController
         }
     }
 
-    // Verify new password equals each other, set password on user, return to login page
+
+    /**
+     * Verifies that the new password and the confirmation of the new password match
+     * and reset the user's password. Then, return to the login screen.
+     */
     @FXML
     void submitNewPass(ActionEvent event)
     {
@@ -86,14 +93,15 @@ public class resetPageController
         String newPassConfirmString = newPassConfirm.getText();
 
         if (newPassString.equals(newPassConfirmString) && newPassString.length()!=0)
-        {   // Can add requirements for password
+        {
+            // Can add requirements for password
             currentUser.setPassword(newPassString);
             Main.userDatabase.updateUser(currentUser);
             removeError();
             returnToLogin(event);
         } else
         {
-            //display error, passwords don't match
+            // Display error, passwords don't match.
             displayError("* Passwords do not match or a new password was not inputted, please try again.");
         }
     }
