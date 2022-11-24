@@ -29,7 +29,7 @@ public class HomeScreenController {
     private VBox rename;
 
    @FXML
-   public void initialize() {
+   public void initialize() throws IOException {
         List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
 
         //Goes through courses and displays tabs for them
@@ -37,6 +37,8 @@ public class HomeScreenController {
             Tab tempTab = new Tab();
             String tempTabName = course.getName();
             tempTab.setGraphic(new Label(tempTabName));
+            Parent root = FXMLLoader.load(Main.class.getResource("screens/home/courseTab.fxml"));
+            tempTab.setContent(root);
             courseList.getTabs().add(tempTab);        
         } 
    }
