@@ -3,20 +3,24 @@ package application.screens.home;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class TopicPaneController {
 
-    void initialize() {
+    @FXML
+    private Pane topicPane;
 
+    @FXML
+    void initialize() {
     }
 
     @FXML
     void onDelTopicClicked(MouseEvent event) {
-        Node topic = (Node) event.getSource();
-        ((VBox) topic.getParent().getParent()).getChildren().remove(topic.getParent());
+        ((VBox) topicPane.getParent()).getChildren().remove(topicPane);
     }
 
     @FXML
