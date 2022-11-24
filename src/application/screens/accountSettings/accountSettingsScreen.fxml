@@ -21,7 +21,7 @@
       <Button fx:id="applyBtn" layoutX="565.0" layoutY="361.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="52.0" text="Apply" />
       <Button fx:id="cancelBtn" layoutX="627.0" layoutY="361.0" mnemonicParsing="false" onMouseClicked="#onCancelClick" text="Cancel" />
       <Label layoutX="486.0" layoutY="139.0" prefHeight="26.0" prefWidth="159.0" text="Confirm new password" />
-      <Button fx:id="deleteBtn" layoutX="24.0" layoutY="361.0" mnemonicParsing="false" text="Delete Account" textFill="RED" />
+      <Button fx:id="deleteBtn" layoutX="24.0" layoutY="361.0" mnemonicParsing="false" onAction="#updateDeletionVisibility" text="Delete Account" textFill="RED" />
       <TextField fx:id="usernameField" layoutX="24.0" layoutY="114.0" prefHeight="25.0" prefWidth="333.0" promptText="Enter new username" />
       <PasswordField fx:id="newPassField" layoutX="486.0" layoutY="114.0" prefHeight="25.0" prefWidth="202.0" promptText="Enter new password" />
       <PasswordField fx:id="confirmPassField" layoutX="486.0" layoutY="165.0" prefHeight="25.0" prefWidth="202.0" promptText="Confirm password" />
@@ -29,5 +29,6 @@
       <TextField fx:id="secQuestionField" layoutX="24.0" layoutY="190.0" onKeyReleased="#revealSecurityAnswerElements" prefHeight="25.0" prefWidth="333.0" promptText="Enter new security question" />
       <Label fx:id="secAnswerLbl" disable="true" layoutX="24.0" layoutY="225.0" text="Change security answer" />
       <TextField fx:id="secAnswerField" disable="true" layoutX="24.0" layoutY="246.0" prefHeight="25.0" prefWidth="333.0" promptText="Enter new security answer" />
+      <Button fx:id="confirmDeletionBtn" disable="true" layoutX="132.0" layoutY="361.0" mnemonicParsing="false" onAction="#deleteAccount" prefHeight="25.0" prefWidth="134.0" text="CONFIRM DELETION" textFill="RED" visible="false" />
    </children>
 </AnchorPane>
