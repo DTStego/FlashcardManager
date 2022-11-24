@@ -1,29 +1,32 @@
 package application.screens.home;
 
-import java.util.List;
-
 import application.Main;
 import application.managers.Course;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+import java.io.IOException;
+import java.util.List;
 
 public class HomeScreenController {
 
     @FXML
-    private Button accountSettingsBtn;
-
-    @FXML
     private TabPane courseList;
-    @FXML
-    private VBox rename;
-    @FXML
-    private TextField newCourseNameInput;
+
     @FXML
     private Text errorTxt;
 
+    @FXML
+    private TextField newCourseNameInput;
+
+    @FXML
+    private VBox rename;
 
    @FXML
    public void initialize() {
@@ -74,7 +77,7 @@ public class HomeScreenController {
     }
 
     @FXML
-    void onNewTabClick(MouseEvent event) {
+    void onNewTabClick(MouseEvent event) throws IOException{
         Tab blankTab = new Tab();
         String blankTabName = "Blank Course " + courseList.getTabs().size();
         blankTab.setGraphic(new Label(blankTabName));
@@ -84,8 +87,23 @@ public class HomeScreenController {
         Course newCourse = new Course(null, blankTabName);
         Main.currentUser.getNotebook().getCourseList().add(newCourse);
 
+        Parent root = FXMLLoader.load(Main.class.getResource("screens/home/courseTab.fxml"));
+        blankTab.setContent(root);
+
         updateUser();
         nameTab();
+    }
+
+    @FXML
+    void onNewTopicClick(MouseEvent event) throws IOException {
+        if (!courseList.getTabs().isEmpty()) {
+            int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
+            Tab currentTab = courseList.getTabs().get(selectedIndex);
+
+            Parent root = FXMLLoader.load(Main.class.getResource("screens/home/topicPane.fxml"));
+            VBox topicList = (VBox) ((AnchorPane) currentTab.getContent()).getChildren().get(0);
+            topicList.getChildren().add(root);
+        }
     }
 
     @FXML
