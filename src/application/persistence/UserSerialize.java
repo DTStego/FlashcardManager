@@ -3,16 +3,18 @@ package application.persistence;
 import application.User;
 
 import javax.swing.filechooser.FileSystemView;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class UserSerialize implements UserPersistence, ObjectSerialize
 {
-    // Path of save folder in documents, e.g., (For Windows) "../My Documents/FlashcardManager/saves/"
-    private final String saveFolder = FileSystemView.getFileSystemView().getDefaultDirectory().getPath()
-            .concat(File.separatorChar + "FlashcardManager" + File.separatorChar + "saves");
+    // Path of save folder in documents, e.g., (For Windows) "../My Documents/FlashcardManager/saves_v{version_number}/"
+    public static final String saveFolder = FileSystemView.getFileSystemView().getDefaultDirectory().getPath()
+            .concat(File.separatorChar + "FlashcardManager" + File.separatorChar + "saves_v0.9");
 
     /**
      * Stores the userList in a "saves" folder in a user's document folder through serialization.
@@ -83,8 +85,9 @@ public class UserSerialize implements UserPersistence, ObjectSerialize
     @Override
     public boolean createSaveFile()
     {
-        // Attempt to create the directory "FlashcardManager/saves"
-        // Cannot combine with .createNewFile statement because method creates files instead
+        // Attempt to create the directory "FlashcardManager/saves_v.{version_number}"
+        // Can't create folders and files together using mkdirs(), need to use
+        // createNewFile() instead to create the save file.
         File file = new File(saveFolder);
         file.mkdirs();
 

@@ -2,6 +2,7 @@ package application.screens.login;
 
 import application.Main;
 import application.User;
+import application.persistence.UserSerialize;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -9,6 +10,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 public class LoginScreenController
 {
@@ -92,6 +97,18 @@ public class LoginScreenController
         {
             ErrorMsg.setText("* Username does not exist, please try again");
             return false;
+        }
+    }
+
+    @FXML
+    void openSaveLocation(MouseEvent event)
+    {
+        try
+        {
+            Desktop.getDesktop().open(new File(UserSerialize.saveFolder));
+        } catch (IOException ioException)
+        {
+            System.out.println("Critical Error: No Save File: " + ioException.getMessage());
         }
     }
 }

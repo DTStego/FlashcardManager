@@ -39,6 +39,7 @@
                   <Button fx:id="loginBtn" mnemonicParsing="false" onMouseClicked="#onLoginClick" text="Login" />
                   <Hyperlink fx:id="forgotPassBtn" onMouseClicked="#onForgotPassClick" text="Forgot password?" />
                   <Hyperlink fx:id="registerBtn" onMouseClicked="#onRegisterClick" prefHeight="29.0" prefWidth="303.0" text="Don't have an account? Create one!" />
+                  <Hyperlink fx:id="saveFileBtn" onMouseClicked="#openSaveLocation" text="Open Save File" />
                </children>
                <padding>
                   <Insets top="20.0" />
