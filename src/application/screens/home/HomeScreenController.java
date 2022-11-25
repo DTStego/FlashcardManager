@@ -2,6 +2,7 @@ package application.screens.home;
 
 import application.Main;
 import application.managers.Course;
+import application.managers.Topic;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,6 +13,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeScreenController {
@@ -31,7 +33,7 @@ public class HomeScreenController {
    @FXML
    public void initialize() throws IOException {
         List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
-
+        int i = 0;
         //Goes through courses and displays tabs for them
         for (Course course : currentCourseList) {
             Tab tempTab = new Tab();
@@ -39,7 +41,17 @@ public class HomeScreenController {
             tempTab.setGraphic(new Label(tempTabName));
             Parent root = FXMLLoader.load(Main.class.getResource("screens/home/courseTab.fxml"));
             tempTab.setContent(root);
-            courseList.getTabs().add(tempTab);        
+            courseList.getTabs().add(tempTab);
+            
+            Tab currentTab = courseList.getTabs().get(i);
+
+            for (Topic topic : course.getTopicList()) {
+                root = FXMLLoader.load(Main.class.getResource("screens/home/topicPane.fxml"));
+                VBox topicList = (VBox) ((AnchorPane) currentTab.getContent()).getChildren().get(0);
+                topicList.getChildren().add(root);
+            } 
+
+            i++;
         } 
    }
 
@@ -85,8 +97,9 @@ public class HomeScreenController {
         blankTab.setGraphic(new Label(blankTabName));
         courseList.getTabs().add(blankTab);
         courseList.getSelectionModel().select(blankTab);
+        ArrayList<Topic> topicList = new ArrayList<Topic>();
 
-        Course newCourse = new Course(null, blankTabName);
+        Course newCourse = new Course(topicList, blankTabName);
         Main.currentUser.getNotebook().getCourseList().add(newCourse);
 
         Parent root = FXMLLoader.load(Main.class.getResource("screens/home/courseTab.fxml"));
@@ -101,10 +114,17 @@ public class HomeScreenController {
         if (!courseList.getTabs().isEmpty()) {
             int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
             Tab currentTab = courseList.getTabs().get(selectedIndex);
+            Course currentCourse = getCurrentCourse();
+
+            String newTopicName = "Blank Topic " + currentCourse.getTopicList().size();
+            Topic newTopic = new Topic(null, newTopicName);
+
 
             Parent root = FXMLLoader.load(Main.class.getResource("screens/home/topicPane.fxml"));
             VBox topicList = (VBox) ((AnchorPane) currentTab.getContent()).getChildren().get(0);
             topicList.getChildren().add(root);
+
+            currentCourse.getTopicList().add(newTopic);
         }
     }
 
@@ -159,7 +179,27 @@ public class HomeScreenController {
             displayError("Please enter a name for this course.");
         }
     }
+    
+    Course getCurrentCourse() {
+        Course currentCourse = null;
 
+        int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
+        Tab currentTab = courseList.getTabs().get(selectedIndex);
+
+        Label currentTabText = (Label)currentTab.getGraphic();
+        String currentName = currentTabText.getText();
+        
+        //Find in notebook and rename file 
+        List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
+
+        for (Course course : currentCourseList) {
+            if (course.getName().equals(currentName)) {
+                currentCourse = course; 
+            } 
+        }
+
+        return currentCourse;
+    }
     @FXML
     void onAccountSettingsBtnClick(MouseEvent event) {
         Main.loadScreen(event,"screens/accountSettings/accountSettingsScreen.fxml", "AccountSettings");
