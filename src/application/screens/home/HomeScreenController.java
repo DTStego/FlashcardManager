@@ -163,18 +163,6 @@ public class HomeScreenController {
         createTopicTab(topic, tabPane);
     }
 
-    private TabPane buildTabPane()
-    {
-        TabPane tabPane = new TabPane();
-        tabPane.setRotateGraphic(true);
-        tabPane.setSide(Side.LEFT);
-        tabPane.setTabMinHeight(75);
-        tabPane.setTabMaxHeight(150);
-        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-
-        return tabPane;
-    }
-
     private void createTopicTab(Topic topic, TabPane tabpane)
     {
         Tab newTab = new Tab();
@@ -193,6 +181,25 @@ public class HomeScreenController {
             currentTab = newTab;
             currentTabPane = tabpane;
         });
+    }
+
+    /**
+     * Used when inserting topics into a course tab since
+     * only the courses TabPane can be built in SceneBuilder.
+     * @return TabPane with necessary settings that allows for tab vertical rotation,
+     * tabs set to align on the left, and minimum tab size. Also disables ability to
+     * delete tabs with the (X) button in the GUI which would bypass save ability.
+     */
+    private TabPane buildTabPane()
+    {
+        TabPane tabPane = new TabPane();
+        tabPane.setRotateGraphic(true);
+        tabPane.setSide(Side.LEFT);
+        tabPane.setTabMinHeight(75);
+        tabPane.setTabMaxHeight(150);
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        return tabPane;
     }
 
     /** Deletes a course or topic tab and its corresponding object from the user's notebook */
@@ -274,7 +281,7 @@ public class HomeScreenController {
         int selectedIndex = courseTabPane.getSelectionModel().getSelectedIndex();
         Tab currentTab = courseTabPane.getTabs().get(selectedIndex);
 
-        Label currentTabText = (Label)currentTab.getGraphic();
+        Label currentTabText = (Label) currentTab.getGraphic();
         String currentName = currentTabText.getText();
         
         //Find in notebook and rename file 
@@ -289,11 +296,13 @@ public class HomeScreenController {
         return currentCourse;
     }
     @FXML
-    void onAccountSettingsBtnClick(ActionEvent event) {
+    void onAccountSettingsBtnClick(ActionEvent event)
+    {
         Main.loadScreen(event,"screens/accountSettings/accountSettingsScreen.fxml", "AccountSettings");
     }
     @FXML
-    void signOut(ActionEvent event) {
+    void signOut(ActionEvent event)
+    {
         Main.loadScreen(event, "screens/login/LoginScreen.fxml", "LoginScreen");
     }
 
