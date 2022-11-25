@@ -36,6 +36,8 @@ public class Main extends Application
 
         primaryStage.setTitle("Flashcard Manager");
         primaryStage.setScene(scene);
+        primaryStage.setMinHeight(screenHeight / (screenScale * 2.25));
+        primaryStage.setMinWidth(screenWidth / (screenScale * 2.1));
         primaryStage.show();
     }
 
@@ -53,6 +55,13 @@ public class Main extends Application
         launch(args);
     }
 
+    /**
+     * Global method to switch to another screen from an existing one. Generally used in
+     * conjunction with a MouseEvent, i.e., when a user clicks on a button to go to another screen.
+     * @param event Possibly an FXML MouseEvent which is used to retrieve the stage
+     * @param fxmlLocation String that represents the file location of an FXML file
+     * @param stageTitle String to change the window's title, e.g., "Home Page"
+     */
     public static void loadScreen(Event event, String fxmlLocation, String stageTitle)
     {
         try
