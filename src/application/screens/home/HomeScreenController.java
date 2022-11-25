@@ -2,6 +2,7 @@ package application.screens.home;
 
 import application.Main;
 import application.managers.Course;
+import application.managers.IndexCard;
 import application.managers.Notebook;
 import application.managers.Topic;
 import javafx.event.ActionEvent;
@@ -15,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -32,10 +34,13 @@ public class HomeScreenController {
     private Button deleteBtn;
     @FXML
     private Button newTopicBtn;
+    @FXML
+    private Label errorMsg;
 
     private final Notebook notebook = Main.currentUser.getNotebook();
     private Course currentCourse;
     private Topic currentTopic;
+    private IndexCard currentIndexCard;
     private Tab currentTab;
     private TabPane currentTabPane = courseTabPane;
 
@@ -58,7 +63,17 @@ public class HomeScreenController {
 
         StackPane tempPane = new StackPane(new Group(tempLabel));
         tempPane.setRotate(90);
-        tempPane.setRotate(90);
+
+        tab.setGraphic(tempPane);
+        tab.setText("");
+    }
+
+    void rotateTab(Tab tab, String newName)
+    {
+        Label tempLabel = new Label(newName);
+        tempLabel.setRotate(90);
+
+        StackPane tempPane = new StackPane(new Group(tempLabel));
 
         tab.setGraphic(tempPane);
         tab.setText("");
@@ -80,43 +95,93 @@ public class HomeScreenController {
 
         rotateTab(newTab);
         courseTabPane.getTabs().add(newTab);
+
+        currentCourse = course;
+        currentTopic = null;
+        currentIndexCard = null;
+        currentTab = newTab;
+        currentTabPane = courseTabPane;
+
         newTab.setOnSelectionChanged(event ->
         {
             if (newTab.isSelected())
             {
                 currentCourse = course;
+                currentTopic = null;
+                currentIndexCard = null;
                 currentTab = newTab;
                 currentTabPane = courseTabPane;
-                makeCourseOptionsVisible();
             }
         });
 
         updateUser();
     }
 
+    /** Deletes a course or topic tab and its corresponding object from the user's notebook */
     @FXML
     void deleteBtn()
     {
-        notebook.delete(currentCourse);
-        currentTabPane.getTabs().remove(currentTab);
+        if (currentIndexCard != null)
+        {
+            currentTopic.getCardList().remove(currentIndexCard);
+            // Remove card information (Perhaps to another card if there is one or make it blank).
+            updateUser();
+            return;
+        }
 
-        updateUser();
+        if (currentTopic != null)
+        {
+            currentCourse.getTopicList().remove(currentTopic);
+            currentTabPane.getTabs().remove(currentTab);
+            updateUser();
+            return;
+        }
+
+        if (currentCourse != null)
+        {
+            notebook.getCourseList().remove(currentCourse);
+            currentTabPane.getTabs().remove(currentTab);
+            updateUser();
+        }
     }
 
-    /** Make the rename, delete, and add new topic buttons visible **/
-    void makeCourseOptionsVisible()
+    @FXML
+    void renameBtn()
     {
-        renameBtn.setVisible(true);
-        renameBtn.setDisable(false);
+        if (renameTxtField.getText().isEmpty())
+        {
+            errorMsg.setText("Please input a name!");
+            return;
+        }
 
-        renameTxtField.setVisible(true);
-        renameTxtField.setDisable(false);
+        if (renameTxtField.getText().length() > 20)
+        {
+            errorMsg.setText("20 Character Limit");
+            return;
+        }
 
-        deleteBtn.setVisible(true);
-        deleteBtn.setDisable(false);
+        if (currentIndexCard != null)
+        {
+            errorMsg.setText("Please use the dedicated rename buttons for flashcards.");
+        }
 
-        newTopicBtn.setVisible(true);
-        newTopicBtn.setDisable(false);
+        errorMsg.setText("");
+
+        if (currentTopic != null)
+        {
+            currentTopic.setName(renameTxtField.getText());
+            rotateTab(currentTab, renameTxtField.getText());
+            updateUser();
+
+            return;
+        }
+
+        if (currentCourse != null)
+        {
+            currentCourse.setName(renameTxtField.getText());
+            rotateTab(currentTab, renameTxtField.getText());
+            updateUser();
+        }
     }
 
     Course getCurrentCourse() {
