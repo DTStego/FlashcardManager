@@ -8,6 +8,7 @@ import application.managers.Topic;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Side;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -56,6 +57,7 @@ public class HomeScreenController {
        }
    }
 
+   /** Used when creating a new tab to create vertical tabs */
     void rotateTab(Tab tab)
     {
         Label tempLabel = new Label(tab.getText());
@@ -68,6 +70,7 @@ public class HomeScreenController {
         tab.setText("");
     }
 
+    /** Method overloading for renaming tabs */
     void rotateTab(Tab tab, String newName)
     {
         Label tempLabel = new Label(newName);
@@ -86,6 +89,39 @@ public class HomeScreenController {
         notebook.getCourseList().add(course);
 
         createCourseTab(course);
+    }
+
+    @FXML
+    void createNewTopicBtn()
+    {
+        errorMsg.setText("");
+
+        if (currentCourse == null || currentTopic != null || currentIndexCard != null)
+        {
+            errorMsg.setText("Please click on a course!");
+            return;
+        }
+
+        TabPane tabPane;
+
+        // Checks to see if there is already a TabPane or not
+        if (currentTab.getContent() == null)
+        {
+            tabPane = new TabPane();
+            tabPane.setRotateGraphic(true);
+            tabPane.setSide(Side.LEFT);
+            tabPane.minHeight(75);
+            tabPane.maxHeight(150);
+
+            currentTab.setContent(tabPane);
+        }
+
+        tabPane = (TabPane) currentTab.getContent();
+
+        Topic topic = new Topic(new ArrayList<>(), "Untitled Topic");
+        currentCourse.getTopicList().add(topic);
+
+        createTopicTab(topic, tabPane);
     }
 
     private void createCourseTab(Course course)
@@ -117,6 +153,26 @@ public class HomeScreenController {
         updateUser();
     }
 
+    private void createTopicTab(Topic topic, TabPane tabpane)
+    {
+        Tab newTab = new Tab();
+        newTab.setText(topic.getName());
+
+        rotateTab(newTab);
+        tabpane.getTabs().add(newTab);
+
+        currentTopic = topic;
+        currentIndexCard = null;
+
+        newTab.setOnSelectionChanged(event ->
+        {
+            currentTopic = topic;
+            currentIndexCard = null;
+            currentTab = newTab;
+            currentTabPane = tabpane;
+        });
+    }
+
     /** Deletes a course or topic tab and its corresponding object from the user's notebook */
     @FXML
     void deleteBtn()
@@ -145,9 +201,15 @@ public class HomeScreenController {
         }
     }
 
+    /**
+     * Renames a course or topic tab and updates its object in the user's notebook.
+     * There will be dedicated rename options for flashcards.
+     */
     @FXML
     void renameBtn()
     {
+        errorMsg.setText("");
+
         if (renameTxtField.getText().isEmpty())
         {
             errorMsg.setText("Please input a name!");

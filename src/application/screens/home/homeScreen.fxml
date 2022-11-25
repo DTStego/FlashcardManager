@@ -27,7 +27,7 @@
                      </font>
                   </Button>
                   <Button layoutX="34.0" layoutY="14.0" mnemonicParsing="false" onAction="#createNewCourseBtn" text="Create New Course" />
-                  <Button fx:id="newTopicBtn" layoutX="40.0" layoutY="170.0" mnemonicParsing="false" text="Create New Topic" />
+                  <Button fx:id="newTopicBtn" layoutX="40.0" layoutY="170.0" mnemonicParsing="false" onAction="#createNewTopicBtn" text="Create New Topic" />
                   <Button fx:id="deleteBtn" layoutX="69.0" layoutY="139.0" mnemonicParsing="false" onAction="#deleteBtn" text="Delete" />
                   <Button fx:id="renameBtn" layoutX="66.0" layoutY="71.0" mnemonicParsing="false" onAction="#renameBtn" text="Rename" />
                   <TextField fx:id="renameTxtField" layoutX="3.0" layoutY="102.0" prefHeight="25.0" prefWidth="178.0" />
