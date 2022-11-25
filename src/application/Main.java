@@ -36,8 +36,8 @@ public class Main extends Application
 
         primaryStage.setTitle("Flashcard Manager");
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(screenHeight / (screenScale * 2.25));
-        primaryStage.setMinWidth(screenWidth / (screenScale * 2.1));
+        primaryStage.setMinWidth(800);
+        primaryStage.setMinHeight(600);
         primaryStage.show();
     }
 
