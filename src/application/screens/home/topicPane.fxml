@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 
 <Pane fx:id="topicPane" prefHeight="30.0" prefWidth="316.0" style="-fx-border-color: black;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.home.TopicPaneController">
    <children>
-      <Button id="topicName" layoutX="3.0" layoutY="2.0" mnemonicParsing="false" onMouseClicked="#onTopicBtnClicked" prefHeight="25.0" prefWidth="291.0" snapToPixel="false" text="Sample Topic 1" />
+      <Button id="topicName" layoutX="3.0" layoutY="2.0" mnemonicParsing="false" onMouseClicked="#onTopicBtnClicked" prefHeight="25.0" prefWidth="274.0" snapToPixel="false" text="Sample Topic 1" />
       <ImageView fitHeight="20.0" fitWidth="17.0" layoutX="301.0" layoutY="4.0" onMouseClicked="#onDelTopicClicked" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../assets/images/delete.png" />
          </image>
       </ImageView>
+      <ImageView fitHeight="20.0" fitWidth="17.0" layoutX="282.0" layoutY="6.0" onMouseClicked="#onEditBtnClicked" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../assets/images/edit.png" />
+         </image>
+      </ImageView>
+      <TextField fx:id="editNameField" layoutX="66.0" layoutY="2.0" onKeyPressed="#onEditKeyPress" />
+      <Button fx:id="saveBtn" layoutX="215.0" layoutY="2.0" mnemonicParsing="false" onMouseClicked="#onSaveBtnClicked" text="Save" />
    </children>
 </Pane>
