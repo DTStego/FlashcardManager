@@ -52,7 +52,15 @@ public class HomeScreenController {
        {
            for (Course course : notebook.getCourseList())
            {
-               createCourseTab(course);
+               Tab courseTab = createCourseTab(course);
+
+               TabPane tabPane = buildTabPane();
+               courseTab.setContent(tabPane);
+
+               for (Topic topic : course.getTopicList())
+               {
+                    createTopicTab(topic, tabPane);
+               }
            }
        }
    }
@@ -91,40 +99,7 @@ public class HomeScreenController {
         createCourseTab(course);
     }
 
-    @FXML
-    void createNewTopicBtn()
-    {
-        errorMsg.setText("");
-
-        if (currentCourse == null || currentTopic != null || currentIndexCard != null)
-        {
-            errorMsg.setText("Please click on a course!");
-            return;
-        }
-
-        TabPane tabPane;
-
-        // Checks to see if there is already a TabPane or not
-        if (currentTab.getContent() == null)
-        {
-            tabPane = new TabPane();
-            tabPane.setRotateGraphic(true);
-            tabPane.setSide(Side.LEFT);
-            tabPane.minHeight(75);
-            tabPane.maxHeight(150);
-
-            currentTab.setContent(tabPane);
-        }
-
-        tabPane = (TabPane) currentTab.getContent();
-
-        Topic topic = new Topic(new ArrayList<>(), "Untitled Topic");
-        currentCourse.getTopicList().add(topic);
-
-        createTopicTab(topic, tabPane);
-    }
-
-    private void createCourseTab(Course course)
+    private Tab createCourseTab(Course course)
     {
         Tab newTab = new Tab();
         newTab.setText(course.getName());
@@ -151,6 +126,53 @@ public class HomeScreenController {
         });
 
         updateUser();
+        return newTab;
+    }
+
+    /** Creates a topic tab in the selected course. */
+    @FXML
+    void createNewTopicBtn()
+    {
+        errorMsg.setText("");
+
+        // Error if there is no selected course.
+        if (currentCourse == null || currentTopic != null || currentIndexCard != null)
+        {
+            errorMsg.setText("Please click on a course!");
+            return;
+        }
+
+        TabPane tabPane;
+
+        // Checks to see if there is already a TabPane, if not, build one.
+        if (currentTab.getContent() == null)
+        {
+            tabPane = buildTabPane();
+
+            currentTab.setContent(tabPane);
+        }
+
+        // Retrieve the TabPane from the one built above or an existing one already loaded in the program.
+        tabPane = (TabPane) currentTab.getContent();
+
+        // Create a new topic object and store it in the course's topic list.
+        Topic topic = new Topic(new ArrayList<>(), "Untitled Topic");
+        currentCourse.getTopicList().add(topic);
+
+        // Create an actual topic tab in the course's TabPane
+        createTopicTab(topic, tabPane);
+    }
+
+    private TabPane buildTabPane()
+    {
+        TabPane tabPane = new TabPane();
+        tabPane.setRotateGraphic(true);
+        tabPane.setSide(Side.LEFT);
+        tabPane.setTabMinHeight(75);
+        tabPane.setTabMaxHeight(150);
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        return tabPane;
     }
 
     private void createTopicTab(Topic topic, TabPane tabpane)
