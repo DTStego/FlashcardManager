@@ -36,10 +36,7 @@ public class LoginScreenController
     {
         if (event.getCode() == KeyCode.ENTER)
         {
-            if (verifyUser(event))
-            {
-                //go to next page
-            }
+            verifyUser(event);
         }
     }
     @FXML
@@ -47,10 +44,7 @@ public class LoginScreenController
     {
         if (event.getCode() == KeyCode.ENTER)
         {
-            if (verifyUser(event))
-            {
-                //go to next page
-            }
+            verifyUser(event);
         }
     }
     @FXML

@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -12,6 +13,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class TopicPaneController {
+
+    @FXML
+    private Button topicBtn;
 
     @FXML
     private TextField editNameField;
@@ -24,6 +28,7 @@ public class TopicPaneController {
 
     private void enableEdit() {
         editNameField.setDisable(false);
+        editNameField.setText(topicBtn.getText());
         editNameField.setVisible(true);
         editNameField.requestFocus();
         saveBtn.setDisable(false);
@@ -37,10 +42,18 @@ public class TopicPaneController {
         saveBtn.setDisable(true);
         saveBtn.setVisible(false);
     }
-    @FXML
-    void initialize() {
+
+    private void attemptSave() {
+        String text = editNameField.getText();
+        if (text.equals("")) {
+            //error empty name field
+        } else {
+            topicBtn.setText(text);
+        }
         disableEdit();
     }
+    @FXML
+    void initialize() {disableEdit();}
 
     @FXML
     void onDelTopicClicked(MouseEvent event) {
@@ -48,9 +61,7 @@ public class TopicPaneController {
     }
 
     @FXML
-    void onEditBtnClicked(MouseEvent event) {
-        enableEdit();
-    }
+    void onEditBtnClicked(MouseEvent event) {enableEdit();}
 
     @FXML
     void onTopicBtnClicked(MouseEvent event) {
@@ -59,11 +70,15 @@ public class TopicPaneController {
 
     @FXML
     void onEditKeyPress(KeyEvent event) {
-
+        if (event.getCode() == KeyCode.ENTER) {
+            attemptSave();
+        } else if (event.getCode() == KeyCode.ESCAPE) {
+            disableEdit();
+        }
     }
 
     @FXML
     void onSaveBtnClicked(MouseEvent event) {
-
+        attemptSave();
     }
 }
