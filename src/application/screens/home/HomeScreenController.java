@@ -273,7 +273,15 @@ public class HomeScreenController {
                 }
 
                 // Set Visibility, Load flashcards
-                makeCardElementsVisible(true);
+                if (currentTopic.getCardList().size() > 0)
+                {
+                    currentIndexCard = currentTopic.getCardList().get(0);
+                    displayCard();
+                    makeCardElementsVisible(true);
+                } else
+                {
+                    makeDefaultCardElementsVisible(true);
+                }
             }
         });
         courseTab.setContent(tabPane);
@@ -303,14 +311,6 @@ public class HomeScreenController {
     @FXML
     void deleteBtn()
     {
-        if (currentIndexCard != null)
-        {
-            currentTopic.getCardList().remove(currentIndexCard);
-            // Remove card information (Perhaps to another card if there is one or make it blank).
-            updateUser();
-            return;
-        }
-
         if (currentTopic != null)
         {
             currentCourse.getTopicList().remove(currentTopic);
@@ -373,21 +373,63 @@ public class HomeScreenController {
     }
 
     /** Change default flashcard element visibility. Ignores delete button when there is no flashcard in the topicList */
-    @FXML
+    void makeDefaultCardElementsVisible(boolean input)
+    {
+        title.setDisable(!input);
+        createCardBtn.setDisable(!input);
+        cardText.setDisable(!input);
+        checkmark.setDisable(input);
+        flipBtn.setDisable(input);
+        sortBtn.setDisable(input);
+        deleteCardBtn.setDisable(input);
+    }
+
     void makeCardElementsVisible(boolean input)
     {
         title.setDisable(!input);
-        checkmark.setDisable(!input);
-        sortBtn.setDisable(!input);
-        flipBtn.setDisable(!input);
         createCardBtn.setDisable(!input);
         cardText.setDisable(!input);
+        checkmark.setDisable(!input);
+        flipBtn.setDisable(!input);
+        sortBtn.setDisable(!input);
+        deleteCardBtn.setDisable(!input);
     }
 
     @FXML
     void createNewCardBtn()
     {
+        IndexCard newIndexCard = new IndexCard("Click to Enter Text", "Click to Enter Text");
+        currentTopic.getCardList().add(newIndexCard);
+        currentIndexCard = newIndexCard;
+        updateUser();
+        cardText.setText(newIndexCard.getQuestion());
+        displayCard();
+        makeCardElementsVisible(true);
+    }
 
+    @FXML
+    void deleteCardBtn()
+    {
+        if (currentTopic.getCardList().size() == 1)
+        {
+            currentTopic.getCardList().remove(currentIndexCard);
+            makeDefaultCardElementsVisible(true);
+            cardText.setText("");
+            updateUser();
+        }
+
+        if (currentTopic.getCardList().size() > 1)
+        {
+            currentTopic.getCardList().remove(currentIndexCard);
+            currentIndexCard = currentTopic.getCardList().get(0);
+            displayCard();
+            updateUser();
+        }
+    }
+
+    void displayCard()
+    {
+        cardText.setText(currentIndexCard.getQuestion());
     }
 
     @FXML

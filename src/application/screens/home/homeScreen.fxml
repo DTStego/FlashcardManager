@@ -52,13 +52,13 @@
                </font>
             </Button>
             <Button fx:id="createCardBtn" disable="true" layoutX="394.0" layoutY="341.0" mnemonicParsing="false" onAction="#createNewCardBtn" prefHeight="30.0" prefWidth="133.0" text="Create New Flashcard" />
-            <Button fx:id="deleteCardBtn" disable="true" layoutX="584.0" layoutY="341.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="110.0" text="Delete Flashcard" textFill="RED" />
+            <Button fx:id="deleteCardBtn" disable="true" layoutX="584.0" layoutY="341.0" mnemonicParsing="false" onAction="#deleteCardBtn" prefHeight="30.0" prefWidth="110.0" text="Delete Flashcard" textFill="RED" />
             <TextField fx:id="cardTextField" alignment="CENTER" disable="true" layoutX="418.0" layoutY="106.0" prefHeight="122.0" prefWidth="253.0" visible="false">
                <font>
                   <Font size="20.0" />
                </font>
             </TextField>
-            <Label fx:id="cardText" alignment="CENTER" disable="true" layoutX="418.0" layoutY="106.0" prefHeight="122.0" prefWidth="253.0" text="Click to Enter Text" wrapText="true">
+            <Label fx:id="cardText" alignment="CENTER" disable="true" layoutX="418.0" layoutY="106.0" prefHeight="122.0" prefWidth="253.0" wrapText="true">
                <font>
                   <Font size="20.0" />
                </font>
