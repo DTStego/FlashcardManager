@@ -34,13 +34,19 @@ public class Main extends Application
         try {
             Parent root = FXMLLoader.load(getClass().getResource("screens/login/LoginScreen.fxml"));
 
-            Scene scene = new Scene(root, screenWidth * screenScale, screenHeight * screenScale);
+//            Scene scene = new Scene(root, screenWidth * screenScale, screenHeight * screenScale);
+            Scene scene = new Scene(root, 700,700);
+
             primaryStage.setTitle("Flashcard Manager");
-            scene.getStylesheets().addAll(getClass().getResource("application.css").toExternalForm());
+//            scene.getStylesheets().addAll(getClass().getResource("application.css").toExternalForm());
 
             primaryStage.setScene(scene);
-            primaryStage.setMinHeight(screenHeight / (screenScale * 2.25));
-            primaryStage.setMinWidth(screenWidth / (screenScale * 2.1));
+            //Set screensize
+            primaryStage.setMinHeight(700);
+            primaryStage.setMinWidth(700);
+            primaryStage.setMaxHeight(700);
+            primaryStage.setMaxWidth(700);
+
             primaryStage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -77,7 +83,35 @@ public class Main extends Application
             Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
 
             primaryStage.setTitle(stageTitle);
-            scene.getStylesheets().addAll(Main.class.getResource("application.css").toExternalForm());
+//            scene.getStylesheets().addAll(Main.class.getResource("application.css").toExternalForm());
+            //Set screensize
+            primaryStage.setMinHeight(700);
+            primaryStage.setMinWidth(700);
+            primaryStage.setMaxHeight(700);
+            primaryStage.setMaxWidth(700);
+
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e)
+        {
+            System.out.println(fxmlLocation + ": Target FXML file not found");
+        }
+    }
+
+    //This is a separate method because home screen is the only screen with a different screen size
+    public static void loadHomeScreen(Event event, String fxmlLocation, String stageTitle)
+    {
+        try
+        {
+            Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            Parent root = FXMLLoader.load(Main.class.getResource(fxmlLocation));
+            Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
+
+            primaryStage.setMinHeight(screenHeight / (screenScale * 2.25));
+            primaryStage.setMinWidth(screenWidth / (screenScale * 2.1));
+
+            primaryStage.setTitle(stageTitle);
+//            scene.getStylesheets().addAll(Main.class.getResource("application.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e)

@@ -9,11 +9,25 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane id="root" fx:id="root" prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.login.LoginScreenController">
    <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="700.0" stroke="TRANSPARENT" strokeType="INSIDE" width="700.0">
+         <fill>
+            <LinearGradient endX="1.0" endY="1.0" startX="1.0" startY="0.06310679611650483">
+               <stops>
+                  <Stop color="WHITE" />
+                  <Stop color="WHITE" offset="0.007246376811594203" />
+                  <Stop color="#b2e7ed" offset="0.4384057971014493" />
+                  <Stop color="#04b6c6" offset="1.0" />
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Rectangle>
       <VBox layoutX="35.0" layoutY="28.0" prefHeight="88.0" prefWidth="608.0" spacing="10.0">
          <children>
             <Label prefHeight="19.0" prefWidth="464.0" text="Sign In">
@@ -21,7 +35,7 @@
                   <Font size="34.0" />
                </font>
             </Label>
-            <Rectangle id="rect" arcHeight="5.0" arcWidth="5.0" fill="#dadada" height="5.0" stroke="TRANSPARENT" strokeType="INSIDE" width="608.0" />
+            <Rectangle id="rect" arcHeight="5.0" arcWidth="5.0" fill="#dadada" height="5.0" stroke="TRANSPARENT" strokeType="INSIDE" style="-fx-fill: 7d8485;" width="608.0" />
          </children>
       </VBox>
       <VBox layoutX="35.0" layoutY="130.0" prefHeight="381.0" prefWidth="627.0" spacing="10.0">
@@ -38,9 +52,12 @@
                </font>
             </Label>
             <PasswordField fx:id="passTextBox" onKeyPressed="#onPassKeyPress" promptText="Enter your password" />
-            <HBox prefHeight="79.0" prefWidth="627.0" spacing="40.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="79.0" prefWidth="627.0" spacing="40.0">
                <children>
-                  <Button fx:id="loginBtn" mnemonicParsing="false" onMouseClicked="#onLoginClick" text="Login" />
+                  <Button fx:id="loginBtn" mnemonicParsing="false" onMouseClicked="#onLoginClick" prefHeight="37.0" prefWidth="109.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 15; -fx-font-size: 16;" text="Login">
+                     <font>
+                        <Font name="Arial" size="16.0" />
+                     </font></Button>
                   <Hyperlink fx:id="forgotPassBtn" alignment="CENTER" onMouseClicked="#onForgotPassClick" text="Forgot password?" />
                   <Hyperlink fx:id="registerBtn" onMouseClicked="#onRegisterClick" prefHeight="29.0" prefWidth="259.0" text="Don't have an account? Create one!" />
                </children>

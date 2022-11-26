@@ -117,7 +117,7 @@ public class LoginScreenController
             if (user.getPassword().equals(passTextBox.getText()))
             {
                 Main.currentUser = user;
-                Main.loadScreen(event, "screens/home/homeScreen.fxml", "Home");
+                Main.loadHomeScreen(event, "screens/home/homeScreen.fxml", "Home");
                 ErrorMsg.setOpacity(0);
                 return true;
             } else
