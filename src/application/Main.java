@@ -31,14 +31,20 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage) throws IOException
     {
-        Parent root = FXMLLoader.load(getClass().getResource("screens/login/LoginScreen.fxml"));
-        Scene scene = new Scene(root, screenWidth * screenScale, screenHeight * screenScale);
+        try {
+            Parent root = FXMLLoader.load(getClass().getResource("screens/login/LoginScreen.fxml"));
 
-        primaryStage.setTitle("Flashcard Manager");
-        primaryStage.setScene(scene);
-        primaryStage.setMinHeight(screenHeight / (screenScale * 2.25));
-        primaryStage.setMinWidth(screenWidth / (screenScale * 2.1));
-        primaryStage.show();
+            Scene scene = new Scene(root, screenWidth * screenScale, screenHeight * screenScale);
+            primaryStage.setTitle("Flashcard Manager");
+            scene.getStylesheets().addAll(getClass().getResource("application.css").toExternalForm());
+
+            primaryStage.setScene(scene);
+            primaryStage.setMinHeight(screenHeight / (screenScale * 2.25));
+            primaryStage.setMinWidth(screenWidth / (screenScale * 2.1));
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args)
@@ -71,6 +77,7 @@ public class Main extends Application
             Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
 
             primaryStage.setTitle(stageTitle);
+            scene.getStylesheets().addAll(Main.class.getResource("application.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e)
