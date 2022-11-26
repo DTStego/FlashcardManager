@@ -5,6 +5,8 @@ import application.managers.Course;
 import application.managers.IndexCard;
 import application.managers.Notebook;
 import application.managers.Topic;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +24,9 @@ import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class HomeScreenController {
     @FXML
@@ -39,6 +43,8 @@ public class HomeScreenController {
     private Label errorMsg;
 
     private final Notebook notebook = Main.currentUser.getNotebook();
+
+    // Will identify below variables as "Sight" or "Program Sight".
     private Course currentCourse;
     private Topic currentTopic;
     private IndexCard currentIndexCard;
@@ -48,20 +54,62 @@ public class HomeScreenController {
    @FXML
    public void initialize()
    {
+       // Global rule for course TabPane when a course is selected.
+       courseTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) ->
+       {
+            if (newTab != null)
+            {
+                currentTab = newTab;
+
+                /*
+                 * Course names are hidden inside the tab's getGraphic() method which has
+                 * a StackPane that bundles a Label (That's where the course name is) inside a group.
+                 * Attempts to unravel that to get the label.
+                 */
+                Label courseName = (Label) ((Group) ((StackPane) newTab.getGraphic()).getChildren().get(0)).getChildren().get(0);
+
+                // Search for the course in user's notebook using the courseName Label.
+                for (Course course : notebook.getCourseList())
+                {
+                    if (courseName.getText().equals(course.getName()))
+                        currentCourse = course;
+                }
+
+                // If a course tab is selected, make sure program is set so neither a topic nor card is selected.
+                currentTopic = null;
+                currentIndexCard = null;
+                currentTabPane = courseTabPane;
+            }
+       });
+
+       // Populate GUI with course and topic tabs.
        if (!notebook.getCourseList().isEmpty())
        {
-           for (Course course : notebook.getCourseList())
+           // Used to set the sight to the first course tab.
+           Tab firstTabTemp = new Tab();
+
+           // Iterate through the list of courses and create a tab for each course.
+           for (int i = 0 ; i < notebook.getCourseList().size(); i++)
            {
-               Tab courseTab = createCourseTab(course);
+               Tab courseTab = createCourseTab(notebook.getCourseList().get(i));
+
+               // Save the first course to an outside variable to set the program sight later.
+               if (i == 0)
+                   firstTabTemp = courseTab;
 
                TabPane tabPane = buildTabPane();
                courseTab.setContent(tabPane);
 
-               for (Topic topic : course.getTopicList())
+               // Iterate though each topic in each course and populate that course's TabPane.
+               for (Topic topic : notebook.getCourseList().get(i).getTopicList())
                {
-                    createTopicTab(topic, tabPane);
+                   createTopicTab(topic, tabPane);
                }
            }
+
+           // Set the sight to the first course tab.
+           currentCourse = notebook.getCourseList().get(0);
+           currentTab = firstTabTemp;
        }
    }
 
@@ -78,7 +126,7 @@ public class HomeScreenController {
         tab.setText("");
     }
 
-    /** Method overloading for renaming tabs */
+    /** Method overloading for changing a tab's name */
     void rotateTab(Tab tab, String newName)
     {
         Label tempLabel = new Label(newName);
@@ -90,15 +138,22 @@ public class HomeScreenController {
         tab.setText("");
     }
 
+    /** On "Create New Course" click, create a new Course and corresponding Tab (Insert into courseTabPane). */
     @FXML
     void createNewCourseBtn()
     {
         Course course = new Course(new ArrayList<>(), "Untitled Course");
         notebook.getCourseList().add(course);
+        updateUser();
 
         createCourseTab(course);
     }
 
+    /**
+     * Create a Tab based off of Course object, add to list, and set program sight to course.
+     * @param course Course object to be linked with a course tab based on its name.
+     * @return Tab that was created and inserted into the course TabPane
+     */
     private Tab createCourseTab(Course course)
     {
         Tab newTab = new Tab();
@@ -113,19 +168,6 @@ public class HomeScreenController {
         currentTab = newTab;
         currentTabPane = courseTabPane;
 
-        newTab.setOnSelectionChanged(event ->
-        {
-            if (newTab.isSelected())
-            {
-                currentCourse = course;
-                currentTopic = null;
-                currentIndexCard = null;
-                currentTab = newTab;
-                currentTabPane = courseTabPane;
-            }
-        });
-
-        updateUser();
         return newTab;
     }
 
@@ -144,10 +186,37 @@ public class HomeScreenController {
 
         TabPane tabPane;
 
-        // Checks to see if there is already a TabPane, if not, build one.
+        // Checks to see if there is already a TabPane, if not, build one to list topics.
         if (currentTab.getContent() == null)
         {
             tabPane = buildTabPane();
+
+            // Event when a topic is clicked on by a user in the TabPane containing topics.
+            TabPane finalTabPane = tabPane;
+            tabPane.getSelectionModel().selectedItemProperty().addListener((observableValue, oldTab, newTab) ->
+            {
+                if (newTab != null)
+                {
+                    currentTab = newTab;
+
+                    /*
+                     * Topic names are hidden inside the tab's getGraphic() method which has
+                     * a StackPane that bundles a Label (That's where the course name is) inside a group.
+                     * Attempts to unravel that to get the label.
+                     */
+                    Label topicName = (Label) ((Group) ((StackPane) newTab.getGraphic()).getChildren().get(0)).getChildren().get(0);
+
+                    for (Topic topic : currentCourse.getTopicList())
+                    {
+                        if (topicName.getText().equals(topic.getName()))
+                        {
+                            currentTopic = topic;
+                            currentIndexCard = null;
+                            currentTabPane = finalTabPane;
+                        }
+                    }
+                }
+            });
 
             currentTab.setContent(tabPane);
         }
@@ -171,16 +240,7 @@ public class HomeScreenController {
         rotateTab(newTab);
         tabpane.getTabs().add(newTab);
 
-        currentTopic = topic;
         currentIndexCard = null;
-
-        newTab.setOnSelectionChanged(event ->
-        {
-            currentTopic = topic;
-            currentIndexCard = null;
-            currentTab = newTab;
-            currentTabPane = tabpane;
-        });
     }
 
     /**
@@ -203,6 +263,7 @@ public class HomeScreenController {
     }
 
     /** Deletes a course or topic tab and its corresponding object from the user's notebook */
+    // TODO Add prompt to check if user wants to delete the manager.
     @FXML
     void deleteBtn()
     {
@@ -275,26 +336,6 @@ public class HomeScreenController {
         }
     }
 
-    Course getCurrentCourse() {
-        Course currentCourse = null;
-
-        int selectedIndex = courseTabPane.getSelectionModel().getSelectedIndex();
-        Tab currentTab = courseTabPane.getTabs().get(selectedIndex);
-
-        Label currentTabText = (Label) currentTab.getGraphic();
-        String currentName = currentTabText.getText();
-        
-        //Find in notebook and rename file 
-        List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
-
-        for (Course course : currentCourseList) {
-            if (course.getName().equals(currentName)) {
-                currentCourse = course; 
-            } 
-        }
-
-        return currentCourse;
-    }
     @FXML
     void onAccountSettingsBtnClick(ActionEvent event)
     {
