@@ -11,9 +11,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -42,6 +44,27 @@ public class HomeScreenController {
     @FXML
     private Label errorMsg;
 
+    @FXML
+    private Label title;
+    @FXML
+    private CheckBox checkmark;
+    @FXML
+    private ImageView leftArrow;
+    @FXML
+    private ImageView rightArrow;
+    @FXML
+    private Button flipBtn;
+    @FXML
+    private MenuButton sortBtn;
+    @FXML
+    private Button createCardBtn;
+    @FXML
+    private Button deleteCardBtn;
+    @FXML
+    private Label cardText;
+    @FXML
+    private TextField cardTextField;
+
     private final Notebook notebook = Main.currentUser.getNotebook();
 
     // Will identify below variables as "Sight" or "Program Sight".
@@ -51,6 +74,8 @@ public class HomeScreenController {
     private Tab currentTab;
     private TabPane currentTabPane = courseTabPane;
 
+    // TODO: Hide "Create Topic/Course" buttons based on program sight.
+    // TODO: Fix currentCourse not equaling the first course on setup.
    @FXML
    public void initialize()
    {
@@ -80,6 +105,9 @@ public class HomeScreenController {
                 currentIndexCard = null;
                 currentTabPane = courseTabPane;
             }
+
+            // Change visibility of flashcard elements, unload flashcards
+            makeCardElementsVisible(false);
        });
 
        // Populate GUI with course and topic tabs.
@@ -98,7 +126,7 @@ public class HomeScreenController {
                    firstTabTemp = courseTab;
 
                TabPane tabPane = buildTabPane();
-               courseTab.setContent(tabPane);
+               topicTabPaneSettings(courseTab, tabPane);
 
                // Iterate though each topic in each course and populate that course's TabPane.
                for (Topic topic : notebook.getCourseList().get(i).getTopicList())
@@ -110,10 +138,11 @@ public class HomeScreenController {
            // Set the sight to the first course tab.
            currentCourse = notebook.getCourseList().get(0);
            currentTab = firstTabTemp;
+           makeCardElementsVisible(false);
        }
    }
 
-   /** Used when creating a new tab to create vertical tabs */
+    /** Used when creating a new tab to create vertical tabs */
     void rotateTab(Tab tab)
     {
         Label tempLabel = new Label(tab.getText());
@@ -142,7 +171,7 @@ public class HomeScreenController {
     @FXML
     void createNewCourseBtn()
     {
-        Course course = new Course(new ArrayList<>(), "Untitled Course");
+        Course course = new Course(new ArrayList<>(), "Untitled Course " + (notebook.getCourseList().size() + 1));
         notebook.getCourseList().add(course);
         updateUser();
 
@@ -192,41 +221,16 @@ public class HomeScreenController {
             tabPane = buildTabPane();
 
             // Event when a topic is clicked on by a user in the TabPane containing topics.
-            TabPane finalTabPane = tabPane;
-            tabPane.getSelectionModel().selectedItemProperty().addListener((observableValue, oldTab, newTab) ->
-            {
-                if (newTab != null)
-                {
-                    currentTab = newTab;
-
-                    /*
-                     * Topic names are hidden inside the tab's getGraphic() method which has
-                     * a StackPane that bundles a Label (That's where the course name is) inside a group.
-                     * Attempts to unravel that to get the label.
-                     */
-                    Label topicName = (Label) ((Group) ((StackPane) newTab.getGraphic()).getChildren().get(0)).getChildren().get(0);
-
-                    for (Topic topic : currentCourse.getTopicList())
-                    {
-                        if (topicName.getText().equals(topic.getName()))
-                        {
-                            currentTopic = topic;
-                            currentIndexCard = null;
-                            currentTabPane = finalTabPane;
-                        }
-                    }
-                }
-            });
-
-            currentTab.setContent(tabPane);
+            topicTabPaneSettings(currentTab, tabPane);
         }
 
         // Retrieve the TabPane from the one built above or an existing one already loaded in the program.
         tabPane = (TabPane) currentTab.getContent();
 
         // Create a new topic object and store it in the course's topic list.
-        Topic topic = new Topic(new ArrayList<>(), "Untitled Topic");
+        Topic topic = new Topic(new ArrayList<>(), "Untitled Topic " + (currentCourse.getTopicList().size() + 1));
         currentCourse.getTopicList().add(topic);
+        updateUser();
 
         // Create an actual topic tab in the course's TabPane
         createTopicTab(topic, tabPane);
@@ -243,6 +247,38 @@ public class HomeScreenController {
         currentIndexCard = null;
     }
 
+    private void topicTabPaneSettings(Tab courseTab, TabPane tabPane)
+    {
+        tabPane.getSelectionModel().selectedItemProperty().addListener((observableValue, oldTab, newTab) ->
+        {
+            if (newTab != null)
+            {
+                currentTab = newTab;
+
+                /*
+                 * Topic names are hidden inside the tab's getGraphic() method which has
+                 * a StackPane that bundles a Label (That's where the course name is) inside a group.
+                 * Attempts to unravel that to get the label.
+                 */
+                Label topicName = (Label) ((Group) ((StackPane) newTab.getGraphic()).getChildren().get(0)).getChildren().get(0);
+
+                for (Topic topic : currentCourse.getTopicList())
+                {
+                    if (topicName.getText().equals(topic.getName()))
+                    {
+                        currentTopic = topic;
+                        currentIndexCard = null;
+                        currentTabPane = newTab.getTabPane();
+                    }
+                }
+
+                // Set Visibility, Load flashcards
+                makeCardElementsVisible(true);
+            }
+        });
+        courseTab.setContent(tabPane);
+    }
+
     /**
      * Used when inserting topics into a course tab since
      * only the courses TabPane can be built in SceneBuilder.
@@ -256,7 +292,7 @@ public class HomeScreenController {
         tabPane.setRotateGraphic(true);
         tabPane.setSide(Side.LEFT);
         tabPane.setTabMinHeight(75);
-        tabPane.setTabMaxHeight(150);
+        tabPane.setTabMaxHeight(160);
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         return tabPane;
@@ -334,6 +370,36 @@ public class HomeScreenController {
             rotateTab(currentTab, renameTxtField.getText());
             updateUser();
         }
+    }
+
+    /** Change default flashcard element visibility. Ignores delete button when there is no flashcard in the topicList */
+    @FXML
+    void makeCardElementsVisible(boolean input)
+    {
+        title.setDisable(!input);
+        checkmark.setDisable(!input);
+        sortBtn.setDisable(!input);
+        flipBtn.setDisable(!input);
+        createCardBtn.setDisable(!input);
+        cardText.setDisable(!input);
+    }
+
+    @FXML
+    void createNewCardBtn()
+    {
+
+    }
+
+    @FXML
+    void handCursor()
+    {
+        courseTabPane.getScene().setCursor(Cursor.HAND);
+    }
+
+    @FXML
+    void pointerCursor()
+    {
+        courseTabPane.getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
