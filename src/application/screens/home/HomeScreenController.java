@@ -373,7 +373,7 @@ public class HomeScreenController {
             currentTopic.setName(renameTxtField.getText());
             rotateTab(currentTab, renameTxtField.getText());
             updateUser();
-
+            renameTxtField.clear();
             return;
         }
 
@@ -382,6 +382,7 @@ public class HomeScreenController {
             currentCourse.setName(renameTxtField.getText());
             rotateTab(currentTab, renameTxtField.getText());
             updateUser();
+            renameTxtField.clear();
         }
     }
 
