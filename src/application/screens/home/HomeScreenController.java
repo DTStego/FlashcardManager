@@ -2,6 +2,7 @@ package application.screens.home;
 
 import application.Main;
 import application.managers.Course;
+import application.managers.Topic;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -31,6 +32,8 @@ public class HomeScreenController {
 
     private HashMap<Tab, CourseTabController> tabMap = new HashMap<>();
 
+    private HashMap<Tab, Course> courseMap = new HashMap<>();
+
    @FXML
    public void initialize() throws IOException {
         List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
@@ -46,6 +49,7 @@ public class HomeScreenController {
             tempTab.setContent(root);
             courseList.getTabs().add(tempTab);
             tabMap.put(tempTab, loader.getController());
+            courseMap.put(tempTab, course);
         } 
    }
 
@@ -56,19 +60,7 @@ public class HomeScreenController {
 
             //Finds current Tab
             Tab currentTab = courseList.getTabs().get(selectedIndex);
-
-            Label currentTabText = (Label)currentTab.getGraphic();
-            String currentName = currentTabText.getText();
-
-            //Iterates through notebook courselist to find course to delete
-            List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
-            Course currentCourse = null;
-
-            for (Course course : currentCourseList) {
-                if (course.getName().equals(currentName)) {
-                    currentCourse = course; 
-                } 
-            } 
+            Course currentCourse = courseMap.get(currentTab);
 
             if (currentCourse == null) {
                 //Show error
@@ -80,6 +72,7 @@ public class HomeScreenController {
                 Main.currentUser.getNotebook().getCourseList().remove(currentCourse);          
                 Tab removedTab = courseList.getTabs().remove(selectedIndex);
                 tabMap.remove(removedTab);
+                courseMap.remove(removedTab);
                 updateUser();
             }
         }
@@ -101,6 +94,7 @@ public class HomeScreenController {
         blankTab.setContent(root);
 
         tabMap.put(blankTab, loader.getController());
+        courseMap.put(blankTab, newCourse);
 
         updateUser();
         nameTab();
@@ -117,8 +111,12 @@ public class HomeScreenController {
             TopicPaneController topicController = loader.getController();
             CourseTabController tabController = tabMap.get(currentTab);
 
-            topicController.setTopicName("Unnamed Topic " + (tabController.getTopicListSize() + 1));
+            String defaultTopicName = "Unnamed Topic " + (tabController.getTopicListSize() + 1);
+            topicController.setTopicName(defaultTopicName);
             tabController.addTopic(root);
+
+            Course currentCourse = courseMap.get(currentTab);
+            currentCourse.add(new Topic(null, defaultTopicName));
         }
     }
 
@@ -138,23 +136,14 @@ public class HomeScreenController {
     @FXML
     void submitNewCourseName(MouseEvent event) {
         if (!"".equals(newCourseNameInput.getText())) {
-            Course currentCourse = null;
 
             int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
             Tab currentTab = courseList.getTabs().get(selectedIndex);
 
             Label currentTabText = (Label)currentTab.getGraphic();
-            String currentName = currentTabText.getText();
             String newName = newCourseNameInput.getText();
-            
-            //Find in notebook and rename file 
-            List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
 
-            for (Course course : currentCourseList) {
-                if (course.getName().equals(currentName)) {
-                    currentCourse = course; 
-                } 
-            } 
+            Course currentCourse = courseMap.get(currentTab);
 
             if (currentCourse == null) {
                 displayError("There are no courses to rename");
