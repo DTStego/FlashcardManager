@@ -10,37 +10,50 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.register.RegisterController">
+<AnchorPane prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.register.RegisterController">
    <children>
-      <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#returnToLogin" prefHeight="42.0" prefWidth="81.0" text="Back">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="700.0" layoutX="10.0" layoutY="10.0" stroke="TRANSPARENT" strokeType="INSIDE" width="700.0" />
+      <Button fx:id="backBtn" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#returnToLogin" prefHeight="42.0" prefWidth="81.0" style="-fx-background-radius: 15;" text="Back">
          <font>
             <Font size="20.0" />
          </font></Button>
-      <Label layoutX="124.0" layoutY="11.0" prefHeight="19.0" prefWidth="464.0" text="Register ">
+      <Label layoutX="124.0" layoutY="11.0" prefHeight="19.0" prefWidth="464.0" text="New Account">
          <font>
             <Font size="34.0" />
          </font>
       </Label>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dadada" height="3.0" layoutX="124.0" layoutY="63.0" stroke="TRANSPARENT" strokeType="INSIDE" width="677.0" />
-      <VBox layoutX="124.0" layoutY="78.0" prefHeight="336.0" prefWidth="677.0" spacing="10.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dadada" height="4.0" layoutX="124.0" layoutY="65.0" stroke="TRANSPARENT" strokeType="INSIDE" width="546.0" />
+      <VBox layoutX="29.0" layoutY="120.0" prefHeight="331.0" prefWidth="642.0" spacing="30.0">
          <children>
             <TextField fx:id="usernameInput" prefHeight="31.0" prefWidth="284.0" promptText="Username">
                <cursor>
                   <Cursor fx:constant="TEXT" />
                </cursor>
+               <font>
+                  <Font size="21.0" />
+               </font>
             </TextField>
-            <PasswordField fx:id="passwordInput" promptText="Password" />
+            <PasswordField fx:id="passwordInput" promptText="Password">
+               <font>
+                  <Font size="21.0" />
+               </font></PasswordField>
             <TextField fx:id="security" prefHeight="31.0" prefWidth="284.0" promptText="Security Question">
                <cursor>
                   <Cursor fx:constant="TEXT" />
                </cursor>
+               <font>
+                  <Font size="21.0" />
+               </font>
             </TextField>
             <TextField fx:id="secAnswer" prefHeight="31.0" prefWidth="284.0" promptText="Answer">
                <cursor>
                   <Cursor fx:constant="TEXT" />
                </cursor>
+               <font>
+                  <Font size="21.0" />
+               </font>
             </TextField>
-            <Button id="registerNewUser" mnemonicParsing="false" onAction="#registerUser" prefHeight="42.0" prefWidth="157.0" text="Register">
+            <Button id="registerNewUser" mnemonicParsing="false" onAction="#registerUser" prefHeight="42.0" prefWidth="157.0" style="-fx-background-color: #3982f7;" text="Register" textFill="WHITE">
                <font>
                   <Font size="20.0" />
                </font>

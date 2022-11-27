@@ -637,12 +637,12 @@ public class HomeScreenController {
     @FXML
     void onAccountSettingsBtnClick(ActionEvent event)
     {
-        Main.loadScreen(event,"screens/accountSettings/accountSettingsScreen.fxml", "AccountSettings");
+        Main.loadBigScreen(event,"screens/accountSettings/accountSettingsScreen.fxml", "AccountSettings");
     }
     @FXML
     void signOut(ActionEvent event)
     {
-        Main.loadScreen(event, "screens/login/LoginScreen.fxml", "LoginScreen");
+        Main.loadSmallScreen(event, "screens/login/LoginScreen.fxml", "LoginScreen");
     }
 
     public void updateUser()

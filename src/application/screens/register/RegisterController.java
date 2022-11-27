@@ -28,7 +28,7 @@ public class RegisterController
     void returnToLogin(ActionEvent event)
     {
         // Return to login page
-        Main.loadScreen(event, "screens/login/LoginScreen.fxml", "Login");
+        Main.loadSmallScreen(event, "screens/login/LoginScreen.fxml", "Login");
     }
 
     /** If all fields are not empty and the username is unique, add new user to userList */
@@ -38,7 +38,7 @@ public class RegisterController
         if(isValid())
         {
             Main.userDatabase.addUser(new User(usernameInput.getText(), passwordInput.getText(), security.getText(), secAnswer.getText(), new Notebook()));
-            Main.loadScreen(event, "screens/login/LoginScreen.fxml", "Login");
+            Main.loadSmallScreen(event, "screens/login/LoginScreen.fxml", "Login");
         }
     }
 

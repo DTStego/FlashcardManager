@@ -38,7 +38,7 @@ public class resetPageController
     void returnToLogin(ActionEvent event)
     {
         // Return to the login screen
-        Main.loadScreen(event, "screens/login/LoginScreen.fxml", "Login");
+        Main.loadSmallScreen(event, "screens/login/LoginScreen.fxml", "Login");
     }
 
     /** Attempts to retrieve the user from a database to then display the security question */

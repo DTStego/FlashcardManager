@@ -39,7 +39,7 @@ public class LoginScreenController
     @FXML
     void onForgotPassClick(MouseEvent event)
     {
-        Main.loadScreen(event, "screens/resetpage/resetpageUI.fxml", "Reset Page");
+        Main.loadSmallScreen(event, "screens/resetpage/resetpageUI.fxml", "Reset Page");
     }
 
     /**
@@ -49,7 +49,7 @@ public class LoginScreenController
     @FXML
     void onRegisterClick(MouseEvent event)
     {
-        Main.loadScreen(event, "screens/register/register.fxml", "Register");
+        Main.loadSmallScreen(event, "screens/register/register.fxml", "Register");
     }
 
     @FXML
@@ -117,7 +117,7 @@ public class LoginScreenController
             if (user.getPassword().equals(passTextBox.getText()))
             {
                 Main.currentUser = user;
-                Main.loadHomeScreen(event, "screens/home/homeScreen.fxml", "Home");
+                Main.loadBigScreen(event, "screens/home/homeScreen.fxml", "Home");
                 ErrorMsg.setOpacity(0);
                 return true;
             } else

@@ -11,36 +11,45 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.resetpage.resetPageController">
+<?import javafx.scene.control.PasswordField?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.resetpage.resetPageController">
    <children>
-      <Button fx:id="back" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#returnToLogin" text="Back" />
       <Label layoutX="116.0" layoutY="14.0" prefHeight="19.0" prefWidth="464.0" text="Reset Password">
          <font>
             <Font size="34.0" />
          </font>
       </Label>
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dadada" height="3.0" layoutX="116.0" layoutY="69.0" stroke="TRANSPARENT" strokeType="INSIDE" width="677.0" />
-      <Label fx:id="errormsg" layoutX="116.0" layoutY="391.0" opacity="0.0" prefHeight="49.0" prefWidth="677.0" text="Error" textFill="RED" />
-      <HBox layoutX="116.0" layoutY="106.0" prefHeight="300.0" prefWidth="677.0" spacing="120.0">
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dadada" height="3.0" layoutX="116.0" layoutY="69.0" stroke="TRANSPARENT" strokeType="INSIDE" width="518.0" />
+      <Label fx:id="errormsg" layoutX="37.0" layoutY="413.0" opacity="0.0" prefHeight="49.0" prefWidth="625.0" text="Error" textFill="RED" />
+      <HBox layoutX="38.0" layoutY="91.0" prefHeight="300.0" prefWidth="625.0" spacing="90.0">
          <children>
             <VBox prefHeight="324.0" prefWidth="260.0" spacing="15.0">
                <children>
-                  <TextField fx:id="userInput" prefHeight="40.0" prefWidth="286.0" promptText="Username" />
-                  <Button mnemonicParsing="false" onAction="#submitUsername" text="Find User" />
+                  <TextField fx:id="userInput" prefHeight="40.0" prefWidth="286.0" promptText="Username">
+                     <font>
+                        <Font size="21.0" />
+                     </font></TextField>
+                  <Button mnemonicParsing="false" onAction="#submitUsername" style="-fx-background-color: #80a7e8; -fx-background-radius: 10;" text="Find User" textFill="WHITE" />
                   <VBox prefHeight="200.0" prefWidth="260.0" spacing="10.0">
                      <children>
                         <Label prefHeight="19.0" prefWidth="464.0" text="Security Question:">
                            <font>
-                              <Font size="20.0" />
+                              <Font size="24.0" />
                            </font>
                         </Label>
                         <Text fx:id="securityQ" strokeType="OUTSIDE" strokeWidth="0.0" text="-----------" wrappingWidth="253.33333587646484">
                            <font>
-                              <Font size="16.0" />
+                              <Font size="20.0" />
                            </font>
                         </Text>
-                        <TextField fx:id="userAnswer" prefHeight="38.0" prefWidth="254.0" promptText="Answer" />
-                        <Button fx:id="AnswerButton" mnemonicParsing="false" onAction="#submitAnswer" text="Submit" />
+                        <TextField fx:id="userAnswer" prefHeight="38.0" prefWidth="254.0" promptText="Answer">
+                           <font>
+                              <Font size="21.0" />
+                           </font></TextField>
+                        <Button fx:id="AnswerButton" mnemonicParsing="false" onAction="#submitAnswer" prefHeight="35.0" prefWidth="93.0" style="-fx-background-color: #3982f7;" text="Submit" textFill="WHITE">
+                           <font>
+                              <Font size="20.0" />
+                           </font></Button>
                      </children>
                      <padding>
                         <Insets top="20.0" />
@@ -52,13 +61,21 @@
                <children>
                   <Label prefHeight="19.0" prefWidth="464.0" text="New Password">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="24.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="newPass" promptText="New Password" />
-                  <TextField fx:id="newPassConfirm" promptText="Confirm New Pass">
-                  </TextField>
-                  <Button fx:id="confirmNewPass" mnemonicParsing="false" onAction="#submitNewPass" text="Confirm" />
+                  <PasswordField fx:id="newPass" promptText="New Password">
+                     <font>
+                        <Font size="21.0" />
+                     </font></PasswordField>
+                  <PasswordField fx:id="newPassConfirm" promptText="Confirm New Pass">
+                     <font>
+                        <Font size="21.0" />
+                     </font></PasswordField>
+                  <Button fx:id="confirmNewPass" mnemonicParsing="false" onAction="#submitNewPass" style="-fx-background-color: #80a7e8; -fx-background-radius: 15;" text="Confirm" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Button>
                </children>
                <opaqueInsets>
                   <Insets />
@@ -69,5 +86,10 @@
             </VBox>
          </children>
       </HBox>
+      <Button fx:id="backBtn" layoutX="14.0" layoutY="17.0" mnemonicParsing="false" onAction="#returnToLogin" prefHeight="42.0" prefWidth="81.0" style="-fx-background-radius: 15;" text="Back">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
