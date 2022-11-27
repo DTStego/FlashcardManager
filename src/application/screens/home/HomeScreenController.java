@@ -373,7 +373,7 @@ public class HomeScreenController {
             currentTopic.setName(renameTxtField.getText());
             rotateTab(currentTab, renameTxtField.getText());
             updateUser();
-
+            renameTxtField.clear();
             return;
         }
 
@@ -382,6 +382,7 @@ public class HomeScreenController {
             currentCourse.setName(renameTxtField.getText());
             rotateTab(currentTab, renameTxtField.getText());
             updateUser();
+            renameTxtField.clear();
         }
     }
 
@@ -597,7 +598,6 @@ public class HomeScreenController {
     {
         if (displayedCardList.size() > 1)
         {
-            System.out.println(displayedCardList.size());
             for (int i = 0; i < displayedCardList.size(); i++)
             {
                 if (currentIndexCard == displayedCardList.get(i))
