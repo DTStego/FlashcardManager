@@ -43,12 +43,14 @@ public class TopicPaneController {
         saveBtn.setVisible(false);
     }
 
-    private void attemptSave() {
+    public void setTopicName(String name) {topicBtn.setText(name);}
+
+    private void attemptNameSave() {
         String text = editNameField.getText();
         if (text.equals("")) {
             //error empty name field
         } else {
-            topicBtn.setText(text);
+            setTopicName(text);
         }
         disableEdit();
     }
@@ -71,7 +73,7 @@ public class TopicPaneController {
     @FXML
     void onEditKeyPress(KeyEvent event) {
         if (event.getCode() == KeyCode.ENTER) {
-            attemptSave();
+            attemptNameSave();
         } else if (event.getCode() == KeyCode.ESCAPE) {
             disableEdit();
         }
@@ -79,6 +81,6 @@ public class TopicPaneController {
 
     @FXML
     void onSaveBtnClicked(MouseEvent event) {
-        attemptSave();
+        attemptNameSave();
     }
 }

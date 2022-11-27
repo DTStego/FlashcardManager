@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeScreenController {
@@ -28,18 +29,23 @@ public class HomeScreenController {
     @FXML
     private VBox rename;
 
+    private HashMap<Tab, CourseTabController> tabMap = new HashMap<>();
+
    @FXML
    public void initialize() throws IOException {
         List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
 
         //Goes through courses and displays tabs for them
         for (Course course : currentCourseList) {
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("screens/home/courseTab.fxml"));
             Tab tempTab = new Tab();
             String tempTabName = course.getName();
             tempTab.setGraphic(new Label(tempTabName));
-            Parent root = FXMLLoader.load(Main.class.getResource("screens/home/courseTab.fxml"));
+
+            Parent root = loader.load();
             tempTab.setContent(root);
-            courseList.getTabs().add(tempTab);        
+            courseList.getTabs().add(tempTab);
+            tabMap.put(tempTab, loader.getController());
         } 
    }
 
@@ -72,7 +78,8 @@ public class HomeScreenController {
                 rename.setVisible(false);
                 removeError();
                 Main.currentUser.getNotebook().getCourseList().remove(currentCourse);          
-                courseList.getTabs().remove(selectedIndex);
+                Tab removedTab = courseList.getTabs().remove(selectedIndex);
+                tabMap.remove(removedTab);
                 updateUser();
             }
         }
@@ -80,6 +87,7 @@ public class HomeScreenController {
 
     @FXML
     void onNewTabClick(MouseEvent event) throws IOException{
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("screens/home/courseTab.fxml"));
         Tab blankTab = new Tab();
         String blankTabName = "Blank Course " + courseList.getTabs().size();
         blankTab.setGraphic(new Label(blankTabName));
@@ -89,8 +97,10 @@ public class HomeScreenController {
         Course newCourse = new Course(null, blankTabName);
         Main.currentUser.getNotebook().getCourseList().add(newCourse);
 
-        Parent root = FXMLLoader.load(Main.class.getResource("screens/home/courseTab.fxml"));
+        Parent root = loader.load();
         blankTab.setContent(root);
+
+        tabMap.put(blankTab, loader.getController());
 
         updateUser();
         nameTab();
@@ -104,9 +114,11 @@ public class HomeScreenController {
 
             FXMLLoader loader = new FXMLLoader(Main.class.getResource("screens/home/topicPane.fxml"));
             Parent root = loader.load();
+            TopicPaneController topicController = loader.getController();
+            CourseTabController tabController = tabMap.get(currentTab);
 
-            VBox topicList = (VBox) ((AnchorPane) currentTab.getContent()).getChildren().get(0);
-            topicList.getChildren().add(root);
+            topicController.setTopicName("Unnamed Topic " + (tabController.getTopicListSize() + 1));
+            tabController.addTopic(root);
         }
     }
 
@@ -170,7 +182,6 @@ public class HomeScreenController {
     void signOut(MouseEvent event) {
         Main.loadScreen(event, "screens/login/LoginScreen.fxml", "LoginScreen");
     }
-
 
     public void updateUser() {
         Main.userDatabase.updateUser(Main.currentUser);
