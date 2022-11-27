@@ -5,30 +5,23 @@ import application.managers.Course;
 import application.managers.IndexCard;
 import application.managers.Notebook;
 import application.managers.Topic;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.Parent;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
+import javafx.scene.transform.Translate;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class HomeScreenController {
     @FXML
@@ -45,7 +38,7 @@ public class HomeScreenController {
     private Label errorMsg;
 
     @FXML
-    private Label title;
+    private Label side;
     @FXML
     private CheckBox checkmark;
     @FXML
@@ -63,7 +56,12 @@ public class HomeScreenController {
     @FXML
     private Label cardText;
     @FXML
+    private Button cardTextSetter;
+    @FXML
     private TextField cardTextField;
+    private List<IndexCard> displayedCardList;
+
+    private boolean onFrontSide = true;
 
     private final Notebook notebook = Main.currentUser.getNotebook();
 
@@ -106,7 +104,6 @@ public class HomeScreenController {
                 currentTabPane = courseTabPane;
             }
 
-            // Change visibility of flashcard elements, unload flashcards
             makeCardElementsVisible(false);
        });
 
@@ -267,6 +264,7 @@ public class HomeScreenController {
                     if (topicName.getText().equals(topic.getName()))
                     {
                         currentTopic = topic;
+                        displayedCardList = currentTopic.getCardList();
                         currentIndexCard = null;
                         currentTabPane = newTab.getTabPane();
                     }
@@ -278,9 +276,11 @@ public class HomeScreenController {
                     currentIndexCard = currentTopic.getCardList().get(0);
                     displayCard();
                     makeCardElementsVisible(true);
+                    checkArrowVisibility();
                 } else
                 {
-                    makeDefaultCardElementsVisible(true);
+                    cardText.setText("");
+                    makeDefaultCardElementsVisible();
                 }
             }
         });
@@ -373,22 +373,26 @@ public class HomeScreenController {
     }
 
     /** Change default flashcard element visibility. Ignores delete button when there is no flashcard in the topicList */
-    void makeDefaultCardElementsVisible(boolean input)
+    void makeDefaultCardElementsVisible()
     {
-        title.setDisable(!input);
-        createCardBtn.setDisable(!input);
-        cardText.setDisable(!input);
-        checkmark.setDisable(input);
-        flipBtn.setDisable(input);
-        sortBtn.setDisable(input);
-        deleteCardBtn.setDisable(input);
+        side.setDisable(false);
+        createCardBtn.setDisable(false);
+        cardText.setDisable(false);
+        cardTextField.setDisable(true);
+        cardTextSetter.setDisable(true);
+        checkmark.setDisable(true);
+        flipBtn.setDisable(true);
+        sortBtn.setDisable(true);
+        deleteCardBtn.setDisable(true);
     }
 
     void makeCardElementsVisible(boolean input)
     {
-        title.setDisable(!input);
+        side.setDisable(!input);
         createCardBtn.setDisable(!input);
         cardText.setDisable(!input);
+        cardTextField.setDisable(!input);
+        cardTextSetter.setDisable(!input);
         checkmark.setDisable(!input);
         flipBtn.setDisable(!input);
         sortBtn.setDisable(!input);
@@ -398,13 +402,15 @@ public class HomeScreenController {
     @FXML
     void createNewCardBtn()
     {
-        IndexCard newIndexCard = new IndexCard("Click to Enter Text", "Click to Enter Text");
+        IndexCard newIndexCard = new IndexCard("Enter Text Using Textbox", "Enter Text Using Textbox");
         currentTopic.getCardList().add(newIndexCard);
         currentIndexCard = newIndexCard;
         updateUser();
-        cardText.setText(newIndexCard.getQuestion());
         displayCard();
+        side.setText("Front");
+        onFrontSide = true;
         makeCardElementsVisible(true);
+        checkArrowVisibility();
     }
 
     @FXML
@@ -413,9 +419,10 @@ public class HomeScreenController {
         if (currentTopic.getCardList().size() == 1)
         {
             currentTopic.getCardList().remove(currentIndexCard);
-            makeDefaultCardElementsVisible(true);
+            makeDefaultCardElementsVisible();
             cardText.setText("");
             updateUser();
+            checkArrowVisibility();
         }
 
         if (currentTopic.getCardList().size() > 1)
@@ -424,12 +431,195 @@ public class HomeScreenController {
             currentIndexCard = currentTopic.getCardList().get(0);
             displayCard();
             updateUser();
+            checkArrowVisibility();
         }
+    }
+
+    @FXML
+    void changeCardText()
+    {
+        cardText.setText(cardTextField.getText());
+        cardTextField.setText("");
+
+        if (onFrontSide)
+            currentIndexCard.setQuestion(cardText.getText());
+        else
+            currentIndexCard.setAnswer(cardText.getText());
+
+        updateUser();
+    }
+
+    @FXML
+    void checkmarkAction()
+    {
+        currentIndexCard.setHasLearned(checkmark.isSelected());
+        updateUser();
     }
 
     void displayCard()
     {
-        cardText.setText(currentIndexCard.getQuestion());
+        if (onFrontSide)
+            cardText.setText(currentIndexCard.getQuestion());
+        else
+            cardText.setText(currentIndexCard.getAnswer());
+
+        checkmark.setSelected(currentIndexCard.hasLearned());
+    }
+
+    @FXML
+    void flipBtnAction()
+    {
+        if (onFrontSide)
+        {
+            side.setText("Back");
+            onFrontSide = false;
+        } else
+        {
+            side.setText("Front");
+            onFrontSide = true;
+        }
+        displayCard();
+    }
+
+    @FXML
+    void leftArrowClick()
+    {
+        for (int i = 0; i < displayedCardList.size(); i++)
+        {
+            if (currentIndexCard == displayedCardList.get(i))
+            {
+                currentIndexCard = displayedCardList.get(i - 1);
+                checkArrowVisibility();
+                side.setText("Front");
+                onFrontSide = true;
+                displayCard();
+                return;
+            }
+        }
+    }
+
+    @FXML
+    void rightArrowClick()
+    {
+        for (int i = 0; i < displayedCardList.size(); i++)
+        {
+            if (currentIndexCard == displayedCardList.get(i))
+            {
+                currentIndexCard = displayedCardList.get(i + 1);
+                checkArrowVisibility();
+                side.setText("Front");
+                onFrontSide = true;
+                displayCard();
+                return;
+            }
+        }
+    }
+
+    @FXML
+    void allMenuItem()
+    {
+        errorMsg.setText("");
+        errorMsg.setVisible(false);
+
+        displayedCardList = currentTopic.getCardList();
+        currentIndexCard = displayedCardList.get(0);
+        displayCard();
+        checkArrowVisibility();
+    }
+
+    @FXML
+    void learnedMenuItem()
+    {
+        errorMsg.setText("");
+        errorMsg.setVisible(false);
+
+        ArrayList<IndexCard> learnedCardList = new ArrayList<>();
+        for (IndexCard indexCard : currentTopic.getCardList())
+        {
+            if (indexCard.hasLearned())
+                learnedCardList.add(indexCard);
+        }
+
+        if (learnedCardList.isEmpty())
+        {
+            errorMsg.setText("There are no cards for that sort.");
+            errorMsg.setVisible(true);
+            return;
+        }
+
+        displayedCardList = learnedCardList;
+
+        currentIndexCard = displayedCardList.get(0);
+        displayCard();
+        checkArrowVisibility();
+    }
+
+    @FXML
+    void notLearnedMenuItem()
+    {
+        errorMsg.setText("");
+        errorMsg.setVisible(false);
+
+        ArrayList<IndexCard> notLearnedCardList = new ArrayList<>();
+        for (IndexCard indexCard : currentTopic.getCardList())
+        {
+            if (!indexCard.hasLearned())
+                notLearnedCardList.add(indexCard);
+        }
+
+        if (notLearnedCardList.isEmpty())
+        {
+            errorMsg.setText("There are no cards for that sort.");
+            errorMsg.setVisible(true);
+            return;
+        }
+
+        displayedCardList = notLearnedCardList;
+        currentIndexCard = displayedCardList.get(0);
+        displayCard();
+        checkArrowVisibility();
+    }
+
+    void checkArrowVisibility()
+    {
+        if (displayedCardList.size() > 1)
+        {
+            System.out.println(displayedCardList.size());
+            for (int i = 0; i < displayedCardList.size(); i++)
+            {
+                if (currentIndexCard == displayedCardList.get(i))
+                {
+                    if (i == 0)
+                    {
+                        leftArrow.setOpacity(0.35);
+                        leftArrow.setDisable(true);
+                    }
+                    else
+                    {
+                        leftArrow.setOpacity(1.0);
+                        leftArrow.setDisable(false);
+                    }
+
+                    if (i == displayedCardList.size() - 1)
+                    {
+                        rightArrow.setOpacity(0.35);
+                        rightArrow.setDisable(true);
+                    }
+                    else
+                    {
+                        rightArrow.setOpacity(1.0);
+                        rightArrow.setDisable(false);
+                    }
+                }
+            }
+        }
+        else
+        {
+            leftArrow.setDisable(true);
+            leftArrow.setOpacity(0.35);
+            rightArrow.setDisable(true);
+            rightArrow.setOpacity(0.35);
+        }
     }
 
     @FXML
