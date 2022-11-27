@@ -597,7 +597,6 @@ public class HomeScreenController {
     {
         if (displayedCardList.size() > 1)
         {
-            System.out.println(displayedCardList.size());
             for (int i = 0; i < displayedCardList.size(); i++)
             {
                 if (currentIndexCard == displayedCardList.get(i))
