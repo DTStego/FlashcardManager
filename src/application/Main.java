@@ -75,6 +75,7 @@ public class Main extends Application
             primaryStage.show();
         } catch (IOException e)
         {
+            e.printStackTrace();
             System.out.println(fxmlLocation + ": Target FXML file not found");
         }
     }

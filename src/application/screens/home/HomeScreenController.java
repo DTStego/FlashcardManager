@@ -102,7 +102,9 @@ public class HomeScreenController {
             int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
             Tab currentTab = courseList.getTabs().get(selectedIndex);
 
-            Parent root = FXMLLoader.load(Main.class.getResource("screens/home/topicPane.fxml"));
+            FXMLLoader loader = new FXMLLoader(Main.class.getResource("screens/home/topicPane.fxml"));
+            Parent root = loader.load();
+
             VBox topicList = (VBox) ((AnchorPane) currentTab.getContent()).getChildren().get(0);
             topicList.getChildren().add(root);
         }

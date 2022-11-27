@@ -26,6 +26,7 @@ public class TopicPaneController {
     @FXML
     private Pane topicPane;
 
+    public Pane getTopicPane() {return topicPane;}
     private void enableEdit() {
         editNameField.setDisable(false);
         editNameField.setText(topicBtn.getText());
@@ -33,7 +34,6 @@ public class TopicPaneController {
         editNameField.requestFocus();
         saveBtn.setDisable(false);
         saveBtn.setVisible(true);
-
     }
 
     private void disableEdit() {
