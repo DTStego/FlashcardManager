@@ -123,6 +123,11 @@ public class HomeScreenController {
                    firstTabTemp = courseTab;
 
                TabPane tabPane = buildTabPane();
+
+               //Set the sizes of topic tabs created
+               tabPane.setTabMinWidth(40);
+               tabPane.setTabMinHeight(200);
+
                topicTabPaneSettings(courseTab, tabPane);
 
                // Iterate though each topic in each course and populate that course's TabPane.
@@ -137,6 +142,10 @@ public class HomeScreenController {
            currentTab = firstTabTemp;
            makeCardElementsVisible(false);
        }
+
+       //Set the size of course tabs created
+       courseTabPane.setTabMinWidth(40);
+       courseTabPane.setTabMinHeight(200);
    }
 
     /** Used when creating a new tab to create vertical tabs */
@@ -206,7 +215,7 @@ public class HomeScreenController {
         // Error if there is no selected course.
         if (currentCourse == null || currentTopic != null || currentIndexCard != null)
         {
-            errorMsg.setText("Please click on a course!");
+            errorMsg.setText("* Please click on a course!");
             return;
         }
 
@@ -223,6 +232,10 @@ public class HomeScreenController {
 
         // Retrieve the TabPane from the one built above or an existing one already loaded in the program.
         tabPane = (TabPane) currentTab.getContent();
+
+        //Set size of topic tabs created
+        tabPane.setTabMinWidth(40);
+        tabPane.setTabMinHeight(200);
 
         // Create a new topic object and store it in the course's topic list.
         Topic topic = new Topic(new ArrayList<>(), "Untitled Topic " + (currentCourse.getTopicList().size() + 1));
@@ -338,19 +351,19 @@ public class HomeScreenController {
 
         if (renameTxtField.getText().isEmpty())
         {
-            errorMsg.setText("Please input a name!");
+            errorMsg.setText("* Please input a name!");
             return;
         }
 
         if (renameTxtField.getText().length() > 20)
         {
-            errorMsg.setText("20 Character Limit");
+            errorMsg.setText("* Name must be equal to or less than 20 characters");
             return;
         }
 
         if (currentIndexCard != null)
         {
-            errorMsg.setText("Please use the dedicated rename buttons for flashcards.");
+            errorMsg.setText("* Please use the dedicated rename buttons for flashcards.");
         }
 
         errorMsg.setText("");
@@ -407,7 +420,7 @@ public class HomeScreenController {
         currentIndexCard = newIndexCard;
         updateUser();
         displayCard();
-        side.setText("Front");
+        side.setText("Front of Card");
         onFrontSide = true;
         makeCardElementsVisible(true);
         checkArrowVisibility();
@@ -471,11 +484,11 @@ public class HomeScreenController {
     {
         if (onFrontSide)
         {
-            side.setText("Back");
+            side.setText("Back of Card");
             onFrontSide = false;
         } else
         {
-            side.setText("Front");
+            side.setText("Front of Card");
             onFrontSide = true;
         }
         displayCard();
@@ -490,7 +503,7 @@ public class HomeScreenController {
             {
                 currentIndexCard = displayedCardList.get(i - 1);
                 checkArrowVisibility();
-                side.setText("Front");
+                side.setText("Front of Card");
                 onFrontSide = true;
                 displayCard();
                 return;
@@ -507,7 +520,7 @@ public class HomeScreenController {
             {
                 currentIndexCard = displayedCardList.get(i + 1);
                 checkArrowVisibility();
-                side.setText("Front");
+                side.setText("Front of Card");
                 onFrontSide = true;
                 displayCard();
                 return;
@@ -542,7 +555,7 @@ public class HomeScreenController {
 
         if (learnedCardList.isEmpty())
         {
-            errorMsg.setText("There are no cards for that sort.");
+            errorMsg.setText("* There are no cards for that sort.");
             errorMsg.setVisible(true);
             return;
         }
@@ -569,7 +582,7 @@ public class HomeScreenController {
 
         if (notLearnedCardList.isEmpty())
         {
-            errorMsg.setText("There are no cards for that sort.");
+            errorMsg.setText("* There are no cards for that sort.");
             errorMsg.setVisible(true);
             return;
         }
