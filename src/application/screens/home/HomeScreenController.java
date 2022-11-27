@@ -2,6 +2,7 @@ package application.screens.home;
 
 import application.Main;
 import application.managers.Course;
+import application.managers.IndexCard;
 import application.managers.Topic;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,16 +42,30 @@ public class HomeScreenController {
 
         //Goes through courses and displays tabs for them
         for (Course course : currentCourseList) {
-            FXMLLoader loader = new FXMLLoader(Main.class.getResource("screens/home/courseTab.fxml"));
+            FXMLLoader courseTabLoader = new FXMLLoader(Main.class.getResource("screens/home/courseTab.fxml"));
             Tab tempTab = new Tab();
             String tempTabName = course.getName();
             tempTab.setGraphic(new Label(tempTabName));
 
-            Parent root = loader.load();
+            Parent root = courseTabLoader .load();
             tempTab.setContent(root);
             courseList.getTabs().add(tempTab);
-            tabMap.put(tempTab, loader.getController());
+            tabMap.put(tempTab, courseTabLoader .getController());
             courseMap.put(tempTab, course);
+
+            if (course.getTopicList() == null)
+                continue;
+
+            for (Topic topic : course.getTopicList()) {
+                FXMLLoader topicPaneLoader = new FXMLLoader(Main.class.getResource("screens/home/topicPane.fxml"));
+                Parent topicPaneRoot = topicPaneLoader.load();
+
+                TopicPaneController topicController = topicPaneLoader.getController();
+                topicController.setTopicName(topic.getName());
+
+                CourseTabController tabController = courseTabLoader.getController();
+                tabController.addTopic(topicPaneRoot);
+            }
         } 
    }
 
@@ -87,7 +103,7 @@ public class HomeScreenController {
         courseList.getTabs().add(blankTab);
         courseList.getSelectionModel().select(blankTab);
 
-        Course newCourse = new Course(null, blankTabName);
+        Course newCourse = new Course(new ArrayList<>(), blankTabName);
         Main.currentUser.getNotebook().getCourseList().add(newCourse);
 
         Parent root = loader.load();
@@ -110,13 +126,14 @@ public class HomeScreenController {
             Parent root = loader.load();
             TopicPaneController topicController = loader.getController();
             CourseTabController tabController = tabMap.get(currentTab);
-
             String defaultTopicName = "Unnamed Topic " + (tabController.getTopicListSize() + 1);
+
             topicController.setTopicName(defaultTopicName);
             tabController.addTopic(root);
 
             Course currentCourse = courseMap.get(currentTab);
-            currentCourse.add(new Topic(null, defaultTopicName));
+            currentCourse.add(new Topic(new ArrayList<>(), defaultTopicName));
+            updateUser();
         }
     }
 
