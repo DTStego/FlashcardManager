@@ -1,5 +1,8 @@
 package application.screens.home;
 
+import application.Main;
+import application.managers.Course;
+import application.managers.Topic;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -26,7 +29,21 @@ public class TopicPaneController {
     @FXML
     private Pane topicPane;
 
+    private Course course;
+    private Topic topic;
+
     public Pane getTopicPane() {return topicPane;}
+
+    public void setTopicAndCourse(Topic topic, Course course) {
+        if (this.topic == null && this.course == null) {
+            this.topic = topic;
+            this.course = course;
+        } else {
+            System.out.println("Can only set topic and course once");
+        }
+
+    }
+
     private void enableEdit() {
         editNameField.setDisable(false);
         editNameField.setText(topicBtn.getText());
@@ -51,15 +68,19 @@ public class TopicPaneController {
             //error empty name field
         } else {
             setTopicName(text);
+            this.topic.setName(text);
         }
         disableEdit();
+        Main.userDatabase.updateUser(Main.currentUser);
     }
     @FXML
     void initialize() {disableEdit();}
 
     @FXML
     void onDelTopicClicked(MouseEvent event) {
+        course.delete(topic);
         ((VBox) topicPane.getParent()).getChildren().remove(topicPane);
+        Main.userDatabase.updateUser(Main.currentUser);
     }
 
     @FXML

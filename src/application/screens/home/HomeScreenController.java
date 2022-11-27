@@ -47,11 +47,14 @@ public class HomeScreenController {
             String tempTabName = course.getName();
             tempTab.setGraphic(new Label(tempTabName));
 
-            Parent root = courseTabLoader .load();
+            Parent root = courseTabLoader.load();
             tempTab.setContent(root);
             courseList.getTabs().add(tempTab);
             tabMap.put(tempTab, courseTabLoader .getController());
             courseMap.put(tempTab, course);
+
+            CourseTabController tabController = courseTabLoader.getController();
+            tabController.setCourse(course);
 
             if (course.getTopicList() == null)
                 continue;
@@ -62,8 +65,8 @@ public class HomeScreenController {
 
                 TopicPaneController topicController = topicPaneLoader.getController();
                 topicController.setTopicName(topic.getName());
+                topicController.setTopicAndCourse(topic, course);
 
-                CourseTabController tabController = courseTabLoader.getController();
                 tabController.addTopic(topicPaneRoot);
             }
         } 
@@ -112,6 +115,8 @@ public class HomeScreenController {
         tabMap.put(blankTab, loader.getController());
         courseMap.put(blankTab, newCourse);
 
+        ((CourseTabController) loader.getController()).setCourse(newCourse);
+
         updateUser();
         nameTab();
     }
@@ -127,12 +132,14 @@ public class HomeScreenController {
             TopicPaneController topicController = loader.getController();
             CourseTabController tabController = tabMap.get(currentTab);
             String defaultTopicName = "Unnamed Topic " + (tabController.getTopicListSize() + 1);
+            Course currentCourse = courseMap.get(currentTab);
 
+            Topic newTopic = new Topic(new ArrayList<>(), defaultTopicName);
             topicController.setTopicName(defaultTopicName);
+            topicController.setTopicAndCourse(newTopic, currentCourse);
             tabController.addTopic(root);
 
-            Course currentCourse = courseMap.get(currentTab);
-            currentCourse.add(new Topic(new ArrayList<>(), defaultTopicName));
+            currentCourse.add(newTopic);
             updateUser();
         }
     }

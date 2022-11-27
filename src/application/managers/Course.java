@@ -20,7 +20,7 @@ public class Course implements Manager
 
     public boolean delete(Topic topic)
     {
-        return topicList.add(topic);
+        return topicList.remove(topic);
     }
 
     public List<Topic> getTopicList()
