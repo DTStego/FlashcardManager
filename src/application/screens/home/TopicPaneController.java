@@ -3,8 +3,11 @@ package application.screens.home;
 import application.Main;
 import application.managers.Course;
 import application.managers.Topic;
+import application.screens.topic.TopicScreenController;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -14,6 +17,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class TopicPaneController {
 
@@ -51,6 +56,7 @@ public class TopicPaneController {
         editNameField.requestFocus();
         saveBtn.setDisable(false);
         saveBtn.setVisible(true);
+        topicBtn.setDisable(true);
     }
 
     private void disableEdit() {
@@ -58,6 +64,7 @@ public class TopicPaneController {
         editNameField.setVisible(false);
         saveBtn.setDisable(true);
         saveBtn.setVisible(false);
+        topicBtn.setDisable(false);
     }
 
     public void setTopicName(String name) {topicBtn.setText(name);}
@@ -87,8 +94,17 @@ public class TopicPaneController {
     void onEditBtnClicked(MouseEvent event) {enableEdit();}
 
     @FXML
-    void onTopicBtnClicked(MouseEvent event) {
-        //open topic page
+    void onTopicBtnClicked(MouseEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(Main.class.getResource("screens/topic/TopicScreen.fxml"));
+        Parent root = loader.load();
+        TopicScreenController topicScreenController = loader.getController();
+        topicScreenController.setTitle(course.getName() + " >> " + topic.getName());
+
+        Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
+        primaryStage.setTitle(course.getName() + " >> " + topic.getName());
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     @FXML

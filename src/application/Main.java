@@ -70,9 +70,7 @@ public class Main extends Application
             Parent root = FXMLLoader.load(Main.class.getResource(fxmlLocation));
             Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
 
-            primaryStage.setTitle(stageTitle);
-            primaryStage.setScene(scene);
-            primaryStage.show();
+
         } catch (IOException e)
         {
             e.printStackTrace();
