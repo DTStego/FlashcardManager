@@ -72,7 +72,7 @@ public class TopicScreenController {
         saveBtn.setDisable(false);
         cancelBtn.setDisable(false);
         cardList.setDisable(true);
-        deleteCardBtn.setDisable(false);
+        deleteCardBtn.setDisable(true);
         cardTextArea.setEditable(true);
         flipCardBtn.setDisable(true);
         if (isShowingFrontSide) {
@@ -112,6 +112,7 @@ public class TopicScreenController {
         topic.add(card);
 
         cardMap.put(newTab, card);
+        Main.userDatabase.updateUser(Main.currentUser);
     }
 
     @FXML
@@ -123,9 +124,11 @@ public class TopicScreenController {
     void onCardListClicked(MouseEvent event) {
         isShowingFrontSide = true;
         IndexCard currentCard = getSelectedCard();
-        cardSideLabel.setText("Question");
-        cardTextArea.setText(currentCard.getQuestion());
-        learnedBox.setSelected(currentCard.hasLearned());
+        if (currentCard != null) {
+            cardSideLabel.setText("Question");
+            cardTextArea.setText(currentCard.getQuestion());
+            learnedBox.setSelected(currentCard.hasLearned());
+        }
     }
 
     @FXML
@@ -137,6 +140,7 @@ public class TopicScreenController {
             Tab removedTab = cardList.getTabs().remove(selectedIndex);
             cardMap.remove(removedTab);
         }
+        Main.userDatabase.updateUser(Main.currentUser);
     }
 
     @FXML
@@ -167,6 +171,7 @@ public class TopicScreenController {
             currentCard.setAnswer(cardTextArea.getText());
         }
         disableEdit(currentCard);
+        Main.userDatabase.updateUser(Main.currentUser);
     }
 
     @FXML
@@ -176,6 +181,7 @@ public class TopicScreenController {
             currentCard.setHasLearned(true);
         else
             currentCard.setHasLearned(false);
+        Main.userDatabase.updateUser(Main.currentUser);
     }
 
     @FXML
@@ -191,6 +197,21 @@ public class TopicScreenController {
             this.topic = topic;
         else
             System.out.println("Can only set topic once");
+    }
+
+    public void loadCards() {
+        if (topic == null)
+            System.out.println("Could not load: topic has not been set");
+
+        for (IndexCard card : topic.getCardList()) {
+            Tab newTab = new Tab();
+            Label name = new Label("Unnamed Card " + (cardList.getTabs().size() + 1));
+            name.setMaxSize(cardList.getTabMaxWidth(), cardList.getTabMaxHeight());
+            newTab.setGraphic(name);
+            cardList.getTabs().add(newTab);
+
+            cardMap.put(newTab, card);
+        }
     }
 
 }
