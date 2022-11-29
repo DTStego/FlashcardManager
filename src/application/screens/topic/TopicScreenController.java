@@ -51,6 +51,16 @@ public class TopicScreenController {
 
     private HashMap<Tab, IndexCard> cardMap = new HashMap<>();
 
+    private IndexCard getSelectedCard() {
+        if (cardList.getTabs().size() == 0)
+            return null;
+
+        int selectedIndex = cardList.getSelectionModel().getSelectedIndex();
+
+        //Finds current Tab
+        Tab currentTab = cardList.getTabs().get(selectedIndex);
+        return cardMap.get(currentTab);
+    }
     @FXML
     void initialize() {
         cardTextArea.setEditable(false);
@@ -106,109 +116,66 @@ public class TopicScreenController {
 
     @FXML
     void onCancelBtnClick(MouseEvent event) {
-        int selectedIndex = cardList.getSelectionModel().getSelectedIndex();
-
-        //Finds current Tab
-        Tab currentTab = cardList.getTabs().get(selectedIndex);
-        IndexCard currentCard = cardMap.get(currentTab);
-        disableEdit(currentCard);
+        disableEdit(getSelectedCard());
     }
 
     @FXML
     void onCardListClicked(MouseEvent event) {
         isShowingFrontSide = true;
-        if (cardList.getTabs().size() > 0) {
-            int selectedIndex = cardList.getSelectionModel().getSelectedIndex();
-
-            //Finds current Tab
-            Tab currentTab = cardList.getTabs().get(selectedIndex);
-            IndexCard currentCard = cardMap.get(currentTab);
-            cardSideLabel.setText("Question");
-            cardTextArea.setText(currentCard.getQuestion());
-            learnedBox.setSelected(currentCard.hasLearned());
-        }
+        IndexCard currentCard = getSelectedCard();
+        cardSideLabel.setText("Question");
+        cardTextArea.setText(currentCard.getQuestion());
+        learnedBox.setSelected(currentCard.hasLearned());
     }
 
     @FXML
     void onDeleteCardClick(MouseEvent event) {
-        if (cardList.getTabs().size() > 0) {
-            int selectedIndex = cardList.getSelectionModel().getSelectedIndex();
-
-            //Finds current Tab
-            Tab currentTab = cardList.getTabs().get(selectedIndex);
-            IndexCard currentCard = cardMap.get(currentTab);
-
-            if (currentCard != null) {
-                topic.delete(currentCard);
-                Tab removedTab = cardList.getTabs().remove(selectedIndex);
-                cardMap.remove(removedTab);
-            }
+        int selectedIndex = cardList.getSelectionModel().getSelectedIndex();
+        IndexCard currentCard = getSelectedCard();
+        if (currentCard != null) {
+            topic.delete(currentCard);
+            Tab removedTab = cardList.getTabs().remove(selectedIndex);
+            cardMap.remove(removedTab);
         }
     }
 
     @FXML
     void onEditCardClick(MouseEvent event) {
-        if (cardList.getTabs().size() > 0) {
-            int selectedIndex = cardList.getSelectionModel().getSelectedIndex();
-
-            //Finds current Tab
-            Tab currentTab = cardList.getTabs().get(selectedIndex);
-            IndexCard currentCard = cardMap.get(currentTab);
-            enableEdit(currentCard);
-        }
+        enableEdit(getSelectedCard());
     }
 
     @FXML
     void onFlipBtnClick(MouseEvent event) {
         isShowingFrontSide = !isShowingFrontSide;
-        if (cardList.getTabs().size() > 0) {
-            int selectedIndex = cardList.getSelectionModel().getSelectedIndex();
+        IndexCard currentCard = cardMap.get(getSelectedCard());
 
-            //Finds current Tab
-            Tab currentTab = cardList.getTabs().get(selectedIndex);
-            IndexCard currentCard = cardMap.get(currentTab);
-
-            if (isShowingFrontSide) {
-                cardTextArea.setText(currentCard.getQuestion());
-                cardSideLabel.setText("Question");
-            } else {
-                cardTextArea.setText(currentCard.getAnswer());
-                cardSideLabel.setText("Answer");
-            }
-
+        if (isShowingFrontSide) {
+            cardTextArea.setText(currentCard.getQuestion());
+            cardSideLabel.setText("Question");
+        } else {
+            cardTextArea.setText(currentCard.getAnswer());
+            cardSideLabel.setText("Answer");
         }
     }
 
     @FXML
     void onSaveBtnClick(MouseEvent event) {
-        if (cardList.getTabs().size() > 0) {
-            int selectedIndex = cardList.getSelectionModel().getSelectedIndex();
-
-            //Finds current Tab
-            Tab currentTab = cardList.getTabs().get(selectedIndex);
-            IndexCard currentCard = cardMap.get(currentTab);
-            if (isShowingFrontSide) {
-                currentCard.setQuestion(cardTextArea.getText());
-            } else {
-                currentCard.setAnswer(cardTextArea.getText());
-            }
-            disableEdit(currentCard);
+        IndexCard currentCard = cardMap.get(getSelectedCard());
+        if (isShowingFrontSide) {
+            currentCard.setQuestion(cardTextArea.getText());
+        } else {
+            currentCard.setAnswer(cardTextArea.getText());
         }
+        disableEdit(currentCard);
     }
 
     @FXML
     void onLearnedClick(MouseEvent event) {
-        if (cardList.getTabs().size() > 0) {
-            int selectedIndex = cardList.getSelectionModel().getSelectedIndex();
-
-            //Finds current Tab
-            Tab currentTab = cardList.getTabs().get(selectedIndex);
-            IndexCard currentCard = cardMap.get(currentTab);
-            if (learnedBox.isSelected())
-                currentCard.setHasLearned(true);
-            else
-                currentCard.setHasLearned(false);
-        }
+        IndexCard currentCard = getSelectedCard();
+        if (learnedBox.isSelected())
+            currentCard.setHasLearned(true);
+        else
+            currentCard.setHasLearned(false);
     }
 
     @FXML
