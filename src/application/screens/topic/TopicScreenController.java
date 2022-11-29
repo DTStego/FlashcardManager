@@ -71,10 +71,10 @@ public class TopicScreenController {
     private void enableEdit(IndexCard card) {
         saveBtn.setDisable(false);
         cancelBtn.setDisable(false);
-        cardList.setDisable(true);
-        deleteCardBtn.setDisable(true);
+        cardList.setVisible(false);
         cardTextArea.setEditable(true);
         flipCardBtn.setDisable(true);
+        deleteCardBtn.setDisable(true);
         if (isShowingFrontSide) {
             cardSideLabel.setText("Editing Question");
             cardTextArea.setText(card.getQuestion());
@@ -89,7 +89,7 @@ public class TopicScreenController {
         deleteCardBtn.setDisable(false);
         saveBtn.setDisable(true);
         cancelBtn.setDisable(true);
-        cardList.setDisable(false);
+        cardList.setVisible(true);
         cardTextArea.setEditable(false);
         if (isShowingFrontSide) {
             cardTextArea.setText(card.getQuestion());
