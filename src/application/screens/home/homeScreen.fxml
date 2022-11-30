@@ -92,7 +92,7 @@
                <font>
                   <Font size="21.0" />
                </font></Button>
-            <Button fx:id="renameBtn" layoutX="317.0" layoutY="87.0" mnemonicParsing="false" onAction="#renameBtn" style="-fx-background-radius: 15; -fx-background-color: #80aaed;" text="Click to rename" />
+            <Button fx:id="renameBtn" layoutX="314.0" layoutY="79.0" mnemonicParsing="false" onAction="#renameBtn" style="-fx-background-radius: 15; -fx-background-color: #80aaed;" text="Click to rename" />
             <TextField fx:id="renameTxtField" layoutX="32.0" layoutY="79.0" prefHeight="31.0" prefWidth="274.0" promptText="Rename the selected topic or course" />
             <Button fx:id="deleteBtn" layoutX="32.0" layoutY="124.0" mnemonicParsing="false" onAction="#deleteBtn" prefHeight="39.0" prefWidth="274.0" style="-fx-background-color: d10808; -fx-background-radius: 10;" text="Delete selected course or topic" textFill="WHITE">
                <font>
