@@ -5,10 +5,11 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.accountSettings.AccountSettingsController">
+<AnchorPane prefHeight="500.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.accountSettings.AccountSettingsController">
    <children>
       <Label layoutX="24.0" layoutY="14.0" prefHeight="19.0" prefWidth="464.0" text="Account Settings">
          <font>
@@ -16,20 +17,81 @@
          </font>
       </Label>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dadada" height="3.0" layoutX="24.0" layoutY="73.0" stroke="TRANSPARENT" strokeType="INSIDE" width="677.0" />
-      <Label layoutX="24.0" layoutY="88.0" prefHeight="26.0" prefWidth="159.0" text="Change username" />
-      <Label layoutX="486.0" layoutY="88.0" prefHeight="26.0" prefWidth="159.0" text="Change password" />
-      <Button fx:id="applyBtn" layoutX="565.0" layoutY="361.0" mnemonicParsing="false" onAction="#applyBtn" prefHeight="25.0" prefWidth="52.0" text="Apply" />
-      <Button fx:id="cancelBtn" layoutX="627.0" layoutY="361.0" mnemonicParsing="false" onMouseClicked="#onCancelClick" text="Cancel" />
-      <Label layoutX="486.0" layoutY="139.0" prefHeight="26.0" prefWidth="159.0" text="Confirm new password" />
-      <Button fx:id="deleteBtn" layoutX="24.0" layoutY="361.0" mnemonicParsing="false" onAction="#updateDeletionVisibility" text="Delete Account" textFill="RED" />
-      <TextField fx:id="usernameField" layoutX="24.0" layoutY="114.0" prefHeight="25.0" prefWidth="333.0" promptText="Enter new username" />
-      <PasswordField fx:id="newPassField" layoutX="486.0" layoutY="114.0" prefHeight="25.0" prefWidth="202.0" promptText="Enter new password" />
-      <PasswordField fx:id="confirmPassField" layoutX="486.0" layoutY="165.0" prefHeight="25.0" prefWidth="202.0" promptText="Confirm password" />
-      <Label layoutX="24.0" layoutY="169.0" text="Change security question" />
-      <TextField fx:id="secQuestionField" layoutX="24.0" layoutY="190.0" onKeyReleased="#revealSecurityAnswerElements" prefHeight="25.0" prefWidth="333.0" promptText="Enter new security question" />
-      <Label fx:id="secAnswerLbl" disable="true" layoutX="24.0" layoutY="225.0" text="Change security answer" />
-      <TextField fx:id="secAnswerField" disable="true" layoutX="24.0" layoutY="246.0" prefHeight="25.0" prefWidth="333.0" promptText="Enter new security answer" />
-      <Button fx:id="confirmDeletionBtn" disable="true" layoutX="132.0" layoutY="361.0" mnemonicParsing="false" onAction="#deleteAccount" prefHeight="25.0" prefWidth="134.0" text="CONFIRM DELETION" textFill="RED" visible="false" />
-      <Label fx:id="errorLabel" layoutX="136.0" layoutY="283.0" prefHeight="72.0" prefWidth="548.0" />
+      <VBox layoutX="14.0" layoutY="81.0" prefHeight="263.0" prefWidth="317.0">
+         <children>
+            <Label prefHeight="31.0" prefWidth="311.0" text="Change username">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+            <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="333.0" promptText="Enter new username">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </TextField>
+            <Label prefHeight="21.0" prefWidth="311.0" text="Change security question">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+            <TextField fx:id="secQuestionField" onKeyReleased="#revealSecurityAnswerElements" prefHeight="25.0" prefWidth="333.0" promptText="Enter new security question">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </TextField>
+            <Label fx:id="secAnswerLbl" disable="true" opacity="0.99" text="Change security answer">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+            <TextField fx:id="secAnswerField" disable="true" opacity="0.99" prefHeight="25.0" prefWidth="333.0" promptText="Enter new security answer">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </TextField>
+            <Label fx:id="errorLabel" prefHeight="72.0" prefWidth="548.0" />
+         </children>
+      </VBox>
+      <VBox layoutX="371.0" layoutY="76.0" prefHeight="256.0" prefWidth="317.0">
+         <children>
+            <Label prefHeight="26.0" prefWidth="244.0" text="Change password">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="newPassField" prefHeight="25.0" prefWidth="202.0" promptText="Enter new password">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </PasswordField>
+            <Label prefHeight="31.0" prefWidth="243.0" text="Confirm new password">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="confirmPassField" prefHeight="25.0" prefWidth="202.0" promptText="Confirm password">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </PasswordField>
+         </children>
+      </VBox>
+      <Button fx:id="applyBtn" layoutX="403.0" layoutY="361.0" mnemonicParsing="false" onAction="#applyBtn" prefHeight="45.0" prefWidth="183.0" style="-fx-background-color: #8acaed; -fx-background-radius: 10;" text="Apply Changes" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="21.0" />
+         </font>
+      </Button>
+      <Button fx:id="cancelBtn" layoutX="594.0" layoutY="361.0" mnemonicParsing="false" onMouseClicked="#onCancelClick" prefHeight="45.0" prefWidth="97.0" style="-fx-background-radius: 10;" text="Cancel">
+         <font>
+            <Font size="21.0" />
+         </font></Button>
+      <Button fx:id="deleteBtn" layoutX="24.0" layoutY="361.0" mnemonicParsing="false" onAction="#updateDeletionVisibility" prefHeight="45.0" prefWidth="190.0" style="-fx-background-color: d10808; -fx-background-radius: 10;" text="Delete Account" textFill="WHITE">
+         <font>
+            <Font size="21.0" />
+         </font></Button>
+      <Button fx:id="confirmDeletionBtn" disable="true" layoutX="24.0" layoutY="423.0" mnemonicParsing="false" onAction="#deleteAccount" prefHeight="45.0" prefWidth="268.0" style="-fx-background-color: #cc1414; -fx-background-radius: 10;" text="CONFIRM DELETION?" textFill="WHITE" visible="false">
+         <font>
+            <Font size="21.0" />
+         </font></Button>
    </children>
 </AnchorPane>

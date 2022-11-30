@@ -32,12 +32,15 @@ public class Main extends Application
     public void start(Stage primaryStage) throws IOException
     {
         Parent root = FXMLLoader.load(getClass().getResource("screens/login/LoginScreen.fxml"));
-        Scene scene = new Scene(root, screenWidth * screenScale, screenHeight * screenScale);
+//        Scene scene = new Scene(root, screenWidth * screenScale, screenHeight * screenScale);
+        Scene scene = new Scene(root, 700, 700);
 
         primaryStage.setTitle("Flashcard Manager");
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(screenHeight / (screenScale * 2.25));
-        primaryStage.setMinWidth(screenWidth / (screenScale * 2.1));
+        primaryStage.setMinWidth(700);
+        primaryStage.setMinHeight(700);
+        primaryStage.setMaxWidth(700);
+        primaryStage.setMaxHeight(700);
         primaryStage.show();
     }
 
@@ -62,7 +65,29 @@ public class Main extends Application
      * @param fxmlLocation String that represents the file location of an FXML file
      * @param stageTitle String to change the window's title, e.g., "Home Page"
      */
-    public static void loadScreen(Event event, String fxmlLocation, String stageTitle)
+    public static void loadSmallScreen(Event event, String fxmlLocation, String stageTitle)
+    {
+        try
+        {
+            Stage primaryStage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+            Parent root = FXMLLoader.load(Main.class.getResource(fxmlLocation));
+//            Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
+            Scene scene = new Scene(root, 700, 700);
+
+            primaryStage.setMinWidth(700);
+            primaryStage.setMinHeight(700);
+            primaryStage.setMaxWidth(700);
+            primaryStage.setMaxHeight(700);
+
+            primaryStage.setTitle(stageTitle);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+    public static void loadBigScreen(Event event, String fxmlLocation, String stageTitle)
     {
         try
         {
@@ -70,7 +95,15 @@ public class Main extends Application
             Parent root = FXMLLoader.load(Main.class.getResource(fxmlLocation));
             Scene scene = new Scene(root, Main.screenWidth * Main.screenScale, Main.screenHeight * Main.screenScale);
 
+//            primaryStage.setMinHeight(screenHeight / (screenScale * 2.25));
+//            primaryStage.setMinWidth(screenWidth / (screenScale * 2.1));
+            primaryStage.setMinHeight(screenHeight / (screenScale * 2));
+            primaryStage.setMinWidth(screenWidth / (screenScale * 1.9));
+            primaryStage.setMaxHeight(screenHeight);
+            primaryStage.setMaxWidth(screenWidth);
+
             primaryStage.setTitle(stageTitle);
+//            scene.getStylesheets().addAll(Main.class.getResource("application.css").toExternalForm());
             primaryStage.setScene(scene);
             primaryStage.show();
         } catch (IOException e)

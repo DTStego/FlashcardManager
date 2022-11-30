@@ -5,11 +5,17 @@ import application.User;
 import application.persistence.UserSerialize;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.io.File;
@@ -23,6 +29,8 @@ public class LoginScreenController
     private TextField passTextBox;
     @FXML
     private TextField usernameTextBox;
+    @FXML
+    public AnchorPane root;
 
     /**
      * Activates when a user clicks on the "Forgot password?" prompt on the login screen.
@@ -31,7 +39,7 @@ public class LoginScreenController
     @FXML
     void onForgotPassClick(MouseEvent event)
     {
-        Main.loadScreen(event, "screens/resetpage/resetpageUI.fxml", "Reset Page");
+        Main.loadSmallScreen(event, "screens/resetpage/resetpageUI.fxml", "Reset Page");
     }
 
     /**
@@ -41,7 +49,7 @@ public class LoginScreenController
     @FXML
     void onRegisterClick(MouseEvent event)
     {
-        Main.loadScreen(event, "screens/register/register.fxml", "Register");
+        Main.loadSmallScreen(event, "screens/register/register.fxml", "Register");
     }
 
     @FXML
@@ -109,7 +117,7 @@ public class LoginScreenController
             if (user.getPassword().equals(passTextBox.getText()))
             {
                 Main.currentUser = user;
-                Main.loadScreen(event, "screens/home/homeScreen.fxml", "Home");
+                Main.loadBigScreen(event, "screens/home/homeScreen.fxml", "Home");
                 ErrorMsg.setOpacity(0);
                 return true;
             } else

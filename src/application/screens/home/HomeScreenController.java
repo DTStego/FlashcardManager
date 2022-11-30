@@ -2,184 +2,664 @@ package application.screens.home;
 
 import application.Main;
 import application.managers.Course;
+import application.managers.IndexCard;
+import application.managers.Notebook;
+import application.managers.Topic;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.geometry.Side;
+import javafx.scene.Cursor;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.scene.layout.StackPane;
+import javafx.scene.transform.Translate;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeScreenController {
+    @FXML
+    private TabPane courseTabPane;
+    @FXML
+    private Button renameBtn;
+    @FXML
+    private TextField renameTxtField;
+    @FXML
+    private Button deleteBtn;
+    @FXML
+    private Button newTopicBtn;
+    @FXML
+    private Label errorMsg;
 
     @FXML
-    private TabPane courseList;
-
+    private Label side;
     @FXML
-    private Text errorTxt;
-
+    private CheckBox checkmark;
     @FXML
-    private TextField newCourseNameInput;
-
+    private ImageView leftArrow;
     @FXML
-    private VBox rename;
+    private ImageView rightArrow;
+    @FXML
+    private Button flipBtn;
+    @FXML
+    private MenuButton sortBtn;
+    @FXML
+    private Button createCardBtn;
+    @FXML
+    private Button deleteCardBtn;
+    @FXML
+    private Label cardText;
+    @FXML
+    private Button cardTextSetter;
+    @FXML
+    private TextField cardTextField;
+    private List<IndexCard> displayedCardList;
 
+    private boolean onFrontSide = true;
+
+    private final Notebook notebook = Main.currentUser.getNotebook();
+
+    // Will identify below variables as "Sight" or "Program Sight".
+    private Course currentCourse;
+    private Topic currentTopic;
+    private IndexCard currentIndexCard;
+    private Tab currentTab;
+    private TabPane currentTabPane = courseTabPane;
+
+    // TODO: Hide "Create Topic/Course" buttons based on program sight.
+    // TODO: Fix currentCourse not equaling the first course on setup.
    @FXML
-   public void initialize() throws IOException {
-        List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
+   public void initialize()
+   {
+       // Global rule for course TabPane when a course is selected.
+       courseTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) ->
+       {
+            if (newTab != null)
+            {
+                currentTab = newTab;
 
-        //Goes through courses and displays tabs for them
-        for (Course course : currentCourseList) {
-            Tab tempTab = new Tab();
-            String tempTabName = course.getName();
-            tempTab.setGraphic(new Label(tempTabName));
-            Parent root = FXMLLoader.load(Main.class.getResource("screens/home/courseTab.fxml"));
-            tempTab.setContent(root);
-            courseList.getTabs().add(tempTab);        
-        } 
+                /*
+                 * Course names are hidden inside the tab's getGraphic() method which has
+                 * a StackPane that bundles a Label (That's where the course name is) inside a group.
+                 * Attempts to unravel that to get the label.
+                 */
+                Label courseName = (Label) ((Group) ((StackPane) newTab.getGraphic()).getChildren().get(0)).getChildren().get(0);
+
+                // Search for the course in user's notebook using the courseName Label.
+                for (Course course : notebook.getCourseList())
+                {
+                    if (courseName.getText().equals(course.getName()))
+                        currentCourse = course;
+                }
+
+                // If a course tab is selected, make sure program is set so neither a topic nor card is selected.
+                currentTopic = null;
+                currentIndexCard = null;
+                currentTabPane = courseTabPane;
+            }
+
+            makeCardElementsVisible(false);
+       });
+
+       // Populate GUI with course and topic tabs.
+       if (!notebook.getCourseList().isEmpty())
+       {
+           // Used to set the sight to the first course tab.
+           Tab firstTabTemp = new Tab();
+
+           // Iterate through the list of courses and create a tab for each course.
+           for (int i = 0 ; i < notebook.getCourseList().size(); i++)
+           {
+               Tab courseTab = createCourseTab(notebook.getCourseList().get(i));
+
+               // Save the first course to an outside variable to set the program sight later.
+               if (i == 0)
+                   firstTabTemp = courseTab;
+
+               TabPane tabPane = buildTabPane();
+
+               //Set the sizes of topic tabs created
+               tabPane.setTabMinWidth(40);
+               tabPane.setTabMinHeight(200);
+
+               topicTabPaneSettings(courseTab, tabPane);
+
+               // Iterate though each topic in each course and populate that course's TabPane.
+               for (Topic topic : notebook.getCourseList().get(i).getTopicList())
+               {
+                   createTopicTab(topic, tabPane);
+               }
+           }
+
+           // Set the sight to the first course tab.
+           currentCourse = notebook.getCourseList().get(0);
+           currentTab = firstTabTemp;
+           makeCardElementsVisible(false);
+       }
+
+       //Set the size of course tabs created
+       courseTabPane.setTabMinWidth(40);
+       courseTabPane.setTabMinHeight(200);
    }
 
+    /** Used when creating a new tab to create vertical tabs */
+    void rotateTab(Tab tab)
+    {
+        Label tempLabel = new Label(tab.getText());
+        tempLabel.setRotate(90);
+
+        StackPane tempPane = new StackPane(new Group(tempLabel));
+        tempPane.setRotate(90);
+
+        tab.setGraphic(tempPane);
+        tab.setText("");
+    }
+
+    /** Method overloading for changing a tab's name */
+    void rotateTab(Tab tab, String newName)
+    {
+        Label tempLabel = new Label(newName);
+        tempLabel.setRotate(90);
+
+        StackPane tempPane = new StackPane(new Group(tempLabel));
+
+        tab.setGraphic(tempPane);
+        tab.setText("");
+    }
+
+    /** On "Create New Course" click, create a new Course and corresponding Tab (Insert into courseTabPane). */
     @FXML
-    void onDeleteTabClick(MouseEvent event) {
-        if (courseList.getTabs().size() > 0) {
-            int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
+    void createNewCourseBtn()
+    {
+        Course course = new Course(new ArrayList<>(), "Untitled Course " + (notebook.getCourseList().size() + 1));
+        notebook.getCourseList().add(course);
+        updateUser();
 
-            //Finds current Tab
-            Tab currentTab = courseList.getTabs().get(selectedIndex);
+        createCourseTab(course);
+    }
 
-            Label currentTabText = (Label)currentTab.getGraphic();
-            String currentName = currentTabText.getText();
+    /**
+     * Create a Tab based off of Course object, add to list, and set program sight to course.
+     * @param course Course object to be linked with a course tab based on its name.
+     * @return Tab that was created and inserted into the course TabPane
+     */
+    private Tab createCourseTab(Course course)
+    {
+        Tab newTab = new Tab();
+        newTab.setText(course.getName());
 
-            //Iterates through notebook courselist to find course to delete
-            List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
-            Course currentCourse = null;
+        rotateTab(newTab);
+        courseTabPane.getTabs().add(newTab);
 
-            for (Course course : currentCourseList) {
-                if (course.getName().equals(currentName)) {
-                    currentCourse = course; 
-                } 
-            } 
+        currentCourse = course;
+        currentTopic = null;
+        currentIndexCard = null;
+        currentTab = newTab;
+        currentTabPane = courseTabPane;
 
-            if (currentCourse == null) {
-                //Show error
-                displayError("There are no courses to delete");
-            } else {
-                //Remove in notebook, then remove in UI
-                rename.setVisible(false);
-                removeError();
-                Main.currentUser.getNotebook().getCourseList().remove(currentCourse);          
-                courseList.getTabs().remove(selectedIndex);
-                updateUser();
+        return newTab;
+    }
+
+    /** Creates a topic tab in the selected course. */
+    @FXML
+    void createNewTopicBtn()
+    {
+        errorMsg.setText("");
+
+        // Error if there is no selected course.
+        if (currentCourse == null || currentTopic != null || currentIndexCard != null)
+        {
+            errorMsg.setText("* Please click on a course!");
+            return;
+        }
+
+        TabPane tabPane;
+
+        // Checks to see if there is already a TabPane, if not, build one to list topics.
+        if (currentTab.getContent() == null)
+        {
+            tabPane = buildTabPane();
+
+            // Event when a topic is clicked on by a user in the TabPane containing topics.
+            topicTabPaneSettings(currentTab, tabPane);
+        }
+
+        // Retrieve the TabPane from the one built above or an existing one already loaded in the program.
+        tabPane = (TabPane) currentTab.getContent();
+
+        //Set size of topic tabs created
+        tabPane.setTabMinWidth(40);
+        tabPane.setTabMinHeight(200);
+
+        // Create a new topic object and store it in the course's topic list.
+        Topic topic = new Topic(new ArrayList<>(), "Untitled Topic " + (currentCourse.getTopicList().size() + 1));
+        currentCourse.getTopicList().add(topic);
+        updateUser();
+
+        // Create an actual topic tab in the course's TabPane
+        createTopicTab(topic, tabPane);
+    }
+
+    private void createTopicTab(Topic topic, TabPane tabpane)
+    {
+        Tab newTab = new Tab();
+        newTab.setText(topic.getName());
+
+        rotateTab(newTab);
+        tabpane.getTabs().add(newTab);
+
+        currentIndexCard = null;
+    }
+
+    private void topicTabPaneSettings(Tab courseTab, TabPane tabPane)
+    {
+        tabPane.getSelectionModel().selectedItemProperty().addListener((observableValue, oldTab, newTab) ->
+        {
+            if (newTab != null)
+            {
+                currentTab = newTab;
+
+                /*
+                 * Topic names are hidden inside the tab's getGraphic() method which has
+                 * a StackPane that bundles a Label (That's where the course name is) inside a group.
+                 * Attempts to unravel that to get the label.
+                 */
+                Label topicName = (Label) ((Group) ((StackPane) newTab.getGraphic()).getChildren().get(0)).getChildren().get(0);
+
+                for (Topic topic : currentCourse.getTopicList())
+                {
+                    if (topicName.getText().equals(topic.getName()))
+                    {
+                        currentTopic = topic;
+                        displayedCardList = currentTopic.getCardList();
+                        currentIndexCard = null;
+                        currentTabPane = newTab.getTabPane();
+                    }
+                }
+
+                // Set Visibility, Load flashcards
+                if (currentTopic.getCardList().size() > 0)
+                {
+                    currentIndexCard = currentTopic.getCardList().get(0);
+                    displayCard();
+                    makeCardElementsVisible(true);
+                    checkArrowVisibility();
+                } else
+                {
+                    cardText.setText("");
+                    makeDefaultCardElementsVisible();
+                }
+            }
+        });
+        courseTab.setContent(tabPane);
+    }
+
+    /**
+     * Used when inserting topics into a course tab since
+     * only the courses TabPane can be built in SceneBuilder.
+     * @return TabPane with necessary settings that allows for tab vertical rotation,
+     * tabs set to align on the left, and minimum tab size. Also disables ability to
+     * delete tabs with the (X) button in the GUI which would bypass save ability.
+     */
+    private TabPane buildTabPane()
+    {
+        TabPane tabPane = new TabPane();
+        tabPane.setRotateGraphic(true);
+        tabPane.setSide(Side.LEFT);
+        tabPane.setTabMinHeight(75);
+        tabPane.setTabMaxHeight(160);
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        return tabPane;
+    }
+
+    /** Deletes a course or topic tab and its corresponding object from the user's notebook */
+    // TODO Add prompt to check if user wants to delete the manager.
+    @FXML
+    void deleteBtn()
+    {
+        if (currentTopic != null)
+        {
+            currentCourse.getTopicList().remove(currentTopic);
+            currentTabPane.getTabs().remove(currentTab);
+            updateUser();
+            return;
+        }
+
+        if (currentCourse != null)
+        {
+            notebook.getCourseList().remove(currentCourse);
+            currentTabPane.getTabs().remove(currentTab);
+            updateUser();
+        }
+    }
+
+    /**
+     * Renames a course or topic tab and updates its object in the user's notebook.
+     * There will be dedicated rename options for flashcards.
+     */
+    @FXML
+    void renameBtn()
+    {
+        errorMsg.setText("");
+
+        if (renameTxtField.getText().isEmpty())
+        {
+            errorMsg.setText("* Please input a name!");
+            return;
+        }
+
+        if (renameTxtField.getText().length() > 20)
+        {
+            errorMsg.setText("* Name must be equal to or less than 20 characters");
+            return;
+        }
+
+        if (currentIndexCard != null)
+        {
+            errorMsg.setText("* Please use the dedicated rename buttons for flashcards.");
+        }
+
+        errorMsg.setText("");
+
+        if (currentTopic != null)
+        {
+            currentTopic.setName(renameTxtField.getText());
+            rotateTab(currentTab, renameTxtField.getText());
+            updateUser();
+            renameTxtField.clear();
+            return;
+        }
+
+        if (currentCourse != null)
+        {
+            currentCourse.setName(renameTxtField.getText());
+            rotateTab(currentTab, renameTxtField.getText());
+            updateUser();
+            renameTxtField.clear();
+        }
+    }
+
+    /** Change default flashcard element visibility. Ignores delete button when there is no flashcard in the topicList */
+    void makeDefaultCardElementsVisible()
+    {
+        side.setDisable(false);
+        createCardBtn.setDisable(false);
+        cardText.setDisable(false);
+        cardTextField.setDisable(true);
+        cardTextSetter.setDisable(true);
+        checkmark.setDisable(true);
+        flipBtn.setDisable(true);
+        sortBtn.setDisable(true);
+        deleteCardBtn.setDisable(true);
+    }
+
+    void makeCardElementsVisible(boolean input)
+    {
+        side.setDisable(!input);
+        createCardBtn.setDisable(!input);
+        cardText.setDisable(!input);
+        cardTextField.setDisable(!input);
+        cardTextSetter.setDisable(!input);
+        checkmark.setDisable(!input);
+        flipBtn.setDisable(!input);
+        sortBtn.setDisable(!input);
+        deleteCardBtn.setDisable(!input);
+    }
+
+    @FXML
+    void createNewCardBtn()
+    {
+        IndexCard newIndexCard = new IndexCard("Enter Text Using Textbox", "Enter Text Using Textbox");
+        currentTopic.getCardList().add(newIndexCard);
+        currentIndexCard = newIndexCard;
+        updateUser();
+        displayCard();
+        side.setText("Front of Card");
+        onFrontSide = true;
+        makeCardElementsVisible(true);
+        checkArrowVisibility();
+    }
+
+    @FXML
+    void deleteCardBtn()
+    {
+        if (currentTopic.getCardList().size() == 1)
+        {
+            currentTopic.getCardList().remove(currentIndexCard);
+            makeDefaultCardElementsVisible();
+            cardText.setText("");
+            updateUser();
+            checkArrowVisibility();
+        }
+
+        if (currentTopic.getCardList().size() > 1)
+        {
+            currentTopic.getCardList().remove(currentIndexCard);
+            currentIndexCard = currentTopic.getCardList().get(0);
+            displayCard();
+            updateUser();
+            checkArrowVisibility();
+        }
+    }
+
+    @FXML
+    void changeCardText()
+    {
+        cardText.setText(cardTextField.getText());
+        cardTextField.setText("");
+
+        if (onFrontSide)
+            currentIndexCard.setQuestion(cardText.getText());
+        else
+            currentIndexCard.setAnswer(cardText.getText());
+
+        updateUser();
+    }
+
+    @FXML
+    void checkmarkAction()
+    {
+        currentIndexCard.setHasLearned(checkmark.isSelected());
+        updateUser();
+    }
+
+    void displayCard()
+    {
+        if (onFrontSide)
+            cardText.setText(currentIndexCard.getQuestion());
+        else
+            cardText.setText(currentIndexCard.getAnswer());
+
+        checkmark.setSelected(currentIndexCard.hasLearned());
+    }
+
+    @FXML
+    void flipBtnAction()
+    {
+        if (onFrontSide)
+        {
+            side.setText("Back of Card");
+            onFrontSide = false;
+        } else
+        {
+            side.setText("Front of Card");
+            onFrontSide = true;
+        }
+        displayCard();
+    }
+
+    @FXML
+    void leftArrowClick()
+    {
+        for (int i = 0; i < displayedCardList.size(); i++)
+        {
+            if (currentIndexCard == displayedCardList.get(i))
+            {
+                currentIndexCard = displayedCardList.get(i - 1);
+                checkArrowVisibility();
+                side.setText("Front of Card");
+                onFrontSide = true;
+                displayCard();
+                return;
             }
         }
     }
 
     @FXML
-    void onNewTabClick(MouseEvent event) throws IOException{
-        Tab blankTab = new Tab();
-        String blankTabName = "Blank Course " + courseList.getTabs().size();
-        blankTab.setGraphic(new Label(blankTabName));
-        courseList.getTabs().add(blankTab);
-        courseList.getSelectionModel().select(blankTab);
-
-        Course newCourse = new Course(null, blankTabName);
-        Main.currentUser.getNotebook().getCourseList().add(newCourse);
-
-        Parent root = FXMLLoader.load(Main.class.getResource("screens/home/courseTab.fxml"));
-        blankTab.setContent(root);
-
-        updateUser();
-        nameTab();
-    }
-
-    @FXML
-    void onNewTopicClick(MouseEvent event) throws IOException {
-        if (!courseList.getTabs().isEmpty()) {
-            int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
-            Tab currentTab = courseList.getTabs().get(selectedIndex);
-
-            Parent root = FXMLLoader.load(Main.class.getResource("screens/home/topicPane.fxml"));
-            VBox topicList = (VBox) ((AnchorPane) currentTab.getContent()).getChildren().get(0);
-            topicList.getChildren().add(root);
+    void rightArrowClick()
+    {
+        for (int i = 0; i < displayedCardList.size(); i++)
+        {
+            if (currentIndexCard == displayedCardList.get(i))
+            {
+                currentIndexCard = displayedCardList.get(i + 1);
+                checkArrowVisibility();
+                side.setText("Front of Card");
+                onFrontSide = true;
+                displayCard();
+                return;
+            }
         }
     }
 
     @FXML
-    void onRenameTabClick(MouseEvent event) {
-        if (!courseList.getTabs().isEmpty()) {
-            nameTab();
-        } else {
-            displayError("There are no courses to rename");
-        }
-    }
+    void allMenuItem()
+    {
+        errorMsg.setText("");
+        errorMsg.setVisible(false);
 
-    void nameTab() {
-        rename.setVisible(true);
+        displayedCardList = currentTopic.getCardList();
+        currentIndexCard = displayedCardList.get(0);
+        displayCard();
+        checkArrowVisibility();
     }
 
     @FXML
-    void submitNewCourseName(MouseEvent event) {
-        if (!"".equals(newCourseNameInput.getText())) {
-            Course currentCourse = null;
+    void learnedMenuItem()
+    {
+        errorMsg.setText("");
+        errorMsg.setVisible(false);
 
-            int selectedIndex = courseList.getSelectionModel().getSelectedIndex();
-            Tab currentTab = courseList.getTabs().get(selectedIndex);
+        ArrayList<IndexCard> learnedCardList = new ArrayList<>();
+        for (IndexCard indexCard : currentTopic.getCardList())
+        {
+            if (indexCard.hasLearned())
+                learnedCardList.add(indexCard);
+        }
 
-            Label currentTabText = (Label)currentTab.getGraphic();
-            String currentName = currentTabText.getText();
-            String newName = newCourseNameInput.getText();
-            
-            //Find in notebook and rename file 
-            List<Course> currentCourseList = Main.currentUser.getNotebook().getCourseList();
+        if (learnedCardList.isEmpty())
+        {
+            errorMsg.setText("* There are no cards for that sort.");
+            errorMsg.setVisible(true);
+            return;
+        }
 
-            for (Course course : currentCourseList) {
-                if (course.getName().equals(currentName)) {
-                    currentCourse = course; 
-                } 
-            } 
+        displayedCardList = learnedCardList;
 
-            if (currentCourse == null) {
-                displayError("There are no courses to rename");
-            } else {
-                removeError();
+        currentIndexCard = displayedCardList.get(0);
+        displayCard();
+        checkArrowVisibility();
+    }
 
-                currentCourse.rename(newName);
-                
-                //Rename in UI
-                currentTabText.setText(newName);
-                newCourseNameInput.clear();
-                rename.setVisible(false);
-                updateUser();
+    @FXML
+    void notLearnedMenuItem()
+    {
+        errorMsg.setText("");
+        errorMsg.setVisible(false);
+
+        ArrayList<IndexCard> notLearnedCardList = new ArrayList<>();
+        for (IndexCard indexCard : currentTopic.getCardList())
+        {
+            if (!indexCard.hasLearned())
+                notLearnedCardList.add(indexCard);
+        }
+
+        if (notLearnedCardList.isEmpty())
+        {
+            errorMsg.setText("* There are no cards for that sort.");
+            errorMsg.setVisible(true);
+            return;
+        }
+
+        displayedCardList = notLearnedCardList;
+        currentIndexCard = displayedCardList.get(0);
+        displayCard();
+        checkArrowVisibility();
+    }
+
+    void checkArrowVisibility()
+    {
+        if (displayedCardList.size() > 1)
+        {
+            for (int i = 0; i < displayedCardList.size(); i++)
+            {
+                if (currentIndexCard == displayedCardList.get(i))
+                {
+                    if (i == 0)
+                    {
+                        leftArrow.setOpacity(0.35);
+                        leftArrow.setDisable(true);
+                    }
+                    else
+                    {
+                        leftArrow.setOpacity(1.0);
+                        leftArrow.setDisable(false);
+                    }
+
+                    if (i == displayedCardList.size() - 1)
+                    {
+                        rightArrow.setOpacity(0.35);
+                        rightArrow.setDisable(true);
+                    }
+                    else
+                    {
+                        rightArrow.setOpacity(1.0);
+                        rightArrow.setDisable(false);
+                    }
                 }
-        } else {
-            displayError("Please enter a name for this course.");
+            }
+        }
+        else
+        {
+            leftArrow.setDisable(true);
+            leftArrow.setOpacity(0.35);
+            rightArrow.setDisable(true);
+            rightArrow.setOpacity(0.35);
         }
     }
 
     @FXML
-    void onAccountSettingsBtnClick(MouseEvent event) {
-        Main.loadScreen(event,"screens/accountSettings/accountSettingsScreen.fxml", "AccountSettings");
+    void handCursor()
+    {
+        courseTabPane.getScene().setCursor(Cursor.HAND);
+    }
+
+    @FXML
+    void pointerCursor()
+    {
+        courseTabPane.getScene().setCursor(Cursor.DEFAULT);
+    }
+
+    @FXML
+    void onAccountSettingsBtnClick(ActionEvent event)
+    {
+        Main.loadBigScreen(event,"screens/accountSettings/accountSettingsScreen.fxml", "AccountSettings");
     }
     @FXML
-    void signOut(MouseEvent event) {
-        Main.loadScreen(event, "screens/login/LoginScreen.fxml", "LoginScreen");
+    void signOut(ActionEvent event)
+    {
+        Main.loadSmallScreen(event, "screens/login/LoginScreen.fxml", "LoginScreen");
     }
 
-
-    public void updateUser() {
+    public void updateUser()
+    {
         Main.userDatabase.updateUser(Main.currentUser);
-    }
-
-    public void displayError(String text) {
-        errorTxt.setVisible(true);
-        errorTxt.setText(text);
-    }
-
-    public void removeError() {
-        errorTxt.setVisible(false);
     }
 }

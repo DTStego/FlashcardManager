@@ -51,7 +51,7 @@ public class AccountSettingsController
 
     @FXML
     void onCancelClick(MouseEvent event) {
-        Main.loadScreen(event,"screens/home/homeScreen.fxml", "Home");
+        Main.loadBigScreen(event,"screens/home/homeScreen.fxml", "Home");
     }
 
     /** Enable the security answer text-box if input is detected in the security question text-box */
@@ -83,7 +83,7 @@ public class AccountSettingsController
     void deleteAccount(ActionEvent event)
     {
         Main.userDatabase.deleteUser(Main.currentUser);
-        Main.loadScreen(event, "screens/login/LoginScreen.fxml", "Flashcard Manager");
+        Main.loadSmallScreen(event, "screens/login/LoginScreen.fxml", "Flashcard Manager");
     }
 
     @FXML
@@ -131,7 +131,7 @@ public class AccountSettingsController
                     ex.printStackTrace();
                 }
 
-                Main.loadScreen(event, "screens/login/LoginScreen.fxml", "Flashcard Manager");
+                Main.loadSmallScreen(event, "screens/login/LoginScreen.fxml", "Flashcard Manager");
             }
         } else
         {

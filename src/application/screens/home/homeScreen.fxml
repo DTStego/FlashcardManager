@@ -1,37 +1,113 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.home.HomeScreenController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="759.0" prefWidth="1258.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.screens.home.HomeScreenController">
    <children>
-      <TabPane fx:id="courseList" layoutY="32.0" prefHeight="368.0" prefWidth="482.0" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMinHeight="150.0" />
-      <Button fx:id="newCourseBtn" layoutX="487.0" layoutY="14.0" mnemonicParsing="false" onMouseClicked="#onNewTabClick" prefHeight="33.0" prefWidth="99.0" text="New Course" />
-      <Button fx:id="deleteCourseBtn" layoutX="487.0" layoutY="56.0" mnemonicParsing="false" onMouseClicked="#onDeleteTabClick" prefHeight="33.0" prefWidth="99.0" text="Delete Course" />
-      <Button fx:id="renameCourseBtn" layoutX="487.0" layoutY="100.0" mnemonicParsing="false" onMouseClicked="#onRenameTabClick" prefHeight="33.0" prefWidth="99.0" text="Rename Course" />
-      <VBox fx:id="rename" alignment="CENTER" layoutX="487.0" layoutY="146.0" prefHeight="162.0" prefWidth="100.0" visible="false">
+      <HBox prefHeight="549.0" prefWidth="1244.0" spacing="150.0">
          <children>
-            <TextField fx:id="newCourseNameInput" promptText="New Course Name" />
-            <Button mnemonicParsing="false" onMouseClicked="#submitNewCourseName" text="Confirm" />
+            <TabPane fx:id="courseTabPane" prefHeight="403.0" prefWidth="413.0" rotateGraphic="true" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="160.0" tabMinHeight="75.0" />
+            <AnchorPane prefHeight="493.0" prefWidth="685.0">
+               <children>
+                  <CheckBox fx:id="checkmark" disable="true" layoutX="233.0" layoutY="363.0" mnemonicParsing="false" onAction="#checkmarkAction" prefHeight="31.0" prefWidth="99.0" text="Learned">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </CheckBox>
+                  <ImageView fx:id="leftArrow" disable="true" fitHeight="50.0" fitWidth="50.0" layoutX="21.0" layoutY="186.0" onMouseClicked="#leftArrowClick" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" opacity="0.35" pickOnBounds="true" preserveRatio="true" rotate="180.0">
+                     <image>
+                        <Image url="@../../assets/images/arrowButton.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fx:id="rightArrow" disable="true" fitHeight="50.0" fitWidth="50.0" layoutX="619.0" layoutY="186.0" onMouseClicked="#rightArrowClick" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" opacity="0.35" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../assets/images/arrowButton.png" />
+                     </image>
+                  </ImageView>
+                  <MenuButton fx:id="sortBtn" disable="true" layoutX="509.0" layoutY="363.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="99.0" style="-fx-background-color: #e9edf5;" text="Sort By">
+                    <items>
+                      <MenuItem mnemonicParsing="false" onAction="#allMenuItem" text="All" />
+                      <MenuItem mnemonicParsing="false" onAction="#learnedMenuItem" text="Learned" />
+                        <MenuItem mnemonicParsing="false" onAction="#notLearnedMenuItem" text="Not Learned" />
+                    </items>
+                  </MenuButton>
+                  <Button fx:id="flipBtn" disable="true" layoutX="85.0" layoutY="363.0" mnemonicParsing="false" onAction="#flipBtnAction" prefHeight="0.0" prefWidth="133.0" style="-fx-background-color: ced3db; -fx-background-radius: 10;" text="Flip Card">
+                     <font>
+                        <Font name="Quicksand Medium" size="20.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="createCardBtn" disable="true" layoutX="438.0" layoutY="23.0" mnemonicParsing="false" onAction="#createNewCardBtn" prefHeight="44.0" prefWidth="192.0" style="-fx-background-color: ced3db; -fx-background-radius: 10;" text="Create New Flashcard" />
+                  <Button fx:id="deleteCardBtn" disable="true" layoutX="351.0" layoutY="363.0" mnemonicParsing="false" onAction="#deleteCardBtn" prefHeight="31.0" prefWidth="148.0" style="-fx-background-color: #e9edf5;" text="Delete Flashcard" textFill="RED" />
+                  <Label fx:id="side" alignment="CENTER" layoutX="233.0" layoutY="22.0" prefHeight="25.0" prefWidth="192.0" text="Front of Card">
+                     <font>
+                        <Font size="30.0" />
+                     </font>
+                  </Label>
+                  <Rectangle arcHeight="10.0" arcWidth="10.0" fill="WHITE" height="262.0" layoutX="85.0" layoutY="83.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="529.0" />
+                  <Label fx:id="cardText" alignment="CENTER" disable="true" layoutX="107.0" layoutY="107.0" prefHeight="215.0" prefWidth="486.0" wrapText="true">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="cardTextField" layoutX="252.0" layoutY="421.0" prefHeight="30.0" prefWidth="324.0" promptText="Enter Card Text Here">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                  </TextField>
+                  <Button fx:id="cardTextSetter" layoutX="85.0" layoutY="421.0" mnemonicParsing="false" onAction="#changeCardText" prefHeight="45.0" prefWidth="148.0" style="-fx-background-radius: 10; -fx-background-color: ced3db;" text="Change Text">
+                     <font>
+                        <Font size="21.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
          </children>
-      </VBox>
-      <Button layoutX="488.0" layoutY="360.0" mnemonicParsing="false" onMouseClicked="#signOut" prefHeight="25.0" prefWidth="99.0" text="Sign Out" />
-      <Text fx:id="errorTxt" fill="RED" layoutX="480.0" layoutY="315.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Error" textAlignment="CENTER" visible="false" wrappingWidth="112.0172119140625" />
-      <Button fx:id="accountSettingsBtn" layoutX="488.0" layoutY="327.0" mnemonicParsing="false" onMouseClicked="#onAccountSettingsBtnClick" prefHeight="25.0" prefWidth="99.0" text="Acc. Settings" />
-      <Button fx:id="addTopicBtn" layoutX="450.0" layoutY="-2.0" mnemonicParsing="false" onMouseClicked="#onNewTopicClick" prefHeight="32.0" prefWidth="31.0">
-         <graphic>
-            <ImageView fitHeight="20.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../assets/images/plus.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
+      </HBox>
+      <AnchorPane prefHeight="304.0" prefWidth="1309.0">
+         <children>
+            <Button layoutX="1099.0" layoutY="87.0" mnemonicParsing="false" onAction="#signOut" style="-fx-background-color: ced3db; -fx-background-radius: 10;" text="Log Out">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Button>
+            <Button layoutX="1011.0" layoutY="19.0" mnemonicParsing="false" onAction="#onAccountSettingsBtnClick" prefHeight="30.0" prefWidth="192.0" style="-fx-background-color: ced3db; -fx-background-radius: 10;" text="Account Settings">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Button>
+            <Button layoutX="32.0" layoutY="19.0" mnemonicParsing="false" onAction="#createNewCourseBtn" style="-fx-background-color: #ced3db; -fx-background-radius: 10;" text="Create New Course">
+               <font>
+                  <Font size="21.0" />
+               </font></Button>
+            <Button fx:id="renameBtn" layoutX="314.0" layoutY="79.0" mnemonicParsing="false" onAction="#renameBtn" style="-fx-background-radius: 15; -fx-background-color: #80aaed;" text="Click to rename" />
+            <TextField fx:id="renameTxtField" layoutX="32.0" layoutY="79.0" prefHeight="31.0" prefWidth="274.0" promptText="Rename the selected topic or course" />
+            <Button fx:id="deleteBtn" layoutX="32.0" layoutY="124.0" mnemonicParsing="false" onAction="#deleteBtn" prefHeight="39.0" prefWidth="274.0" style="-fx-background-color: d10808; -fx-background-radius: 10;" text="Delete selected course or topic" textFill="WHITE">
+               <font>
+                  <Font size="18.0" />
+               </font></Button>
+            <Button fx:id="newTopicBtn" layoutX="266.0" layoutY="19.0" mnemonicParsing="false" onAction="#createNewTopicBtn" style="-fx-background-color: #ced3db; -fx-background-radius: 10;" text="Create New Topic">
+               <font>
+                  <Font size="21.0" />
+               </font></Button>
+            <Label fx:id="errorMsg" layoutX="32.0" layoutY="173.0" prefHeight="30.0" prefWidth="450.0" textFill="RED">
+               <font>
+                  <Font size="21.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
    </children>
-</AnchorPane>
+</VBox>
