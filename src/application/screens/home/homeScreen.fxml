@@ -19,7 +19,7 @@
    <children>
       <HBox prefHeight="549.0" prefWidth="1244.0" spacing="150.0">
          <children>
-            <TabPane fx:id="courseTabPane" prefHeight="403.0" prefWidth="413.0" rotateGraphic="true" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="160.0" tabMinHeight="75.0" />
+            <TabPane fx:id="courseTabPane" prefHeight="403.0" prefWidth="413.0" rotateGraphic="true" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="160.0" tabMinHeight="200.0" tabMinWidth="60.0" />
             <AnchorPane prefHeight="493.0" prefWidth="685.0">
                <children>
                   <CheckBox fx:id="checkmark" disable="true" layoutX="581.0" layoutY="83.0" mnemonicParsing="false" onAction="#checkmarkAction" prefHeight="31.0" prefWidth="99.0" text="Learned">

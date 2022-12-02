@@ -52,7 +52,9 @@ public class HomeScreenController {
     private TextField cardTextField;
     @FXML
     private Button randomizeBtn;
-    // Is initialized when a topic topicPane is created (Which is inserted in a course tab).
+    /* Is initialized when a topic topicPane is created (Which is inserted in a course tab).
+       Temp list used during sorts and randomizers so the user's notebook isn't touched.
+     */
     private List<IndexCard> displayedCardList;
 
     private boolean onFrontSide = true;
@@ -69,18 +71,19 @@ public class HomeScreenController {
    @FXML
    public void initialize()
    {
-       // Global rule for course TabPane when a course is selected.
+       // Global rule for the "course" TabPane when a course tab is selected.
        courseTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) ->
        {
             if (newTab != null)
             {
+                // Update the selected tab label with the tab that was clicked on.
                 currentTab = newTab;
                 updateSelectedTabLbl();
 
                 /*
                  * Course names are hidden inside the tab's getGraphic() method which has
                  * a StackPane that bundles a Label (That's where the course name is) inside a group.
-                 * Attempts to unravel that to get the label.
+                 * Attempts to unravel that to get the label/tab name.
                  */
                 Label courseName = (Label) ((Group) ((StackPane) newTab.getGraphic()).getChildren().get(0)).getChildren().get(0);
 
@@ -97,15 +100,17 @@ public class HomeScreenController {
                 currentTabPane = courseTabPane;
             }
 
+            // If a course tab is selected, disable the index card UI. It should only be visible when a topic tab is clicked.
             makeCardElementsVisible(false);
        });
 
+       // Used later to select the first topic that the first course has (if one exists) to determine program sight.
        Topic tempTopic = null;
 
-       // Populate GUI with course and topic tabs.
+       // Populate GUI with course and topic tabs (if they exist).
        if (!notebook.getCourseList().isEmpty())
        {
-           // Used to set the sight to the first course tab.
+           // Used to set the sight to either the first course tab or the first topic tab (if it exists).
            Tab firstTabTemp = new Tab();
 
            // Iterate through the list of courses and create a tab for each course.
@@ -117,21 +122,20 @@ public class HomeScreenController {
                if (i == 0)
                    firstTabTemp = courseTab;
 
+               // Set settings for a topic's TabPane's size.
                TabPane tabPane = buildTabPane();
 
-               //Set the sizes of topic tabs created
-               tabPane.setTabMinWidth(40);
-               tabPane.setTabMinHeight(200);
-
+               // Set conditions when a user clicks on a topic tab.
                topicTabPaneSettings(courseTab, tabPane);
 
-               // Iterate though each topic in each course and populate that course's TabPane.
+               // Iterate though each topic in each course and populate that course's TabPane with topic tabs.
                for (int j = 0; j < notebook.getCourseList().get(i).getTopicList().size(); j++)
                {
                    Topic topic = notebook.getCourseList().get(i).getTopicList().get(j);
 
                    createTopicTab(topic, tabPane);
 
+                   // Store the topic and tab for the first topic to set the program sight later.
                    if (j == 0)
                    {
                        tempTopic = topic;
@@ -140,13 +144,14 @@ public class HomeScreenController {
                }
            }
 
-           // Set the sight to the first course tab.
+           // Set the sight to the first course tab. Update "currently selected" label.
            currentCourse = notebook.getCourseList().get(0);
            currentTopic = tempTopic;
            currentTab = firstTabTemp;
            updateSelectedTabLbl();
            makeCardElementsVisible(false);
 
+           // If there were topics in the first course object in the notebook, display its flashcards.
            if (currentTopic != null && !currentTopic.getCardList().isEmpty())
            {
                makeCardElementsVisible(true);
@@ -157,15 +162,13 @@ public class HomeScreenController {
            }
            else if (currentTopic != null)
            {
+               // Otherwise allow the user to add new flashcards.
                side.setDisable(false);
                createCardBtn.setDisable(false);
            }
        }
 
-       //Set the size of course tabs created
-       courseTabPane.setTabMinWidth(40);
-       courseTabPane.setTabMinHeight(200);
-
+       // Add two courses if there are no courses yet (By default) -- Obfuscates issues that occur when there is only one course.
        if (notebook.getCourseList().size() == 0)
        {
            createNewCourseBtn();
@@ -202,6 +205,7 @@ public class HomeScreenController {
     @FXML
     void createNewCourseBtn()
     {
+        // To mitigate issues when courses have the same name, try to make sure the course doesn't have the same "Untitled Course " + index name.
         String newCourseName = "Untitled Course " + (notebook.getCourseList().size() + 1);
         for (Course course : notebook.getCourseList())
         {
@@ -229,6 +233,7 @@ public class HomeScreenController {
         Tab newTab = new Tab();
         newTab.setText(course.getName());
 
+        // Need to rotate the text so it'll be horizontal (the default is vertical).
         rotateTab(newTab);
         courseTabPane.getTabs().add(newTab);
 
@@ -269,11 +274,7 @@ public class HomeScreenController {
         // Retrieve the TabPane from the one built above or an existing one already loaded in the program.
         tabPane = (TabPane) currentTab.getContent();
 
-        //Set size of topic tabs created
-        tabPane.setTabMinWidth(40);
-        tabPane.setTabMinHeight(200);
-
-        // Create a new topic object and store it in the course's topic list.
+        // Create a new topic object and store it in the course's topic list. Same with creating a new course, i.e., name mitigation.
         String newTopicName = "Untitled Topic " + (currentCourse.getTopicList().size() + 1);
         for (Topic t : currentCourse.getTopicList())
         {
@@ -294,11 +295,13 @@ public class HomeScreenController {
         currentTabPane = tabPane;
     }
 
+    /** Creates a topic Tab and inserts it into the specific course's Tab/TabPane */
     private void createTopicTab(Topic topic, TabPane tabpane)
     {
         Tab newTab = new Tab();
         newTab.setText(topic.getName());
 
+        // Rotates the tab so it's horizontal, not vertical (which is the default).
         rotateTab(newTab);
         tabpane.getTabs().add(newTab);
 
@@ -306,11 +309,12 @@ public class HomeScreenController {
     }
 
     /**
-     * Run when a user clicks on a topic tab. Initializes the Flashcard UI with the first flashcard of a Topic
-     * object if there is a flashcard.
+     * Run when a user clicks on a topic tab. Initializes the Flashcard UI
+     * with the first flashcard of a Topic object if there is a flashcard.
      */
     private void topicTabPaneSettings(Tab courseTab, TabPane tabPane)
     {
+        // Listener on the entire TabPane that runs when a topic tab is clicked on.
         tabPane.getSelectionModel().selectedItemProperty().addListener((observableValue, oldTab, newTab) ->
         {
             if (newTab != null)
@@ -325,6 +329,7 @@ public class HomeScreenController {
                  */
                 Label topicName = (Label) ((Group) ((StackPane) newTab.getGraphic()).getChildren().get(0)).getChildren().get(0);
 
+                // Attempts to locate the Topic object based on the selected tab's name.
                 for (Topic topic : currentCourse.getTopicList())
                 {
                     if (topicName.getText().equals(topic.getName()))
@@ -332,11 +337,15 @@ public class HomeScreenController {
                         currentTopic = topic;
                         displayedCardList = currentTopic.getCardList();
                         currentIndexCard = null;
+
+                        /* ISSUE: newTab.getTabPane() may return null when the tab is "selected" automatically
+                           when a tab near it is deleted. Unsure about the actual cause of this bug...
+                         */
                         currentTabPane = newTab.getTabPane();
                     }
                 }
 
-                // Set Visibility, Load flashcards
+                // Set Visibility, Load flashcards starting at the first position.
                 if (currentTopic.getCardList().size() > 0)
                 {
                     currentIndexCard = currentTopic.getCardList().get(0);
@@ -360,7 +369,7 @@ public class HomeScreenController {
 
     /**
      * Used when inserting topics into a course tab since
-     * only the courses TabPane can be built in SceneBuilder.
+     * only the "courses" TabPane can be built in SceneBuilder.
      * @return TabPane with necessary settings that allows for tab vertical rotation,
      * tabs set to align on the left, and minimum tab size. Also disables ability to
      * delete tabs with the (X) button in the GUI which would bypass save ability.
@@ -370,8 +379,9 @@ public class HomeScreenController {
         TabPane tabPane = new TabPane();
         tabPane.setRotateGraphic(true);
         tabPane.setSide(Side.LEFT);
-        tabPane.setTabMinHeight(75);
+        tabPane.setTabMinHeight(200);
         tabPane.setTabMaxHeight(160);
+        tabPane.setTabMinWidth(40);
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
 
         return tabPane;
@@ -640,15 +650,20 @@ public class HomeScreenController {
         }
     }
 
+    /** Shuffles the current displayedCardList (All/Learned/Unlearned) and displays the first card. */
     @FXML
     void randomizeCardList()
     {
+        errorMsg.setText("");
+        errorMsg.setVisible(false);
+
         Collections.shuffle(displayedCardList);
         currentIndexCard = displayedCardList.get(0);
         displayCard();
         checkArrowVisibility();
     }
 
+    /** Displays all the flashcards in the order that they were created. */
     @FXML
     void allMenuItem()
     {
@@ -661,6 +676,7 @@ public class HomeScreenController {
         checkArrowVisibility();
     }
 
+    /** Displays all the flashcards that have been checked "learned". */
     @FXML
     void learnedMenuItem()
     {
@@ -688,6 +704,7 @@ public class HomeScreenController {
         checkArrowVisibility();
     }
 
+    /** Displays all the flashcards that are not checked as "learned". */
     @FXML
     void notLearnedMenuItem()
     {
