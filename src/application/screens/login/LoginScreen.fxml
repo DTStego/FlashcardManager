@@ -22,7 +22,7 @@
                <Font size="34.0" />
             </font>
          </Label>
-         <Rectangle id="rect" arcHeight="5.0" arcWidth="5.0" fill="#dadada" height="5.0" stroke="TRANSPARENT" strokeType="INSIDE" width="608.0" />
+         <Rectangle id="rect" arcHeight="5.0" arcWidth="5.0" fill="#dadada" height="5.0" stroke="TRANSPARENT" strokeType="INSIDE" style="-fx-fill: 7d8485;" width="608.0" />
       </children>
    </VBox>
    <VBox layoutX="27.0" layoutY="116.0" prefHeight="389.0" prefWidth="646.0" spacing="10.0">
