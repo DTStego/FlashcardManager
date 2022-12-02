@@ -165,6 +165,12 @@ public class HomeScreenController {
        //Set the size of course tabs created
        courseTabPane.setTabMinWidth(40);
        courseTabPane.setTabMinHeight(200);
+
+       if (notebook.getCourseList().size() == 0)
+       {
+           createNewCourseBtn();
+           createNewCourseBtn();
+       }
    }
 
     /** Used when creating a new tab to create vertical tabs */
