@@ -427,6 +427,11 @@ public class HomeScreenController {
         onFrontSide = true;
         makeCardElementsVisible(true);
         checkArrowVisibility();
+
+        if (currentTopic.getCardList().size() > 1)
+        {
+            randomizeBtn.setDisable(false);
+        }
     }
 
     @FXML
@@ -448,6 +453,12 @@ public class HomeScreenController {
             displayCard();
             updateUser();
             checkArrowVisibility();
+            randomizeBtn.setDisable(false);
+        }
+
+        if (currentTopic.getCardList().size() < 2)
+        {
+            randomizeBtn.setDisable(true);
         }
     }
 
