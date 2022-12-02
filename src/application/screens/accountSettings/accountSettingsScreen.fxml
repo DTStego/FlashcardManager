@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -23,6 +24,9 @@
                <font>
                   <Font size="21.0" />
                </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
             </Label>
             <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="333.0" promptText="Enter new username">
                <font>
@@ -33,6 +37,9 @@
                <font>
                   <Font size="21.0" />
                </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="10.0" />
+               </VBox.margin>
             </Label>
             <TextField fx:id="secQuestionField" onKeyReleased="#revealSecurityAnswerElements" prefHeight="25.0" prefWidth="333.0" promptText="Enter new security question">
                <font>
@@ -43,6 +50,9 @@
                <font>
                   <Font size="21.0" />
                </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="10.0" />
+               </VBox.margin>
             </Label>
             <TextField fx:id="secAnswerField" disable="true" opacity="0.99" prefHeight="25.0" prefWidth="333.0" promptText="Enter new security answer">
                <font>
@@ -58,16 +68,22 @@
                <font>
                   <Font size="21.0" />
                </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="5.0" />
+               </VBox.margin>
             </Label>
             <PasswordField fx:id="newPassField" prefHeight="25.0" prefWidth="202.0" promptText="Enter new password">
                <font>
                   <Font size="21.0" />
                </font>
             </PasswordField>
-            <Label prefHeight="26.0" prefWidth="159.0" text="Confirm new password">
+            <Label prefHeight="31.0" prefWidth="218.0" text="Confirm new password">
                <font>
                   <Font size="21.0" />
                </font>
+               <VBox.margin>
+                  <Insets bottom="5.0" top="10.0" />
+               </VBox.margin>
             </Label>
             <PasswordField fx:id="confirmPassField" prefHeight="25.0" prefWidth="202.0" promptText="Confirm password">
                <font>
@@ -78,7 +94,7 @@
       </VBox>
       <Button fx:id="applyBtn" layoutX="403.0" layoutY="361.0" mnemonicParsing="false" onAction="#applyBtn" prefHeight="45.0" prefWidth="183.0" style="-fx-background-color: #8acaed; -fx-background-radius: 10;" text="Apply Changes" textFill="WHITE">
          <font>
-            <Font name="System Bold" size="21.0" />
+            <Font name="Quicksand Medium" size="21.0" />
          </font>
       </Button>
       <Button fx:id="cancelBtn" layoutX="594.0" layoutY="361.0" mnemonicParsing="false" onMouseClicked="#onCancelClick" prefHeight="45.0" prefWidth="97.0" style="-fx-background-radius: 10;" text="Cancel">
@@ -87,7 +103,7 @@
          </font></Button>
       <Button fx:id="deleteBtn" layoutX="24.0" layoutY="361.0" mnemonicParsing="false" onAction="#updateDeletionVisibility" prefHeight="45.0" prefWidth="190.0" style="-fx-background-color: d10808; -fx-background-radius: 10;" text="Delete Account" textFill="WHITE">
          <font>
-            <Font size="21.0" />
+            <Font name="Quicksand Medium" size="21.0" />
          </font></Button>
       <Button fx:id="confirmDeletionBtn" disable="true" layoutX="24.0" layoutY="423.0" mnemonicParsing="false" onAction="#deleteAccount" prefHeight="45.0" prefWidth="268.0" style="-fx-background-color: #cc1414; -fx-background-radius: 10;" text="CONFIRM DELETION?" textFill="WHITE" visible="false">
          <font>
