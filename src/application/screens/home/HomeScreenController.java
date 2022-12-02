@@ -59,6 +59,8 @@ public class HomeScreenController {
     private Button cardTextSetter;
     @FXML
     private TextField cardTextField;
+    @FXML
+    private Button randomizeBtn;
     private List<IndexCard> displayedCardList;
 
     private boolean onFrontSide = true;
@@ -397,6 +399,7 @@ public class HomeScreenController {
         flipBtn.setDisable(true);
         sortBtn.setDisable(true);
         deleteCardBtn.setDisable(true);
+        randomizeBtn.setDisable(true);
     }
 
     void makeCardElementsVisible(boolean input)
@@ -420,7 +423,7 @@ public class HomeScreenController {
         currentIndexCard = newIndexCard;
         updateUser();
         displayCard();
-        side.setText("Front of Card");
+        side.setText("Front");
         onFrontSide = true;
         makeCardElementsVisible(true);
         checkArrowVisibility();
@@ -484,11 +487,11 @@ public class HomeScreenController {
     {
         if (onFrontSide)
         {
-            side.setText("Back of Card");
+            side.setText("Back");
             onFrontSide = false;
         } else
         {
-            side.setText("Front of Card");
+            side.setText("Front");
             onFrontSide = true;
         }
         displayCard();
@@ -503,7 +506,7 @@ public class HomeScreenController {
             {
                 currentIndexCard = displayedCardList.get(i - 1);
                 checkArrowVisibility();
-                side.setText("Front of Card");
+                side.setText("Front");
                 onFrontSide = true;
                 displayCard();
                 return;
@@ -520,12 +523,18 @@ public class HomeScreenController {
             {
                 currentIndexCard = displayedCardList.get(i + 1);
                 checkArrowVisibility();
-                side.setText("Front of Card");
+                side.setText("Front");
                 onFrontSide = true;
                 displayCard();
                 return;
             }
         }
+    }
+
+    @FXML
+    void randomizeDisplay()
+    {
+
     }
 
     @FXML
