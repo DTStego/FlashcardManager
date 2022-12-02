@@ -455,6 +455,7 @@ public class HomeScreenController {
             updateUser();
             updateSelectedTabLbl();
 
+            renameTxtField.clear();
             return;
         }
 
@@ -464,6 +465,8 @@ public class HomeScreenController {
             rotateTab(currentTab, renameTxtField.getText());
             updateUser();
             updateSelectedTabLbl();
+
+            renameTxtField.clear();
         }
     }
 
