@@ -37,6 +37,8 @@ public class HomeScreenController {
     private Button newTopicBtn;
     @FXML
     private Label errorMsg;
+    @FXML
+    private Label tabSelectedLbl;
 
     @FXML
     private Label side;
@@ -162,6 +164,8 @@ public class HomeScreenController {
                makeCardElementsVisible(true);
                currentIndexCard = currentTopic.getCardList().get(0);
                displayCard();
+               if (currentTopic.getCardList().size() > 1)
+                   randomizeBtn.setDisable(false);
            }
            else if (currentTopic != null)
            {
@@ -342,10 +346,8 @@ public class HomeScreenController {
                     makeCardElementsVisible(true);
                     checkArrowVisibility();
                     randomizeBtn.setDisable(true);
-                }
-                else if (currentTopic.getCardList().size() > 1)
-                {
-                    randomizeBtn.setDisable(false);
+                    if (currentTopic.getCardList().size() > 1)
+                        randomizeBtn.setDisable(false);
                 }
                 else
                 {
