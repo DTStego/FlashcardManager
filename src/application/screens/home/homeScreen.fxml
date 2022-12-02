@@ -106,11 +106,11 @@
                <font>
                   <Font size="21.0" />
                </font></Button>
-            <Button fx:id="renameBtn" layoutX="313.0" layoutY="82.0" mnemonicParsing="false" onAction="#renameBtn" style="-fx-background-radius: 15; -fx-background-color: #80aaed;" text="Click to rename" />
+            <Button fx:id="renameBtn" layoutX="317.0" layoutY="87.0" mnemonicParsing="false" onAction="#renameBtn" style="-fx-background-radius: 15; -fx-background-color: #80aaed;" text="Click to rename" />
             <TextField fx:id="renameTxtField" layoutX="32.0" layoutY="79.0" prefHeight="31.0" prefWidth="274.0" promptText="Rename the selected topic or course" />
-            <Button layoutX="32.0" layoutY="124.0" mnemonicParsing="false" onAction="#deleteCourse" prefHeight="39.0" prefWidth="148.0" style="-fx-background-color: d10808; -fx-background-radius: 10;" text="Delete Course" textFill="WHITE">
+            <Button fx:id="deleteBtn" layoutX="32.0" layoutY="124.0" mnemonicParsing="false" onAction="#deleteBtn" prefHeight="39.0" prefWidth="274.0" style="-fx-background-color: d10808; -fx-background-radius: 10;" text="Delete selected course or topic" textFill="WHITE">
                <font>
-                  <Font name="Quicksand Medium" size="18.0" />
+                  <Font size="18.0" />
                </font></Button>
             <Button fx:id="newTopicBtn" layoutX="266.0" layoutY="19.0" mnemonicParsing="false" onAction="#createNewTopicBtn" style="-fx-background-color: #ced3db; -fx-background-radius: 10;" text="Create New Topic">
                <font>
@@ -121,11 +121,6 @@
                   <Font size="21.0" />
                </font>
             </Label>
-            <Button layoutX="192.0" layoutY="124.0" mnemonicParsing="false" onAction="#deleteTopic" prefHeight="39.0" prefWidth="148.0" style="-fx-background-color: d10808; -fx-background-radius: 10;" text="Delete Topic" textFill="WHITE">
-               <font>
-                  <Font name="Quicksand Medium" size="18.0" />
-               </font>
-            </Button>
          </children>
       </AnchorPane>
    </children>
