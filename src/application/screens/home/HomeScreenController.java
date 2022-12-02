@@ -5,37 +5,28 @@ import application.managers.Course;
 import application.managers.IndexCard;
 import application.managers.Notebook;
 import application.managers.Topic;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.transform.Translate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HomeScreenController {
     @FXML
     private TabPane courseTabPane;
     @FXML
-    private Button renameBtn;
-    @FXML
     private TextField renameTxtField;
     @FXML
-    private Button deleteBtn;
-    @FXML
-    private Button newTopicBtn;
-    @FXML
     private Label errorMsg;
+    @FXML
+    private Label tabSelectedLbl;
 
     @FXML
     private Label side;
@@ -59,6 +50,9 @@ public class HomeScreenController {
     private Button cardTextSetter;
     @FXML
     private TextField cardTextField;
+    @FXML
+    private Button randomizeBtn;
+    // Is initialized when a topic topicPane is created (Which is inserted in a course tab).
     private List<IndexCard> displayedCardList;
 
     private boolean onFrontSide = true;
@@ -72,8 +66,6 @@ public class HomeScreenController {
     private Tab currentTab;
     private TabPane currentTabPane = courseTabPane;
 
-    // TODO: Hide "Create Topic/Course" buttons based on program sight.
-    // TODO: Fix currentCourse not equaling the first course on setup.
    @FXML
    public void initialize()
    {
@@ -83,6 +75,7 @@ public class HomeScreenController {
             if (newTab != null)
             {
                 currentTab = newTab;
+                updateSelectedTabLbl();
 
                 /*
                  * Course names are hidden inside the tab's getGraphic() method which has
@@ -106,6 +99,8 @@ public class HomeScreenController {
 
             makeCardElementsVisible(false);
        });
+
+       Topic tempTopic = null;
 
        // Populate GUI with course and topic tabs.
        if (!notebook.getCourseList().isEmpty())
@@ -131,16 +126,40 @@ public class HomeScreenController {
                topicTabPaneSettings(courseTab, tabPane);
 
                // Iterate though each topic in each course and populate that course's TabPane.
-               for (Topic topic : notebook.getCourseList().get(i).getTopicList())
+               for (int j = 0; j < notebook.getCourseList().get(i).getTopicList().size(); j++)
                {
+                   Topic topic = notebook.getCourseList().get(i).getTopicList().get(j);
+
                    createTopicTab(topic, tabPane);
+
+                   if (j == 0)
+                   {
+                       tempTopic = topic;
+                       firstTabTemp = tabPane.getTabs().get(j);
+                   }
                }
            }
 
            // Set the sight to the first course tab.
            currentCourse = notebook.getCourseList().get(0);
+           currentTopic = tempTopic;
            currentTab = firstTabTemp;
+           updateSelectedTabLbl();
            makeCardElementsVisible(false);
+
+           if (currentTopic != null && !currentTopic.getCardList().isEmpty())
+           {
+               makeCardElementsVisible(true);
+               currentIndexCard = currentTopic.getCardList().get(0);
+               displayCard();
+               if (currentTopic.getCardList().size() > 1)
+                   randomizeBtn.setDisable(false);
+           }
+           else if (currentTopic != null)
+           {
+               side.setDisable(false);
+               createCardBtn.setDisable(false);
+           }
        }
 
        //Set the size of course tabs created
@@ -177,7 +196,17 @@ public class HomeScreenController {
     @FXML
     void createNewCourseBtn()
     {
-        Course course = new Course(new ArrayList<>(), "Untitled Course " + (notebook.getCourseList().size() + 1));
+        String newCourseName = "Untitled Course " + (notebook.getCourseList().size() + 1);
+        for (Course course : notebook.getCourseList())
+        {
+            if (newCourseName.equals(course.getName()))
+            {
+                newCourseName = "Untitled Course " + (notebook.getCourseList().size() + 2);
+                break;
+            }
+        }
+
+        Course course = new Course(new ArrayList<>(), newCourseName);
         notebook.getCourseList().add(course);
         updateUser();
 
@@ -201,6 +230,7 @@ public class HomeScreenController {
         currentTopic = null;
         currentIndexCard = null;
         currentTab = newTab;
+        updateSelectedTabLbl();
         currentTabPane = courseTabPane;
 
         return newTab;
@@ -238,12 +268,24 @@ public class HomeScreenController {
         tabPane.setTabMinHeight(200);
 
         // Create a new topic object and store it in the course's topic list.
-        Topic topic = new Topic(new ArrayList<>(), "Untitled Topic " + (currentCourse.getTopicList().size() + 1));
+        String newTopicName = "Untitled Topic " + (currentCourse.getTopicList().size() + 1);
+        for (Topic t : currentCourse.getTopicList())
+        {
+            if (newTopicName.equals(t.getName()))
+            {
+                newTopicName = "Untitled Topic " + (currentCourse.getTopicList().size() + 2);
+                break;
+            }
+        }
+
+        Topic topic = new Topic(new ArrayList<>(), newTopicName);
         currentCourse.getTopicList().add(topic);
         updateUser();
 
         // Create an actual topic tab in the course's TabPane
         createTopicTab(topic, tabPane);
+
+        currentTabPane = tabPane;
     }
 
     private void createTopicTab(Topic topic, TabPane tabpane)
@@ -257,6 +299,10 @@ public class HomeScreenController {
         currentIndexCard = null;
     }
 
+    /**
+     * Run when a user clicks on a topic tab. Initializes the Flashcard UI with the first flashcard of a Topic
+     * object if there is a flashcard.
+     */
     private void topicTabPaneSettings(Tab courseTab, TabPane tabPane)
     {
         tabPane.getSelectionModel().selectedItemProperty().addListener((observableValue, oldTab, newTab) ->
@@ -264,6 +310,7 @@ public class HomeScreenController {
             if (newTab != null)
             {
                 currentTab = newTab;
+                updateSelectedTabLbl();
 
                 /*
                  * Topic names are hidden inside the tab's getGraphic() method which has
@@ -290,10 +337,15 @@ public class HomeScreenController {
                     displayCard();
                     makeCardElementsVisible(true);
                     checkArrowVisibility();
-                } else
+                    randomizeBtn.setDisable(true);
+                    if (currentTopic.getCardList().size() > 1)
+                        randomizeBtn.setDisable(false);
+                }
+                else
                 {
                     cardText.setText("");
                     makeDefaultCardElementsVisible();
+                    randomizeBtn.setDisable(true);
                 }
             }
         });
@@ -320,15 +372,38 @@ public class HomeScreenController {
     }
 
     /** Deletes a course or topic tab and its corresponding object from the user's notebook */
-    // TODO Add prompt to check if user wants to delete the manager.
     @FXML
     void deleteBtn()
     {
+        errorMsg.setText("");
+        errorMsg.setVisible(false);
+
         if (currentTopic != null)
         {
+            if (currentTabPane == null)
+            {
+                errorMsg.setText("Program anomaly. Please create another course/tab and then attempt deletion!");
+                errorMsg.setVisible(true);
+                return;
+            }
+
             currentCourse.getTopicList().remove(currentTopic);
             currentTabPane.getTabs().remove(currentTab);
             updateUser();
+
+            if (currentCourse.getTopicList().isEmpty())
+            {
+                currentTopic = null;
+                for (Tab courseTab : courseTabPane.getTabs())
+                {
+                    if (currentCourse.getName()
+                            .equals(((Label) ((Group) ((StackPane) courseTab.getGraphic()).getChildren().get(0)).getChildren().get(0)).getText()))
+                    {
+                        currentTab = courseTab;
+                        updateSelectedTabLbl();
+                    }
+                }
+            }
             return;
         }
 
@@ -337,6 +412,11 @@ public class HomeScreenController {
             notebook.getCourseList().remove(currentCourse);
             currentTabPane.getTabs().remove(currentTab);
             updateUser();
+
+            if (notebook.getCourseList().isEmpty())
+            {
+                tabSelectedLbl.setText("Current Tab: None Selected");
+            }
         }
     }
 
@@ -373,6 +453,8 @@ public class HomeScreenController {
             currentTopic.setName(renameTxtField.getText());
             rotateTab(currentTab, renameTxtField.getText());
             updateUser();
+            updateSelectedTabLbl();
+
             renameTxtField.clear();
             return;
         }
@@ -382,6 +464,8 @@ public class HomeScreenController {
             currentCourse.setName(renameTxtField.getText());
             rotateTab(currentTab, renameTxtField.getText());
             updateUser();
+            updateSelectedTabLbl();
+
             renameTxtField.clear();
         }
     }
@@ -398,6 +482,7 @@ public class HomeScreenController {
         flipBtn.setDisable(true);
         sortBtn.setDisable(true);
         deleteCardBtn.setDisable(true);
+        randomizeBtn.setDisable(true);
     }
 
     void makeCardElementsVisible(boolean input)
@@ -416,23 +501,30 @@ public class HomeScreenController {
     @FXML
     void createNewCardBtn()
     {
-        IndexCard newIndexCard = new IndexCard("Enter Text Using Textbox", "Enter Text Using Textbox");
+        IndexCard newIndexCard = new IndexCard("Enter Text Using Text-box", "Enter Text Using Text-box");
         currentTopic.getCardList().add(newIndexCard);
+        displayedCardList = currentTopic.getCardList();
         currentIndexCard = newIndexCard;
         updateUser();
         displayCard();
-        side.setText("Front of Card");
+        side.setText("Front");
         onFrontSide = true;
         makeCardElementsVisible(true);
         checkArrowVisibility();
+
+        if (currentTopic.getCardList().size() > 1)
+        {
+            randomizeBtn.setDisable(false);
+        }
     }
 
     @FXML
     void deleteCardBtn()
     {
-        if (currentTopic.getCardList().size() == 1)
+        if (displayedCardList.size() == 1)
         {
             currentTopic.getCardList().remove(currentIndexCard);
+            displayedCardList.remove(currentIndexCard);
             makeDefaultCardElementsVisible();
             cardText.setText("");
             updateUser();
@@ -442,10 +534,17 @@ public class HomeScreenController {
         if (currentTopic.getCardList().size() > 1)
         {
             currentTopic.getCardList().remove(currentIndexCard);
-            currentIndexCard = currentTopic.getCardList().get(0);
+            displayedCardList.remove(currentIndexCard);
+            currentIndexCard = displayedCardList.get(0);
             displayCard();
             updateUser();
             checkArrowVisibility();
+            randomizeBtn.setDisable(false);
+        }
+
+        if (currentTopic.getCardList().size() < 2)
+        {
+            randomizeBtn.setDisable(true);
         }
     }
 
@@ -470,6 +569,12 @@ public class HomeScreenController {
         updateUser();
     }
 
+    void updateSelectedTabLbl()
+    {
+        tabSelectedLbl.setText("Current Tab: " +
+                ((Label) ((Group) ((StackPane) currentTab.getGraphic()).getChildren().get(0)).getChildren().get(0)).getText());
+    }
+
     void displayCard()
     {
         if (onFrontSide)
@@ -485,11 +590,11 @@ public class HomeScreenController {
     {
         if (onFrontSide)
         {
-            side.setText("Back of Card");
+            side.setText("Back");
             onFrontSide = false;
         } else
         {
-            side.setText("Front of Card");
+            side.setText("Front");
             onFrontSide = true;
         }
         displayCard();
@@ -504,7 +609,7 @@ public class HomeScreenController {
             {
                 currentIndexCard = displayedCardList.get(i - 1);
                 checkArrowVisibility();
-                side.setText("Front of Card");
+                side.setText("Front");
                 onFrontSide = true;
                 displayCard();
                 return;
@@ -521,7 +626,7 @@ public class HomeScreenController {
             {
                 currentIndexCard = displayedCardList.get(i + 1);
                 checkArrowVisibility();
-                side.setText("Front of Card");
+                side.setText("Front");
                 onFrontSide = true;
                 displayCard();
                 return;
@@ -530,12 +635,21 @@ public class HomeScreenController {
     }
 
     @FXML
+    void randomizeCardList()
+    {
+        Collections.shuffle(displayedCardList);
+        currentIndexCard = displayedCardList.get(0);
+        displayCard();
+        checkArrowVisibility();
+    }
+
+    @FXML
     void allMenuItem()
     {
         errorMsg.setText("");
         errorMsg.setVisible(false);
 
-        displayedCardList = currentTopic.getCardList();
+        displayedCardList = new ArrayList<>(currentTopic.getCardList());
         currentIndexCard = displayedCardList.get(0);
         displayCard();
         checkArrowVisibility();

@@ -22,9 +22,9 @@
             <TabPane fx:id="courseTabPane" prefHeight="403.0" prefWidth="413.0" rotateGraphic="true" side="LEFT" tabClosingPolicy="UNAVAILABLE" tabMaxHeight="160.0" tabMinHeight="75.0" />
             <AnchorPane prefHeight="493.0" prefWidth="685.0">
                <children>
-                  <CheckBox fx:id="checkmark" disable="true" layoutX="233.0" layoutY="363.0" mnemonicParsing="false" onAction="#checkmarkAction" prefHeight="31.0" prefWidth="99.0" text="Learned">
+                  <CheckBox fx:id="checkmark" disable="true" layoutX="581.0" layoutY="83.0" mnemonicParsing="false" onAction="#checkmarkAction" prefHeight="31.0" prefWidth="99.0" text="Learned">
                      <font>
-                        <Font size="18.0" />
+                        <Font name="Quicksand Medium" size="16.0" />
                      </font>
                   </CheckBox>
                   <ImageView fx:id="leftArrow" disable="true" fitHeight="50.0" fitWidth="50.0" layoutX="21.0" layoutY="186.0" onMouseClicked="#leftArrowClick" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" opacity="0.35" pickOnBounds="true" preserveRatio="true" rotate="180.0">
@@ -32,44 +32,58 @@
                         <Image url="@../../assets/images/arrowButton.png" />
                      </image>
                   </ImageView>
-                  <ImageView fx:id="rightArrow" disable="true" fitHeight="50.0" fitWidth="50.0" layoutX="619.0" layoutY="186.0" onMouseClicked="#rightArrowClick" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" opacity="0.35" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="rightArrow" disable="true" fitHeight="50.0" fitWidth="50.0" layoutX="583.0" layoutY="186.0" onMouseClicked="#rightArrowClick" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" opacity="0.35" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../assets/images/arrowButton.png" />
                      </image>
                   </ImageView>
-                  <MenuButton fx:id="sortBtn" disable="true" layoutX="509.0" layoutY="363.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="99.0" style="-fx-background-color: #e9edf5;" text="Sort By">
+                  <MenuButton fx:id="sortBtn" disable="true" layoutX="532.0" layoutY="363.0" mnemonicParsing="false" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" prefHeight="31.0" prefWidth="99.0" style="-fx-background-color: #e9edf5;" text="Sort By">
                     <items>
                       <MenuItem mnemonicParsing="false" onAction="#allMenuItem" text="All" />
                       <MenuItem mnemonicParsing="false" onAction="#learnedMenuItem" text="Learned" />
                         <MenuItem mnemonicParsing="false" onAction="#notLearnedMenuItem" text="Not Learned" />
                     </items>
+                     <font>
+                        <Font name="Quicksand Medium" size="14.0" />
+                     </font>
                   </MenuButton>
-                  <Button fx:id="flipBtn" disable="true" layoutX="85.0" layoutY="363.0" mnemonicParsing="false" onAction="#flipBtnAction" prefHeight="0.0" prefWidth="133.0" style="-fx-background-color: ced3db; -fx-background-radius: 10;" text="Flip Card">
+                  <Button fx:id="flipBtn" disable="true" layoutX="85.0" layoutY="363.0" mnemonicParsing="false" onAction="#flipBtnAction" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" prefHeight="0.0" prefWidth="133.0" style="-fx-background-color: ced3db; -fx-background-radius: 10;" text="Flip Card" textFill="#0021ff">
                      <font>
                         <Font name="Quicksand Medium" size="20.0" />
                      </font>
                   </Button>
-                  <Button fx:id="createCardBtn" disable="true" layoutX="438.0" layoutY="23.0" mnemonicParsing="false" onAction="#createNewCardBtn" prefHeight="44.0" prefWidth="192.0" style="-fx-background-color: ced3db; -fx-background-radius: 10;" text="Create New Flashcard" />
-                  <Button fx:id="deleteCardBtn" disable="true" layoutX="351.0" layoutY="363.0" mnemonicParsing="false" onAction="#deleteCardBtn" prefHeight="31.0" prefWidth="148.0" style="-fx-background-color: #e9edf5;" text="Delete Flashcard" textFill="RED" />
-                  <Label fx:id="side" alignment="CENTER" layoutX="233.0" layoutY="22.0" prefHeight="25.0" prefWidth="192.0" text="Front of Card">
+                  <Button fx:id="createCardBtn" disable="true" layoutX="438.0" layoutY="23.0" mnemonicParsing="false" onAction="#createNewCardBtn" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" prefHeight="44.0" prefWidth="192.0" style="-fx-background-color: ced3db; -fx-background-radius: 10;" text="Create New Flashcard">
                      <font>
-                        <Font size="30.0" />
+                        <Font name="Quicksand Medium" size="16.0" />
+                     </font></Button>
+                  <Button fx:id="deleteCardBtn" disable="true" layoutX="387.0" layoutY="364.0" mnemonicParsing="false" onAction="#deleteCardBtn" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" prefHeight="31.0" prefWidth="133.0" style="-fx-background-color: #e9edf5;" text="Delete Flashcard" textFill="RED">
+                     <font>
+                        <Font name="Quicksand Medium" size="14.0" />
+                     </font></Button>
+                  <Label fx:id="side" alignment="CENTER" layoutX="233.0" layoutY="22.0" prefHeight="25.0" prefWidth="192.0" text="Front">
+                     <font>
+                        <Font name="Quicksand Medium" size="38.0" />
                      </font>
                   </Label>
-                  <Rectangle arcHeight="10.0" arcWidth="10.0" fill="WHITE" height="262.0" layoutX="85.0" layoutY="83.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="529.0" />
-                  <Label fx:id="cardText" alignment="CENTER" disable="true" layoutX="107.0" layoutY="107.0" prefHeight="215.0" prefWidth="486.0" wrapText="true">
+                  <Rectangle arcHeight="10.0" arcWidth="10.0" fill="WHITE" height="262.0" layoutX="85.0" layoutY="83.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="3.0" width="485.0" />
+                  <Label fx:id="cardText" alignment="CENTER" disable="true" layoutX="107.0" layoutY="107.0" prefHeight="215.0" prefWidth="427.0" wrapText="true">
                      <font>
                         <Font size="20.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="cardTextField" layoutX="252.0" layoutY="421.0" prefHeight="30.0" prefWidth="324.0" promptText="Enter Card Text Here">
+                  <TextField fx:id="cardTextField" disable="true" layoutX="252.0" layoutY="421.0" prefHeight="30.0" prefWidth="324.0" promptText="Enter Card Text Here">
                      <font>
                         <Font size="21.0" />
                      </font>
                   </TextField>
-                  <Button fx:id="cardTextSetter" layoutX="85.0" layoutY="421.0" mnemonicParsing="false" onAction="#changeCardText" prefHeight="45.0" prefWidth="148.0" style="-fx-background-radius: 10; -fx-background-color: ced3db;" text="Change Text">
+                  <Button fx:id="cardTextSetter" disable="true" layoutX="85.0" layoutY="421.0" mnemonicParsing="false" onAction="#changeCardText" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" prefHeight="45.0" prefWidth="148.0" style="-fx-background-radius: 10; -fx-background-color: ced3db;" text="Change Text">
                      <font>
                         <Font size="21.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="randomizeBtn" disable="true" layoutX="238.0" layoutY="365.0" mnemonicParsing="false" onAction="#randomizeCardList" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" prefHeight="31.0" prefWidth="133.0" style="-fx-background-radius: 5; -fx-background-color: #e9edf5;" text="Randomize List">
+                     <font>
+                        <Font name="Quicksand Medium" size="14.0" />
                      </font>
                   </Button>
                </children>
@@ -78,33 +92,38 @@
       </HBox>
       <AnchorPane prefHeight="304.0" prefWidth="1309.0">
          <children>
-            <Button layoutX="1099.0" layoutY="87.0" mnemonicParsing="false" onAction="#signOut" style="-fx-background-color: ced3db; -fx-background-radius: 10;" text="Log Out">
+            <Button layoutX="1099.0" layoutY="87.0" mnemonicParsing="false" onAction="#signOut" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" style="-fx-background-color: ced3db; -fx-background-radius: 10;" text="Log Out">
                <font>
                   <Font size="21.0" />
                </font>
             </Button>
-            <Button layoutX="1011.0" layoutY="19.0" mnemonicParsing="false" onAction="#onAccountSettingsBtnClick" prefHeight="30.0" prefWidth="192.0" style="-fx-background-color: ced3db; -fx-background-radius: 10;" text="Account Settings">
+            <Button layoutX="1011.0" layoutY="30.0" mnemonicParsing="false" onAction="#onAccountSettingsBtnClick" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" prefHeight="30.0" prefWidth="192.0" style="-fx-background-color: ced3db; -fx-background-radius: 10;" text="Account Settings">
                <font>
                   <Font size="21.0" />
                </font>
             </Button>
-            <Button layoutX="32.0" layoutY="19.0" mnemonicParsing="false" onAction="#createNewCourseBtn" style="-fx-background-color: #ced3db; -fx-background-radius: 10;" text="Create New Course">
+            <Button layoutX="32.0" layoutY="19.0" mnemonicParsing="false" onAction="#createNewCourseBtn" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" style="-fx-background-color: #ced3db; -fx-background-radius: 10;" text="Create New Course">
                <font>
                   <Font size="21.0" />
                </font></Button>
-            <Button fx:id="renameBtn" layoutX="314.0" layoutY="79.0" mnemonicParsing="false" onAction="#renameBtn" style="-fx-background-radius: 15; -fx-background-color: #80aaed;" text="Click to rename" />
+            <Button layoutX="313.0" layoutY="82.0" mnemonicParsing="false" onAction="#renameBtn" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" style="-fx-background-radius: 15; -fx-background-color: #80aaed;" text="Click to rename" />
             <TextField fx:id="renameTxtField" layoutX="32.0" layoutY="79.0" prefHeight="31.0" prefWidth="274.0" promptText="Rename the selected topic or course" />
-            <Button fx:id="deleteBtn" layoutX="32.0" layoutY="124.0" mnemonicParsing="false" onAction="#deleteBtn" prefHeight="39.0" prefWidth="274.0" style="-fx-background-color: d10808; -fx-background-radius: 10;" text="Delete selected course or topic" textFill="WHITE">
+            <Button layoutX="32.0" layoutY="124.0" mnemonicParsing="false" onAction="#deleteBtn" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" prefHeight="39.0" prefWidth="274.0" style="-fx-background-color: d10808; -fx-background-radius: 10;" text="Delete selected course or topic" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font></Button>
-            <Button fx:id="newTopicBtn" layoutX="266.0" layoutY="19.0" mnemonicParsing="false" onAction="#createNewTopicBtn" style="-fx-background-color: #ced3db; -fx-background-radius: 10;" text="Create New Topic">
+            <Button layoutX="266.0" layoutY="19.0" mnemonicParsing="false" onAction="#createNewTopicBtn" onMouseEntered="#handCursor" onMouseExited="#pointerCursor" style="-fx-background-color: #ced3db; -fx-background-radius: 10;" text="Create New Topic">
                <font>
                   <Font size="21.0" />
                </font></Button>
-            <Label fx:id="errorMsg" layoutX="32.0" layoutY="173.0" prefHeight="30.0" prefWidth="450.0" textFill="RED">
+            <Label fx:id="errorMsg" layoutX="32.0" layoutY="173.0" prefHeight="31.0" prefWidth="953.0" textFill="RED">
                <font>
                   <Font size="21.0" />
+               </font>
+            </Label>
+            <Label fx:id="tabSelectedLbl" layoutX="321.0" layoutY="124.0" prefHeight="39.0" prefWidth="553.0" text="Current Tab: None Selected" textFill="#0f24a9">
+               <font>
+                  <Font name="Quicksand Medium" size="20.0" />
                </font>
             </Label>
          </children>
