@@ -116,7 +116,7 @@
                <font>
                   <Font size="21.0" />
                </font></Button>
-            <Label fx:id="errorMsg" layoutX="32.0" layoutY="173.0" prefHeight="30.0" prefWidth="450.0" textFill="RED">
+            <Label fx:id="errorMsg" layoutX="32.0" layoutY="173.0" prefHeight="31.0" prefWidth="953.0" textFill="RED">
                <font>
                   <Font size="21.0" />
                </font>

@@ -387,8 +387,18 @@ public class HomeScreenController {
     @FXML
     void deleteBtn()
     {
+        errorMsg.setText("");
+        errorMsg.setVisible(false);
+
         if (currentTopic != null)
         {
+            if (currentTabPane == null)
+            {
+                errorMsg.setText("Program anomaly. Please create another course/tab and then attempt deletion!");
+                errorMsg.setVisible(true);
+                return;
+            }
+
             currentCourse.getTopicList().remove(currentTopic);
             currentTabPane.getTabs().remove(currentTab);
             updateUser();
