@@ -32,8 +32,6 @@ public class HomeScreenController {
     @FXML
     private TextField renameTxtField;
     @FXML
-    private Button deleteBtn;
-    @FXML
     private Button newTopicBtn;
     @FXML
     private Label errorMsg;
@@ -377,24 +375,42 @@ public class HomeScreenController {
         return tabPane;
     }
 
-    /** Deletes a course or topic tab and its corresponding object from the user's notebook */
-    // TODO Add prompt to check if user wants to delete the manager.
+    /** Deletes a course tab and its corresponding object from the user's notebook */
     @FXML
-    void deleteBtn()
+    void deleteCourse()
     {
-        if (currentTopic != null)
-        {
-            currentCourse.getTopicList().remove(currentTopic);
-            currentTabPane.getTabs().remove(currentTab);
-            updateUser();
-            return;
-        }
+        errorMsg.setText("");
+        errorMsg.setVisible(false);
 
         if (currentCourse != null)
         {
             notebook.getCourseList().remove(currentCourse);
             currentTabPane.getTabs().remove(currentTab);
             updateUser();
+        }
+        else
+        {
+            errorMsg.setText("No Course Selected!");
+            errorMsg.setVisible(true);
+        }
+    }
+
+    @FXML
+    void deleteTopic()
+    {
+        errorMsg.setText("");
+        errorMsg.setVisible(false);
+
+        if (currentTopic != null)
+        {
+            currentCourse.getTopicList().remove(currentTopic);
+            currentTabPane.getTabs().remove(currentTab);
+            updateUser();
+        }
+        else
+        {
+            errorMsg.setText("No Topic Selected!");
+            errorMsg.setVisible(true);
         }
     }
 
