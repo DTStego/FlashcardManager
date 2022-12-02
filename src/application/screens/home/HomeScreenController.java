@@ -204,7 +204,17 @@ public class HomeScreenController {
     @FXML
     void createNewCourseBtn()
     {
-        Course course = new Course(new ArrayList<>(), "Untitled Course " + (notebook.getCourseList().size() + 1));
+        String newCourseName = "Untitled Course " + (notebook.getCourseList().size() + 1);
+        for (Course course : notebook.getCourseList())
+        {
+            if (newCourseName.equals(course.getName()))
+            {
+                newCourseName = "Untitled Course " + (notebook.getCourseList().size() + 2);
+                break;
+            }
+        }
+
+        Course course = new Course(new ArrayList<>(), newCourseName);
         notebook.getCourseList().add(course);
         updateUser();
 
