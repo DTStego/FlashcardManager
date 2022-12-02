@@ -14,7 +14,7 @@ public class UserSerialize implements UserPersistence, ObjectSerialize
 {
     // Path of save folder in documents, e.g., (For Windows) "../My Documents/FlashcardManager/saves_v{version_number}/"
     public static final String saveFolder = FileSystemView.getFileSystemView().getDefaultDirectory().getPath()
-            .concat(File.separatorChar + "FlashcardManager" + File.separatorChar + "saves_v0.9");
+            .concat(File.separatorChar + "FlashcardManager" + File.separatorChar + "saves_v1.0");
 
     /**
      * Stores the userList in a "saves" folder in a user's document folder through serialization.
