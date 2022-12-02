@@ -121,7 +121,7 @@
                   <Font size="21.0" />
                </font>
             </Label>
-            <Label fx:id="tabSelectedLbl" layoutX="321.0" layoutY="124.0" prefHeight="39.0" prefWidth="553.0" text="Current Tab: " textFill="#0f24a9">
+            <Label fx:id="tabSelectedLbl" layoutX="321.0" layoutY="124.0" prefHeight="39.0" prefWidth="553.0" text="Current Tab: None Selected" textFill="#0f24a9">
                <font>
                   <Font name="Quicksand Medium" size="20.0" />
                </font>

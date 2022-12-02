@@ -89,6 +89,7 @@ public class HomeScreenController {
             if (newTab != null)
             {
                 currentTab = newTab;
+                updateSelectedTabLbl();
 
                 /*
                  * Course names are hidden inside the tab's getGraphic() method which has
@@ -157,6 +158,7 @@ public class HomeScreenController {
            currentCourse = notebook.getCourseList().get(0);
            currentTopic = tempTopic;
            currentTab = firstTabTemp;
+           updateSelectedTabLbl();
            makeCardElementsVisible(false);
 
            if (currentTopic != null && !currentTopic.getCardList().isEmpty())
@@ -242,6 +244,7 @@ public class HomeScreenController {
         currentTopic = null;
         currentIndexCard = null;
         currentTab = newTab;
+        updateSelectedTabLbl();
         currentTabPane = courseTabPane;
 
         return newTab;
@@ -319,6 +322,7 @@ public class HomeScreenController {
             if (newTab != null)
             {
                 currentTab = newTab;
+                updateSelectedTabLbl();
 
                 /*
                  * Topic names are hidden inside the tab's getGraphic() method which has
@@ -389,6 +393,20 @@ public class HomeScreenController {
             currentCourse.getTopicList().remove(currentTopic);
             currentTabPane.getTabs().remove(currentTab);
             updateUser();
+
+            if (currentCourse.getTopicList().isEmpty())
+            {
+                currentTopic = null;
+                for (Tab courseTab : courseTabPane.getTabs())
+                {
+                    if (currentCourse.getName()
+                            .equals(((Label) ((Group) ((StackPane) courseTab.getGraphic()).getChildren().get(0)).getChildren().get(0)).getText()))
+                    {
+                        currentTab = courseTab;
+                        updateSelectedTabLbl();
+                    }
+                }
+            }
             return;
         }
 
@@ -397,6 +415,11 @@ public class HomeScreenController {
             notebook.getCourseList().remove(currentCourse);
             currentTabPane.getTabs().remove(currentTab);
             updateUser();
+
+            if (notebook.getCourseList().isEmpty())
+            {
+                tabSelectedLbl.setText("Current Tab: None Selected");
+            }
         }
     }
 
@@ -433,6 +456,7 @@ public class HomeScreenController {
             currentTopic.setName(renameTxtField.getText());
             rotateTab(currentTab, renameTxtField.getText());
             updateUser();
+            updateSelectedTabLbl();
 
             return;
         }
@@ -442,6 +466,7 @@ public class HomeScreenController {
             currentCourse.setName(renameTxtField.getText());
             rotateTab(currentTab, renameTxtField.getText());
             updateUser();
+            updateSelectedTabLbl();
         }
     }
 
@@ -542,6 +567,12 @@ public class HomeScreenController {
     {
         currentIndexCard.setHasLearned(checkmark.isSelected());
         updateUser();
+    }
+
+    void updateSelectedTabLbl()
+    {
+        tabSelectedLbl.setText("Current Tab: " +
+                ((Label) ((Group) ((StackPane) currentTab.getGraphic()).getChildren().get(0)).getChildren().get(0)).getText());
     }
 
     void displayCard()
