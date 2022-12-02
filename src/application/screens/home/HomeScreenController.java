@@ -21,6 +21,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Translate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HomeScreenController {
@@ -61,6 +62,7 @@ public class HomeScreenController {
     private TextField cardTextField;
     @FXML
     private Button randomizeBtn;
+    // Is initialized when a topic topicPane is created (Which is inserted in a course tab).
     private List<IndexCard> displayedCardList;
 
     private boolean onFrontSide = true;
@@ -109,6 +111,8 @@ public class HomeScreenController {
             makeCardElementsVisible(false);
        });
 
+       Topic tempTopic = null;
+
        // Populate GUI with course and topic tabs.
        if (!notebook.getCourseList().isEmpty())
        {
@@ -133,16 +137,37 @@ public class HomeScreenController {
                topicTabPaneSettings(courseTab, tabPane);
 
                // Iterate though each topic in each course and populate that course's TabPane.
-               for (Topic topic : notebook.getCourseList().get(i).getTopicList())
+               for (int j = 0; j < notebook.getCourseList().get(i).getTopicList().size(); j++)
                {
+                   Topic topic = notebook.getCourseList().get(i).getTopicList().get(j);
+
                    createTopicTab(topic, tabPane);
+
+                   if (j == 0)
+                   {
+                       tempTopic = topic;
+                       firstTabTemp = tabPane.getTabs().get(j);
+                   }
                }
            }
 
            // Set the sight to the first course tab.
            currentCourse = notebook.getCourseList().get(0);
+           currentTopic = tempTopic;
            currentTab = firstTabTemp;
            makeCardElementsVisible(false);
+
+           if (currentTopic != null && !currentTopic.getCardList().isEmpty())
+           {
+               makeCardElementsVisible(true);
+               currentIndexCard = currentTopic.getCardList().get(0);
+               displayCard();
+           }
+           else if (currentTopic != null)
+           {
+               side.setDisable(false);
+               createCardBtn.setDisable(false);
+           }
        }
 
        //Set the size of course tabs created
@@ -240,7 +265,17 @@ public class HomeScreenController {
         tabPane.setTabMinHeight(200);
 
         // Create a new topic object and store it in the course's topic list.
-        Topic topic = new Topic(new ArrayList<>(), "Untitled Topic " + (currentCourse.getTopicList().size() + 1));
+        String newTopicName = "Untitled Topic " + (currentCourse.getTopicList().size() + 1);
+        for (Topic t : currentCourse.getTopicList())
+        {
+            if (newTopicName.equals(t.getName()))
+            {
+                newTopicName = "Untitled Topic " + (currentCourse.getTopicList().size() + 2);
+                break;
+            }
+        }
+
+        Topic topic = new Topic(new ArrayList<>(), newTopicName);
         currentCourse.getTopicList().add(topic);
         updateUser();
 
@@ -259,6 +294,10 @@ public class HomeScreenController {
         currentIndexCard = null;
     }
 
+    /**
+     * Run when a user clicks on a topic tab. Initializes the Flashcard UI with the first flashcard of a Topic
+     * object if there is a flashcard.
+     */
     private void topicTabPaneSettings(Tab courseTab, TabPane tabPane)
     {
         tabPane.getSelectionModel().selectedItemProperty().addListener((observableValue, oldTab, newTab) ->
@@ -292,10 +331,17 @@ public class HomeScreenController {
                     displayCard();
                     makeCardElementsVisible(true);
                     checkArrowVisibility();
-                } else
+                    randomizeBtn.setDisable(true);
+                }
+                else if (currentTopic.getCardList().size() > 1)
+                {
+                    randomizeBtn.setDisable(false);
+                }
+                else
                 {
                     cardText.setText("");
                     makeDefaultCardElementsVisible();
+                    randomizeBtn.setDisable(true);
                 }
             }
         });
@@ -420,6 +466,7 @@ public class HomeScreenController {
     {
         IndexCard newIndexCard = new IndexCard("Enter Text Using Textbox", "Enter Text Using Textbox");
         currentTopic.getCardList().add(newIndexCard);
+        displayedCardList = currentTopic.getCardList();
         currentIndexCard = newIndexCard;
         updateUser();
         displayCard();
@@ -437,9 +484,10 @@ public class HomeScreenController {
     @FXML
     void deleteCardBtn()
     {
-        if (currentTopic.getCardList().size() == 1)
+        if (displayedCardList.size() == 1)
         {
             currentTopic.getCardList().remove(currentIndexCard);
+            displayedCardList.remove(currentIndexCard);
             makeDefaultCardElementsVisible();
             cardText.setText("");
             updateUser();
@@ -449,7 +497,8 @@ public class HomeScreenController {
         if (currentTopic.getCardList().size() > 1)
         {
             currentTopic.getCardList().remove(currentIndexCard);
-            currentIndexCard = currentTopic.getCardList().get(0);
+            displayedCardList.remove(currentIndexCard);
+            currentIndexCard = displayedCardList.get(0);
             displayCard();
             updateUser();
             checkArrowVisibility();
@@ -543,9 +592,12 @@ public class HomeScreenController {
     }
 
     @FXML
-    void randomizeDisplay()
+    void randomizeCardList()
     {
-
+        Collections.shuffle(displayedCardList);
+        currentIndexCard = displayedCardList.get(0);
+        displayCard();
+        checkArrowVisibility();
     }
 
     @FXML
@@ -554,7 +606,7 @@ public class HomeScreenController {
         errorMsg.setText("");
         errorMsg.setVisible(false);
 
-        displayedCardList = currentTopic.getCardList();
+        displayedCardList = new ArrayList<>(currentTopic.getCardList());
         currentIndexCard = displayedCardList.get(0);
         displayCard();
         checkArrowVisibility();

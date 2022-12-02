@@ -81,7 +81,7 @@
                         <Font size="21.0" />
                      </font>
                   </Button>
-                  <Button fx:id="randomizeBtn" disable="true" layoutX="238.0" layoutY="365.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="133.0" style="-fx-background-radius: 5; -fx-background-color: #e9edf5;" text="Randomize List">
+                  <Button fx:id="randomizeBtn" disable="true" layoutX="238.0" layoutY="365.0" mnemonicParsing="false" onAction="#randomizeCardList" prefHeight="31.0" prefWidth="133.0" style="-fx-background-radius: 5; -fx-background-color: #e9edf5;" text="Randomize List">
                      <font>
                         <Font name="Quicksand Medium" size="14.0" />
                      </font>
