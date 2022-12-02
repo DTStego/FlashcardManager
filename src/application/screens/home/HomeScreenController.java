@@ -78,8 +78,6 @@ public class HomeScreenController {
     private Tab currentTab;
     private TabPane currentTabPane = courseTabPane;
 
-    // TODO: Hide "Create Topic/Course" buttons based on program sight.
-    // TODO: Fix currentCourse not equaling the first course on setup.
    @FXML
    public void initialize()
    {
@@ -298,6 +296,8 @@ public class HomeScreenController {
 
         // Create an actual topic tab in the course's TabPane
         createTopicTab(topic, tabPane);
+
+        currentTabPane = tabPane;
     }
 
     private void createTopicTab(Topic topic, TabPane tabpane)
@@ -384,7 +384,6 @@ public class HomeScreenController {
     }
 
     /** Deletes a course or topic tab and its corresponding object from the user's notebook */
-    // TODO Add prompt to check if user wants to delete the manager.
     @FXML
     void deleteBtn()
     {
