@@ -5,20 +5,14 @@ import application.managers.Course;
 import application.managers.IndexCard;
 import application.managers.Notebook;
 import application.managers.Topic;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.transform.Translate;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,13 +22,7 @@ public class HomeScreenController {
     @FXML
     private TabPane courseTabPane;
     @FXML
-    private Button renameBtn;
-    @FXML
     private TextField renameTxtField;
-    @FXML
-    private Button deleteBtn;
-    @FXML
-    private Button newTopicBtn;
     @FXML
     private Label errorMsg;
     @FXML
