@@ -501,7 +501,7 @@ public class HomeScreenController {
     @FXML
     void createNewCardBtn()
     {
-        IndexCard newIndexCard = new IndexCard("Enter Text Using Textbox", "Enter Text Using Textbox");
+        IndexCard newIndexCard = new IndexCard("Enter Text Using Text-box", "Enter Text Using Text-box");
         currentTopic.getCardList().add(newIndexCard);
         displayedCardList = currentTopic.getCardList();
         currentIndexCard = newIndexCard;
