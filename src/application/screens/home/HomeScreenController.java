@@ -68,6 +68,11 @@ public class HomeScreenController {
     private Tab currentTab;
     private TabPane currentTabPane = courseTabPane;
 
+    /**
+     * Ran when a user logs in and enters the home screen. Sets behavior for when a user clicks on a tab in the course
+     * TabPane. Creates existing course and topic tabs and sets the program scope to the correct items. Also makes sure
+     * that buttons and other elements are correctly enabled/disabled.
+     */
    @FXML
    public void initialize()
    {
@@ -394,8 +399,10 @@ public class HomeScreenController {
         errorMsg.setText("");
         errorMsg.setVisible(false);
 
+        // Code for deleting a topic.
         if (currentTopic != null)
         {
+            // Anomaly condition caused by the "on tab-click" listener in certain conditions. Just print an error.
             if (currentTabPane == null)
             {
                 errorMsg.setText("Program anomaly. Please create another course/tab and then attempt deletion!");
@@ -403,10 +410,12 @@ public class HomeScreenController {
                 return;
             }
 
+            // Remove the Topic object and its tab and update the Notebook object;
             currentCourse.getTopicList().remove(currentTopic);
             currentTabPane.getTabs().remove(currentTab);
             updateUser();
 
+            // If the topicList is empty after deletion, set the program scope to the parent course.
             if (currentCourse.getTopicList().isEmpty())
             {
                 currentTopic = null;
@@ -423,12 +432,15 @@ public class HomeScreenController {
             return;
         }
 
+        // Code to delete a course which only works if no topic was selected.
         if (currentCourse != null)
         {
+            // Remove the Course object and its Tab. Then, update the user.
             notebook.getCourseList().remove(currentCourse);
             currentTabPane.getTabs().remove(currentTab);
             updateUser();
 
+            // Code to set the "Current Tab" label to none.
             if (notebook.getCourseList().isEmpty())
             {
                 tabSelectedLbl.setText("Current Tab: None Selected");
@@ -438,7 +450,7 @@ public class HomeScreenController {
 
     /**
      * Renames a course or topic tab and updates its object in the user's notebook.
-     * There will be dedicated rename options for flashcards.
+     * There is a dedicated rename option for flashcards.
      */
     @FXML
     void renameBtn()
@@ -451,19 +463,16 @@ public class HomeScreenController {
             return;
         }
 
+        // Limit to amount of characters due to size of Tab objects.
         if (renameTxtField.getText().length() > 20)
         {
             errorMsg.setText("* Name must be equal to or less than 20 characters");
             return;
         }
 
-        if (currentIndexCard != null)
-        {
-            errorMsg.setText("* Please use the dedicated rename buttons for flashcards.");
-        }
-
         errorMsg.setText("");
 
+        // Rename the selected topic and update the notebook and "Current Tab" label.
         if (currentTopic != null)
         {
             currentTopic.setName(renameTxtField.getText());
@@ -475,6 +484,7 @@ public class HomeScreenController {
             return;
         }
 
+        // Rename the selected course and update the notebook and "Current Tab" label.
         if (currentCourse != null)
         {
             currentCourse.setName(renameTxtField.getText());
@@ -514,12 +524,16 @@ public class HomeScreenController {
         deleteCardBtn.setDisable(!input);
     }
 
+    /**
+     * Create a new flashcard and set up the FlashCard UI area. Also adjusts the program scope.
+     */
     @FXML
     void createNewCardBtn()
     {
         IndexCard newIndexCard = new IndexCard("Enter Text Using Text-box", "Enter Text Using Text-box");
         currentTopic.getCardList().add(newIndexCard);
         displayedCardList = currentTopic.getCardList();
+
         currentIndexCard = newIndexCard;
         updateUser();
         displayCard();
@@ -528,36 +542,43 @@ public class HomeScreenController {
         makeCardElementsVisible(true);
         checkArrowVisibility();
 
+        // Allow the randomize button to be used if there are multiple flashcards.
         if (currentTopic.getCardList().size() > 1)
         {
             randomizeBtn.setDisable(false);
         }
     }
 
+    /** Method to delete a flashcard. Essentially includes some QOL adjustments. */
     @FXML
     void deleteCardBtn()
     {
+        // Will result in no flashcards and therefore adjusts the UI for that situation.
         if (displayedCardList.size() == 1)
         {
             currentTopic.getCardList().remove(currentIndexCard);
             displayedCardList.remove(currentIndexCard);
+
             makeDefaultCardElementsVisible();
             cardText.setText("");
             updateUser();
             checkArrowVisibility();
         }
 
+        // There will still be flashcards after the deletion so this plans for that scenario.
         if (currentTopic.getCardList().size() > 1)
         {
             currentTopic.getCardList().remove(currentIndexCard);
             displayedCardList.remove(currentIndexCard);
             currentIndexCard = displayedCardList.get(0);
+
             displayCard();
             updateUser();
             checkArrowVisibility();
             randomizeBtn.setDisable(false);
         }
 
+        // Disables the randomize button when the deletion reduces the flashcard amount to less than 2.
         if (currentTopic.getCardList().size() < 2)
         {
             randomizeBtn.setDisable(true);
