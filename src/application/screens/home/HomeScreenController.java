@@ -496,7 +496,10 @@ public class HomeScreenController {
         }
     }
 
-    /** Change default flashcard element visibility. Ignores delete button when there is no flashcard in the topicList */
+    /**
+     * Change default flashcard element visibility. Ignores delete button when there is no flashcard in the topicList.
+     * This method is for when there is no flashcard available and only makes elements for creating a card available.
+     */
     void makeDefaultCardElementsVisible()
     {
         side.setDisable(false);
@@ -511,6 +514,8 @@ public class HomeScreenController {
         randomizeBtn.setDisable(true);
     }
 
+
+    /** This method makes all buttons and field available and is used when there is a flashcard to edit/change. */
     void makeCardElementsVisible(boolean input)
     {
         side.setDisable(!input);
@@ -524,9 +529,7 @@ public class HomeScreenController {
         deleteCardBtn.setDisable(!input);
     }
 
-    /**
-     * Create a new flashcard and set up the FlashCard UI area. Also adjusts the program scope.
-     */
+    /** Create a new flashcard and set up the FlashCard UI area. Also adjusts the program scope. */
     @FXML
     void createNewCardBtn()
     {
@@ -549,7 +552,7 @@ public class HomeScreenController {
         }
     }
 
-    /** Method to delete a flashcard. Essentially includes some QOL adjustments. */
+    /** Method to delete a flashcard. Includes some QOL adjustments. */
     @FXML
     void deleteCardBtn()
     {
@@ -585,6 +588,7 @@ public class HomeScreenController {
         }
     }
 
+    /** Changes the flashcard text based on the text field below the Flashcard UI. */
     @FXML
     void changeCardText()
     {
@@ -599,6 +603,7 @@ public class HomeScreenController {
         updateUser();
     }
 
+    /** Runs when the checkmark is clicked/changed. Updates the IndexCard object in the user's notebook. */
     @FXML
     void checkmarkAction()
     {
@@ -606,12 +611,21 @@ public class HomeScreenController {
         updateUser();
     }
 
+    /**
+     * Indicator which helps point out what the program thinks is the selected tab in the TabPane(s). This helps
+     * mitigate errors in the Tab listeners since they seem to fire/not fire at unintended/intended moments. While the
+     * current tab may be accurate, some actions such as delete or create may still not work as intended.
+     */
     void updateSelectedTabLbl()
     {
         tabSelectedLbl.setText("Current Tab: " +
                 ((Label) ((Group) ((StackPane) currentTab.getGraphic()).getChildren().get(0)).getChildren().get(0)).getText());
     }
 
+    /**
+     * Method called to display the currentIndexCard's information.
+     * Does not require anything else besides currentIndexCard != null.
+     */
     void displayCard()
     {
         if (onFrontSide)
@@ -622,6 +636,7 @@ public class HomeScreenController {
         checkmark.setSelected(currentIndexCard.hasLearned());
     }
 
+    /** Flip the IndexCard by using the "onFrontSide" variable and change the Flashcard UI to match. */
     @FXML
     void flipBtnAction()
     {
@@ -637,9 +652,14 @@ public class HomeScreenController {
         displayCard();
     }
 
+    /**
+     * Only sets functionality of moving to a flashcard left of the current one in the list.
+     * Ability to actually use the left arrow is determined through checkArrowVisibility().
+     */
     @FXML
     void leftArrowClick()
     {
+        // Assumes that there is a flashcard to the left of the current one and switches to it.
         for (int i = 0; i < displayedCardList.size(); i++)
         {
             if (currentIndexCard == displayedCardList.get(i))
@@ -654,9 +674,14 @@ public class HomeScreenController {
         }
     }
 
+    /**
+     * Only sets functionality of moving to a flashcard right of the current one in the list.
+     * Ability to actually use the right arrow is determined through checkArrowVisibility().
+     */
     @FXML
     void rightArrowClick()
     {
+        // Assumes that there is a flashcard to the right of the current one and switches to it.
         for (int i = 0; i < displayedCardList.size(); i++)
         {
             if (currentIndexCard == displayedCardList.get(i))
@@ -752,14 +777,22 @@ public class HomeScreenController {
         checkArrowVisibility();
     }
 
+    /**
+     * Determines whether the left/right arrow are disabled or not based on whether
+     * there is a flashcard to the left/right of the current flashcard. Arrows are actually
+     * images in an ImageView and therefore don't lose opacity when disabled. It needs to be done manually.
+     */
     void checkArrowVisibility()
     {
+        // Arrows are only enabled if there is more than one flashcard.
         if (displayedCardList.size() > 1)
         {
             for (int i = 0; i < displayedCardList.size(); i++)
             {
+                // Identify the current flashcard.
                 if (currentIndexCard == displayedCardList.get(i))
                 {
+                    // If the current flashcard is the first one, there's no flashcard to its left.
                     if (i == 0)
                     {
                         leftArrow.setOpacity(0.35);
@@ -767,10 +800,12 @@ public class HomeScreenController {
                     }
                     else
                     {
+                        // Otherwise, there is a flashcard to its left. This enables the left arrow.
                         leftArrow.setOpacity(1.0);
                         leftArrow.setDisable(false);
                     }
 
+                    // If the current flashcard is the last one in the list, disable the right arrow.
                     if (i == displayedCardList.size() - 1)
                     {
                         rightArrow.setOpacity(0.35);
@@ -778,6 +813,7 @@ public class HomeScreenController {
                     }
                     else
                     {
+                        // Otherwise, enable the right arrow since there is a flashcard to its right.
                         rightArrow.setOpacity(1.0);
                         rightArrow.setDisable(false);
                     }
@@ -786,6 +822,7 @@ public class HomeScreenController {
         }
         else
         {
+            // Disable arrows if there is less than two flashcards.
             leftArrow.setDisable(true);
             leftArrow.setOpacity(0.35);
             rightArrow.setDisable(true);
