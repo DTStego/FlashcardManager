@@ -4,11 +4,15 @@ A index card manager made with JavaFX which allows you to create and browse flas
 FlashcardManager requires a Java 8 JDK with JavaFX built in.
 
 ## Development
-The program incorporates pure JavaFX with FXML and controllers. 
+The program incorporates pure JavaFX with FXML and controllers.
 
 ## Release
 
--- Work In Progress
+https://github.com/DTStego/FlashcardManager/releases
+
+## Requirements
+
+You need a JDK 8 with JavaFX bundled in. [This JDK](https://bell-sw.com/pages/downloads/) was used when making this project and works with the release. Make sure to download the "Full" JDK 8 jar to get the correct bundle!
 
 ## Authors
 
