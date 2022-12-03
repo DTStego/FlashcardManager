@@ -3,6 +3,8 @@ A index card manager made with JavaFX which allows you to create and browse flas
 
 FlashcardManager requires a Java 8 JDK with JavaFX built in.
 
+![github](https://user-images.githubusercontent.com/58103561/205457318-f291d5e5-8ed7-4492-8b4c-2e956c170197.png)
+
 ## Development
 The program incorporates pure JavaFX with FXML and controllers.
 
