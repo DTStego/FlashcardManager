@@ -1,12 +1,12 @@
 # Flashcard Manager
-A index card manager made with JavaFX which allows you to create and browse flashcards for courses/classes
+A index card manager made with JavaFX which allows you to create and browse flashcards for courses/classes.
 
 FlashcardManager requires a Java 8 JDK with JavaFX built in.
 
 <img src="https://i.imgur.com/own4ha7.png" width=75% height=75%>
 
 ## Development
-The program incorporates pure JavaFX with FXML and controllers.
+The program incorporates JavaFX with FXML. Uses the MVC design pattern and CSS for UI elements.
 
 ## Release
 
@@ -22,10 +22,3 @@ You need a JDK 8 with JavaFX bundled in. [This JDK](https://bell-sw.com/pages/do
 - Keigo Tajima
 - Johnhuy Nguyen
 - Brandon Ching
-
-## Notes
-
-The program saves information to the default documents folder for your respective OS.
-
-Windows: C:/Users/*username*/Documents/FlashcardManager<br>
-&nbsp;&nbsp;&nbsp;&nbsp;If OneDrive hijacked your documents folder, C:/Users/*username*/OneDrive/Documents/FlashcardManager
