@@ -496,39 +496,6 @@ public class HomeScreenController {
         }
     }
 
-    /**
-     * Change default flashcard element visibility. Ignores delete button when there is no flashcard in the topicList.
-     * This method is for when there is no flashcard available and only makes elements for creating a card available.
-     */
-    void makeDefaultCardElementsVisible()
-    {
-        side.setDisable(false);
-        createCardBtn.setDisable(false);
-        cardText.setDisable(false);
-        cardTextField.setDisable(true);
-        cardTextSetter.setDisable(true);
-        checkmark.setDisable(true);
-        flipBtn.setDisable(true);
-        sortBtn.setDisable(true);
-        deleteCardBtn.setDisable(true);
-        randomizeBtn.setDisable(true);
-    }
-
-
-    /** This method makes all buttons and field available and is used when there is a flashcard to edit/change. */
-    void makeCardElementsVisible(boolean input)
-    {
-        side.setDisable(!input);
-        createCardBtn.setDisable(!input);
-        cardText.setDisable(!input);
-        cardTextField.setDisable(!input);
-        cardTextSetter.setDisable(!input);
-        checkmark.setDisable(!input);
-        flipBtn.setDisable(!input);
-        sortBtn.setDisable(!input);
-        deleteCardBtn.setDisable(!input);
-    }
-
     /** Create a new flashcard and set up the FlashCard UI area. Also adjusts the program scope. */
     @FXML
     void createNewCardBtn()
@@ -601,6 +568,38 @@ public class HomeScreenController {
             currentIndexCard.setAnswer(cardText.getText());
 
         updateUser();
+    }
+
+    /**
+     * Change default flashcard element visibility. Ignores delete button when there is no flashcard in the topicList.
+     * This method is for when there is no flashcard available and only makes elements for creating a card available.
+     */
+    void makeDefaultCardElementsVisible()
+    {
+        side.setDisable(false);
+        createCardBtn.setDisable(false);
+        cardText.setDisable(false);
+        cardTextField.setDisable(true);
+        cardTextSetter.setDisable(true);
+        checkmark.setDisable(true);
+        flipBtn.setDisable(true);
+        sortBtn.setDisable(true);
+        deleteCardBtn.setDisable(true);
+        randomizeBtn.setDisable(true);
+    }
+
+    /** This method makes all buttons and field available and is used when there is a flashcard to edit/change. */
+    void makeCardElementsVisible(boolean input)
+    {
+        side.setDisable(!input);
+        createCardBtn.setDisable(!input);
+        cardText.setDisable(!input);
+        cardTextField.setDisable(!input);
+        cardTextSetter.setDisable(!input);
+        checkmark.setDisable(!input);
+        flipBtn.setDisable(!input);
+        sortBtn.setDisable(!input);
+        deleteCardBtn.setDisable(!input);
     }
 
     /** Runs when the checkmark is clicked/changed. Updates the IndexCard object in the user's notebook. */
